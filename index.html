@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MIDI Stereo · DX7 Patch Manager</title>
+  <style>
+    * { box-sizing: border-box; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1a2e; min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; padding: 12px; touch-action: manipulation; }
+    .container { max-width: 880px; width: 100%; background: #16213e; border-radius: 32px; padding: 20px 16px 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.7); border: 1px solid #2a3a5e; }
+    h1 { text-align: center; font-weight: 400; font-size: 1.5rem; letter-spacing: 1px; color: #b9d0f0; margin-top: 0; margin-bottom: 16px; text-shadow: 0 2px 0 #0b1324; }
+    h1 small { font-size: 0.75rem; opacity: 0.6; display: block; font-weight: 300; letter-spacing: 1px; color: #88a8d8; }
+    .connect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .connect-section { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; background: #0f1a2f; padding: 10px 14px; border-radius: 60px; border: 1px solid #2d4066; }
+    .connect-section label { font-size: 0.75rem; color: #8aacd8; font-weight: 600; letter-spacing: 0.5px; }
+    .connect-section select { flex: 1; min-width: 100px; background: #1e2d4a; border: 1px solid #3d5a80; color: #d6e6ff; padding: 8px 12px; border-radius: 40px; font-size: 0.85rem; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; }
+    .connect-section select:disabled { opacity: 0.4; cursor: not-allowed; }
+    .connect-section button { background: #2d5a8a; border: none; color: white; padding: 8px 18px; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.15s; border: 1px solid #4a7bb5; white-space: nowrap; touch-action: manipulation; }
+    .connect-section button:active { transform: scale(0.95); }
+    .status-badge { font-size: 0.7rem; padding: 4px 12px; border-radius: 30px; background: #2a2a4a; color: #8a9fc0; border: 1px solid #3a4a6a; white-space: nowrap; }
+    .status-badge.online { background: #1a4a3a; color: #7de0b0; border-color: #3aa87a; }
+    .piano-wrapper { background: #0e1728; border-radius: 18px; padding: 12px 6px 10px; margin-bottom: 16px; border: 1px solid #2a3d60; touch-action: none; }
+    #pianoContainer { position: relative; width: 100%; height: 200px; touch-action: none; margin: 0 auto; }
+    .key-white { flex: 1 0 0; height: 100%; background: #f0f4fe; border: 1px solid #b0c8e8; border-radius: 0 0 6px 6px; box-shadow: 0 4px 0 #b0c0d8; cursor: pointer; position: relative; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; font-size: 0.6rem; font-weight: 600; color: rgba(0,0,0,0.25); transition: background 0.06s, transform 0.06s, box-shadow 0.06s; touch-action: none; }
+    .key-white.active { background: #c8dfff; transform: translateY(4px); box-shadow: 0 0 0 #b0c0d8; border-color: #6a9ae0; }
+    .key-black { position: absolute; top: 0; height: 100%; background: #1a1f2e; border: 1px solid #080b12; border-radius: 0 0 4px 4px; box-shadow: 0 4px 0 #05070c, 0 6px 8px rgba(0,0,0,0.6); cursor: pointer; pointer-events: auto; z-index: 3; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; color: rgba(255,255,255,0.15); font-size: 0.5rem; transition: background 0.06s, transform 0.06s, box-shadow 0.06s; touch-action: none; }
+    .key-black.active { background: #3a4a6a; transform: translateY(4px); box-shadow: 0 0 0 #05070c, 0 2px 6px rgba(0,0,0,0.8); border-color: #6a8aba; }
+    .key-label { position: absolute; bottom: 6px; font-size: 0.55rem; pointer-events: none; color: rgba(255,255,255,0.3); }
+    .key-white .key-label { color: rgba(0,0,0,0.25); }
+    .key-black .key-label { color: rgba(255,255,255,0.25); }
+    .controls { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; justify-content: center; background: #0f1a2f; border-radius: 40px; padding: 12px 16px; border: 1px solid #2d4066; margin-bottom: 16px; }
+    .controls button { background: #2f3d5e; border: none; color: #d6e6ff; padding: 10px 20px; border-radius: 30px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: 1px solid #4a6088; transition: 0.1s; touch-action: manipulation; flex: 1 1 auto; min-width: 80px; }
+    .controls button:active { transform: scale(0.95); }
+    .controls button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .pan-control { display: flex; align-items: center; gap: 10px; color: #a0b8e0; font-weight: 500; font-size: 0.85rem; flex: 1 1 100%; justify-content: center; }
+    .pan-control input[type="range"] { flex: 1; max-width: 140px; height: 6px; -webkit-appearance: none; appearance: none; background: #2a4060; border-radius: 10px; outline: none; touch-action: none; }
+    .pan-control input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #6a9ae0; cursor: pointer; border: 2px solid #b0d0ff; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+    .pan-control input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #6a9ae0; cursor: pointer; border: 2px solid #b0d0ff; }
+    .pan-value { min-width: 32px; text-align: center; background: #1a2a44; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: #b0d0ff; }
+    .patch-control { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; width: 100%; padding-top: 8px; border-top: 1px solid #2a4060; margin-top: 4px; color: #a0b8e0; font-weight: 500; font-size: 0.8rem; }
+    .patch-control label { font-size: 0.65rem; color: #7a9abb; font-weight: 600; letter-spacing: 0.5px; }
+    .patch-control input[type="number"], .patch-control input[type="file"], .patch-control select { background: #1e2d4a; border: 1px solid #3d5a80; color: #d6e6ff; padding: 4px 8px; border-radius: 20px; text-align: center; font-size: 0.8rem; outline: none; width: 50px; -moz-appearance: textfield; }
+    .patch-control input[type="file"] { width: auto; padding: 4px 10px; font-size: 0.7rem; cursor: pointer; }
+    .patch-control select { width: auto; min-width: 140px; text-align: left; padding: 4px 12px; -webkit-appearance: none; appearance: none; cursor: pointer; }
+    .patch-control input[type="number"]::-webkit-inner-spin-button, .patch-control input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .patch-control button { background: #2f3d5e; border: none; color: #d6e6ff; padding: 6px 18px; border-radius: 30px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: 1px solid #4a6088; transition: 0.1s; touch-action: manipulation; white-space: nowrap; }
+    .patch-control button:active { transform: scale(0.95); }
+    .patch-control button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .patch-status { font-size: 0.7rem; color: #7a9abb; margin-left: 4px; }
+    .log-section { background: #0e1728; border-radius: 18px; padding: 12px; border: 1px solid #2a3d60; margin-top: 4px; }
+    .log-header { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .log-header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .log-header-left span { color: #8aacd8; font-size: 0.8rem; font-weight: 600; }
+    .log-header-left label { color: #8aacd8; font-size: 0.75rem; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+    .log-header-left input[type="checkbox"] { width: 16px; height: 16px; accent-color: #6a9ae0; cursor: pointer; }
+    .log-header button { background: #2f3d5e; border: none; color: #d6e6ff; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; border: 1px solid #4a6088; }
+    .log-header button:active { transform: scale(0.95); }
+    #logArea { width: 100%; height: 150px; background: #0b1422; border: 1px solid #1a2a44; border-radius: 12px; color: #b0d0f0; font-family: 'Courier New', monospace; font-size: 0.7rem; padding: 8px 10px; resize: none; outline: none; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #2a4060 transparent; }
+    #logArea::-webkit-scrollbar { width: 6px; }
+    #logArea::-webkit-scrollbar-track { background: transparent; }
+    #logArea::-webkit-scrollbar-thumb { background: #2a4060; border-radius: 10px; }
+    .key-hint { text-align: center; margin-top: 10px; font-size: 0.7rem; color: #4a6a8a; letter-spacing: 0.3px; display: none; }
+    .footer { margin-top: 10px; color: #3a5a7a; text-align: center; font-size: 0.7rem; letter-spacing: 0.3px; }
+    @media (min-width: 600px) { .key-hint { display: block; } #pianoContainer { height: 220px; } .container { padding: 30px 25px 35px; } .connect-grid { grid-template-columns: 1fr 1fr; } #logArea { height: 180px; } }
+    @media (max-width: 500px) { .connect-grid { grid-template-columns: 1fr; } .log-header-left { width: 100%; } .patch-control input[type="number"] { width: 44px; } .patch-control select { min-width: 120px; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🎹 MIDI Stereo · DX7 Patch Manager <small>touch piano · load bank · send patches</small></h1>
+  <div class="connect-grid">
+    <div class="connect-section">
+      <label>🎛️ Out</label>
+      <select id="midiOutputSelect" disabled><option value="">— no outputs —</option></select>
+      <span id="statusBadgeOut" class="status-badge">⚪ off</span>
+    </div>
+    <div class="connect-section">
+      <label>🎤 In</label>
+      <select id="midiInputSelect" disabled><option value="">— no inputs —</option></select>
+      <span id="statusBadgeIn" class="status-badge">⚪ off</span>
+    </div>
+  </div>
+  <div style="display:flex; justify-content:center; margin-bottom:16px;">
+    <button id="connectBtn" style="background:#2d5a8a; border:none; color:white; padding:10px 32px; border-radius:40px; font-weight:600; font-size:1rem; border:1px solid #4a7bb5; cursor:pointer;">🔌 Connect MIDI</button>
+  </div>
+  <div class="piano-wrapper"><div id="pianoContainer"></div></div>
+  <div class="controls">
+    <button id="scaleBtn" disabled>🎵 Scale</button>
+    <button id="arpeggioBtn" disabled>🌀 Arpeggio</button>
+    <div class="pan-control">
+      <span>🎚️ Pan</span>
+      <input type="range" id="panSlider" min="0" max="127" value="64" disabled />
+      <span class="pan-value" id="panDisplay">64</span>
+    </div>
+    <div class="patch-control" style="border-top:1px solid #2a4060; padding-top:8px; margin-top:4px;">
+      <span>🎛️ PC</span>
+      <label>MSB</label><input type="number" id="bankMsb" min="0" max="127" value="0" style="width:44px;" />
+      <label>LSB</label><input type="number" id="bankLsb" min="0" max="127" value="0" style="width:44px;" />
+      <label>Prog</label><input type="number" id="patchProg" min="0" max="127" value="0" style="width:44px;" />
+      <button id="sendPatchBtn" disabled>Send PC</button>
+    </div>
+    <div class="patch-control" style="border-top:1px solid #2a4060; padding-top:8px; margin-top:4px; flex-wrap:wrap;">
+      <label>📂 Load .syx Bank</label>
+      <input type="file" id="syxFileInput" accept=".syx" style="width:auto; flex:1; min-width:120px;" />
+      <span class="patch-status" id="bankInfo">No bank loaded</span>
+    </div>
+    <div class="patch-control" style="border-top:none; padding-top:0; margin-top:0;">
+      <label>🎯 Patch</label>
+      <select id="patchSelect" disabled style="min-width:140px; max-width:240px;">
+        <option value="">— load a bank —</option>
+      </select>
+      <label>➡️ Dest Prog</label>
+      <input type="number" id="destProg" min="0" max="127" value="0" style="width:50px;" />
+      <button id="sendSinglePatchBtn" disabled>📤 Send Patch</button>
+      <button id="sendFullBankBtn" disabled>📤 Send Full Bank</button>
+      <label style="font-size:0.65rem; display:flex; align-items:center; gap:4px;">
+        <input type="checkbox" id="invertLevelsCheck" /> Invert Levels (0↔99)
+      </label>
+    </div>
+  </div>
+  <div class="log-section">
+    <div class="log-header">
+      <div class="log-header-left">
+        <span>📋 MIDI Activity Log</span>
+        <label><input type="checkbox" id="showRawCheck" /> Show raw bytes</label>
+      </div>
+      <button id="clearLogBtn">Clear</button>
+    </div>
+    <textarea id="logArea" readonly placeholder="All MIDI messages and patch operations..." spellcheck="false"></textarea>
+  </div>
+  <div class="key-hint"><kbd>Z</kbd><kbd>X</kbd><kbd>C</kbd><kbd>V</kbd><kbd>B</kbd><kbd>N</kbd><kbd>M</kbd> · <kbd>S</kbd><kbd>D</kbd><kbd>G</kbd><kbd>H</kbd><kbd>J</kbd></div>
+  <div class="footer">Web MIDI · DX7 bank format · Fixed note name display for all notes</div>
+</div>
+<script>
+  (function() {
+    "use strict";
+
+    // ----- Constants -----
+    const FM1_OPERATOR_COUNT = 6;
+    const FM1_OPERATOR_PARAMETER_COUNT = 21;
+    const FM1_VOICE_NAME_LENGTH = 10;
+    const FM1_VOICE_NAME_START = 118;
+
+    const DX7_BANK_VOICE_COUNT = 32;
+    const DX7_PACKED_VOICE_SIZE = 128;
+    const DX7_BANK_DATA_SIZE = DX7_BANK_VOICE_COUNT * DX7_PACKED_VOICE_SIZE; // 4096
+    const DX7_BANK_FILE_SIZE = DX7_BANK_DATA_SIZE + 8; // 4104 bytes
+
+    const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+    // ----- Helper: get note name (fixed for all notes) -----
+    function getNoteName(note) {
+      const octave = Math.floor(note / 12) - 1;
+      const noteIndex = ((note % 12) + 12) % 12;
+      return NOTE_NAMES[noteIndex] + octave;
+    }
+
+    // ----- DOM refs -----
+    const outputSelect = document.getElementById('midiOutputSelect');
+    const inputSelect = document.getElementById('midiInputSelect');
+    const connectBtn = document.getElementById('connectBtn');
+    const statusBadgeOut = document.getElementById('statusBadgeOut');
+    const statusBadgeIn = document.getElementById('statusBadgeIn');
+    const pianoContainer = document.getElementById('pianoContainer');
+    const scaleBtn = document.getElementById('scaleBtn');
+    const arpeggioBtn = document.getElementById('arpeggioBtn');
+    const panSlider = document.getElementById('panSlider');
+    const panDisplay = document.getElementById('panDisplay');
+    const logArea = document.getElementById('logArea');
+    const clearLogBtn = document.getElementById('clearLogBtn');
+    const showRawCheck = document.getElementById('showRawCheck');
+    const bankMsb = document.getElementById('bankMsb');
+    const bankLsb = document.getElementById('bankLsb');
+    const patchProg = document.getElementById('patchProg');
+    const sendPatchBtn = document.getElementById('sendPatchBtn');
+    const syxFileInput = document.getElementById('syxFileInput');
+    const patchSelect = document.getElementById('patchSelect');
+    const destProg = document.getElementById('destProg');
+    const sendSinglePatchBtn = document.getElementById('sendSinglePatchBtn');
+    const sendFullBankBtn = document.getElementById('sendFullBankBtn');
+    const invertLevelsCheck = document.getElementById('invertLevelsCheck');
+    const bankInfo = document.getElementById('bankInfo');
+
+    let midiAccess = null, selectedOutput = null, selectedInput = null;
+    let activeNotes = new Set(), scheduledTimeouts = [];
+    let loadedPatches = [];
+    let fullBankData = null;
+
+    const KEYBOARD_MAP = { 'z':60, 's':61, 'x':62, 'd':63, 'c':64, 'v':65, 'g':66, 'b':67, 'h':68, 'n':69, 'j':70, 'm':71 };
+
+    // ----- MIDI helpers -----
+    function sendMidi(status, data1, data2) {
+      if (!selectedOutput) return false;
+      try { if (data2 === undefined) selectedOutput.send([status, data1]); else selectedOutput.send([status, data1, data2]); return true; } catch(e) { console.warn('MIDI send error:', e); return false; }
+    }
+    function noteOn(note, velocity=105) {
+      if (activeNotes.has(note)) return;
+      activeNotes.add(note); sendMidi(0x90, note, velocity);
+      const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.add('active');
+    }
+    function noteOff(note) {
+      if (!activeNotes.has(note)) return;
+      activeNotes.delete(note); sendMidi(0x80, note, 0);
+      const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.remove('active');
+    }
+    function allNotesOff() {
+      for (const note of activeNotes) { sendMidi(0x80, note, 0); const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.remove('active'); }
+      activeNotes.clear(); for (const t of scheduledTimeouts) clearTimeout(t); scheduledTimeouts = [];
+    }
+    function sendPan(value) {
+      const clamped = Math.min(127, Math.max(0, Math.round(value)));
+      panDisplay.textContent = clamped; sendMidi(0xB0, 0x0A, clamped);
+    }
+
+    function sendProgramChange(msb, lsb, prog) {
+      if (!selectedOutput) return false;
+      msb = Math.min(127, Math.max(0, msb));
+      lsb = Math.min(127, Math.max(0, lsb));
+      prog = Math.min(127, Math.max(0, prog));
+      sendMidi(0xB0, 0x00, msb);
+      sendMidi(0xB0, 0x20, lsb);
+      sendMidi(0xC0, prog);
+      const ts = new Date().toLocaleTimeString();
+      const raw = showRawCheck.checked ? `[0xB0 0x00 0x${msb.toString(16).padStart(2,'0')}] [0xB0 0x20 0x${lsb.toString(16).padStart(2,'0')}] [0xC0 0x${prog.toString(16).padStart(2,'0')}]` : '';
+      logArea.value += `[${ts}] ${raw} Sent PC: MSB=${msb}, LSB=${lsb}, Prog=${prog}\n`;
+      logArea.scrollTop = logArea.scrollHeight;
+      return true;
+    }
+
+    function sendSysEx(data, callback) {
+      if (!selectedOutput) {
+        alert('No MIDI output connected.');
+        if (callback) callback();
+        return;
+      }
+      try {
+        selectedOutput.send(data);
+        if (callback) callback();
+      } catch (e) {
+        console.error('SysEx send error:', e);
+        alert('Error sending SysEx: ' + e.message);
+        if (callback) callback();
+      }
+    }
+
+    // ----- DX7 voice unpacking (FIXED order) -----
+    function unpackDx7Voice(packed) {
+      const unpacked = [];
+      for (let operator = 0; operator < FM1_OPERATOR_COUNT; operator += 1) {
+        const offset = operator * 17;
+        for (let i = 0; i < 11; i += 1) {
+          unpacked.push(packed[offset + i]);
+        }
+        unpacked.push(packed[offset + 11] & 0x03);
+        unpacked.push((packed[offset + 11] >> 2) & 0x03);
+        unpacked.push(packed[offset + 12] & 0x07);
+        unpacked.push(packed[offset + 13] & 0x03);
+        unpacked.push((packed[offset + 13] >> 2) & 0x07);
+        unpacked.push(packed[offset + 14]);          // Output level
+        unpacked.push(packed[offset + 15] & 0x01);
+        unpacked.push((packed[offset + 15] >> 1) & 0x1f);
+        unpacked.push(packed[offset + 16]);
+        unpacked.push((packed[offset + 12] >> 3) & 0x0f);
+      }
+      for (let i = 102; i < 110; i += 1) {
+        unpacked.push(packed[i]);
+      }
+      unpacked.push(packed[110] & 0x1f);
+      unpacked.push(packed[111] & 0x07);
+      unpacked.push((packed[111] >> 3) & 0x01);
+      for (let i = 112; i < 116; i += 1) {
+        unpacked.push(packed[i]);
+      }
+      unpacked.push(packed[116] & 0x01);
+      unpacked.push((packed[116] >> 1) & 0x07);
+      unpacked.push((packed[116] >> 4) & 0x07);
+      for (let i = 117; i < 128; i += 1) {
+        unpacked.push(packed[i]);
+      }
+      return Uint8Array.from(unpacked);
+    }
+
+    function applyInvertLevels(packed) {
+      const newPacked = new Uint8Array(packed);
+      for (let op = 0; op < FM1_OPERATOR_COUNT; op++) {
+        const offset = op * 17;
+        const level = newPacked[offset + 14];
+        if (level >= 0 && level <= 99) {
+          newPacked[offset + 14] = 99 - level;
+        }
+      }
+      return newPacked;
+    }
+
+    function makeDx7SingleVoicePayload(packedVoice, channel) {
+      if (packedVoice.length !== DX7_PACKED_VOICE_SIZE) {
+        throw new Error(`Expected a ${DX7_PACKED_VOICE_SIZE}-byte packed DX7 voice; received ${packedVoice.length} bytes.`);
+      }
+      let voiceData = packedVoice;
+      if (invertLevelsCheck.checked) {
+        voiceData = applyInvertLevels(packedVoice);
+        console.log('Invert levels enabled.');
+      }
+      const data = unpackDx7Voice(voiceData);
+      console.log('Packed level raw:', packedVoice[14], 'Unpacked level:', data[17]);
+      const checksum = (128 - (data.reduce((sum, byte) => sum + byte, 0) & 0x7f)) & 0x7f;
+      return Uint8Array.from([(channel - 1) & 0x0f, 0x00, 0x01, 0x1b, ...data, checksum]);
+    }
+
+    function decodeVoiceName(data) {
+      let name = '';
+      for (let i = 0; i < FM1_VOICE_NAME_LENGTH; i += 1) {
+        const code = data[FM1_VOICE_NAME_START + i];
+        if (code >= 0x20 && code <= 0x7e) {
+          name += String.fromCharCode(code);
+        } else {
+          name += ' ';
+        }
+      }
+      return name.trim() || 'UNTITLED';
+    }
+
+    function parseDx7Bank(file) {
+      const bytes = new Uint8Array(file);
+      if (bytes.length !== DX7_BANK_FILE_SIZE) {
+        throw new Error(`Expected a 4104-byte DX7 bank; received ${bytes.length} bytes.`);
+      }
+      if (bytes[0] !== 0xf0 || bytes[1] !== 0x43 || bytes[3] !== 0x09 ||
+          bytes[4] !== 0x20 || bytes[5] !== 0x00 || bytes.at(-1) !== 0xf7) {
+        throw new Error('This is not a Yamaha DX7 32-voice bulk SysEx bank.');
+      }
+      const voiceData = bytes.slice(6, 6 + DX7_BANK_DATA_SIZE);
+      const checksum = (128 - (voiceData.reduce((sum, byte) => sum + byte, 0) & 0x7f)) & 0x7f;
+      if (checksum !== bytes.at(-2)) {
+        throw new Error('The DX7 bank checksum is invalid.');
+      }
+      const voices = [];
+      for (let i = 0; i < DX7_BANK_VOICE_COUNT; i += 1) {
+        const data = voiceData.slice(i * DX7_PACKED_VOICE_SIZE, (i + 1) * DX7_PACKED_VOICE_SIZE);
+        const name = decodeVoiceName(data);
+        voices.push({ data, name });
+      }
+      return voices;
+    }
+
+    // ----- File loading -----
+    syxFileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const buffer = e.target.result;
+          const voices = parseDx7Bank(buffer);
+          loadedPatches = voices;
+          fullBankData = new Uint8Array(buffer);
+
+          patchSelect.innerHTML = '';
+          if (loadedPatches.length === 0) {
+            patchSelect.innerHTML = '<option value="">— no patches —</option>';
+            patchSelect.disabled = true;
+            bankInfo.textContent = 'No patches found';
+            sendSinglePatchBtn.disabled = true;
+            sendFullBankBtn.disabled = true;
+            return;
+          }
+          patchSelect.disabled = false;
+          loadedPatches.forEach((p, idx) => {
+            const opt = document.createElement('option');
+            opt.value = idx;
+            opt.textContent = `${idx+1}: ${p.name}`;
+            patchSelect.appendChild(opt);
+          });
+          patchSelect.value = 0;
+          bankInfo.textContent = `Loaded ${loadedPatches.length} patches (bank)`;
+          sendSinglePatchBtn.disabled = !selectedOutput;
+          sendFullBankBtn.disabled = !selectedOutput;
+          const ts = new Date().toLocaleTimeString();
+          logArea.value += `[${ts}] ✅ Loaded .syx file: ${loadedPatches.length} patches\n`;
+          logArea.scrollTop = logArea.scrollHeight;
+        } catch (err) {
+          alert('Error parsing .syx file: ' + err.message);
+          console.error(err);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    // ----- Send single patch -----
+    function sendSinglePatch() {
+      if (!selectedOutput) { alert('Connect to a MIDI output first.'); return; }
+      const idx = parseInt(patchSelect.value, 10);
+      if (isNaN(idx) || idx < 0 || idx >= loadedPatches.length) {
+        alert('Please select a patch.');
+        return;
+      }
+      const dest = parseInt(destProg.value, 10);
+      if (isNaN(dest) || dest < 0 || dest > 127) {
+        alert('Destination program must be between 0 and 127.');
+        return;
+      }
+      let msb = parseInt(bankMsb.value, 10) || 0;
+      let lsb = parseInt(bankLsb.value, 10) || 0;
+      msb = Math.min(127, Math.max(0, msb));
+      lsb = Math.min(127, Math.max(0, lsb));
+
+      sendSinglePatchBtn.disabled = true;
+      sendSinglePatchBtn.textContent = '⏳ Sending...';
+
+      sendProgramChange(msb, lsb, dest);
+
+      setTimeout(() => {
+        const channel = 1;
+        const packedVoice = loadedPatches[idx].data;
+        try {
+          const payload = makeDx7SingleVoicePayload(packedVoice, channel);
+          const syx = new Uint8Array(2 + payload.length + 1);
+          syx[0] = 0xF0;
+          syx[1] = 0x43;
+          syx.set(payload, 2);
+          syx[2 + payload.length] = 0xF7;
+
+          if (showRawCheck.checked) {
+            const hex = Array.from(syx).map(b => '0x' + b.toString(16).padStart(2,'0').toUpperCase()).join(' ');
+            logArea.value += `[${new Date().toLocaleTimeString()}] Sending SysEx: ${hex}\n`;
+          }
+
+          sendSysEx(syx, () => {
+            sendSinglePatchBtn.disabled = (loadedPatches.length===0 || !selectedOutput);
+            sendSinglePatchBtn.textContent = '📤 Send Patch';
+            const ts = new Date().toLocaleTimeString();
+            logArea.value += `[${ts}] ✅ Patch "${loadedPatches[idx].name}" sent to slot ${dest}\n`;
+            logArea.scrollTop = logArea.scrollHeight;
+          });
+        } catch (e) {
+          console.error('Error building SysEx:', e);
+          alert('Error: ' + e.message);
+          sendSinglePatchBtn.disabled = false;
+          sendSinglePatchBtn.textContent = '📤 Send Patch';
+        }
+      }, 50);
+    }
+
+    function sendFullBank() {
+      if (!selectedOutput) { alert('Connect to a MIDI output first.'); return; }
+      if (!fullBankData) { alert('No bank data loaded.'); return; }
+      sendFullBankBtn.disabled = true;
+      sendFullBankBtn.textContent = '⏳ Sending...';
+      sendSysEx(fullBankData, () => {
+        sendFullBankBtn.disabled = !selectedOutput;
+        sendFullBankBtn.textContent = '📤 Send Full Bank';
+        const ts = new Date().toLocaleTimeString();
+        logArea.value += `[${ts}] ✅ Full bank sent to FM-1\n`;
+        logArea.scrollTop = logArea.scrollHeight;
+      });
+    }
+
+    sendSinglePatchBtn.addEventListener('click', sendSinglePatch);
+    sendFullBankBtn.addEventListener('click', sendFullBank);
+
+    // ----- MIDI input logging (fixed note names) -----
+    function midiMessageToString(data, showRaw) {
+      if (!data || data.length===0) return '';
+      const rawHex = Array.from(data).map(b=>'0x'+b.toString(16).padStart(2,'0').toUpperCase()).join(' ');
+      const status = data[0]; const channel = (status&0x0F)+1; const command = status&0xF0;
+      let desc='';
+      if (status===0xF0) desc=`SysEx (${data.length} bytes)`;
+      else if (status===0xF7) desc='SysEx End';
+      else if (status>=0xF8) { const rt={0xF8:'Timing Clock',0xFA:'Start',0xFB:'Continue',0xFC:'Stop',0xFE:'Active Sensing',0xFF:'System Reset'}; desc=`Realtime: ${rt[status]||'0x'+status.toString(16)}`; }
+      else {
+        switch(command) {
+          case 0x80: {
+            const note=data[1], vel=data[2]||0;
+            const name = getNoteName(note);
+            desc=`Ch${channel} Note Off : ${name} (${note}) vel=${vel}`;
+            break;
+          }
+          case 0x90: {
+            const note=data[1], vel=data[2]||0;
+            const name = getNoteName(note);
+            desc=`Ch${channel} Note On  : ${name} (${note}) vel=${vel}`;
+            break;
+          }
+          case 0xA0: {
+            const note=data[1], pressure=data[2]||0;
+            const name = getNoteName(note);
+            desc=`Ch${channel} PolyPressure: ${name} (${note}) pressure=${pressure}`;
+            break;
+          }
+          case 0xB0: {
+            const cc=data[1], val=data[2];
+            const ccName=cc===10?'Pan':cc===1?'Modulation':cc===7?'Volume':cc===11?'Expression':cc===64?'Sustain':cc===91?'Reverb':cc===93?'Chorus':`CC${cc}`;
+            desc=`Ch${channel} Control  : ${ccName} = ${val}`;
+            break;
+          }
+          case 0xC0: {
+            const prog=data[1];
+            desc=`Ch${channel} Program   : ${prog}`;
+            break;
+          }
+          case 0xD0: {
+            const pressure=data[1];
+            desc=`Ch${channel} ChannelPressure: ${pressure}`;
+            break;
+          }
+          case 0xE0: {
+            const lsb=data[1], msb=data[2];
+            const val=(msb<<7)|lsb;
+            desc=`Ch${channel} PitchBend : ${val}`;
+            break;
+          }
+          default: desc=`Ch${channel} Unknown   : ${rawHex}`;
+        }
+      }
+      return showRaw ? `[${rawHex}] ${desc}` : desc;
+    }
+
+    function appendLog(data, showRaw) {
+      const ts = new Date().toLocaleTimeString();
+      const msg = midiMessageToString(data, showRaw);
+      if (!msg) return;
+      logArea.value += `[${ts}] ${msg}\n`;
+      logArea.scrollTop = logArea.scrollHeight;
+      const lines = logArea.value.split('\n');
+      if (lines.length > 500) logArea.value = lines.slice(-400).join('\n');
+    }
+
+    function attachInputListener(input) {
+      if (!input) return;
+      input.onmidimessage = (event) => { appendLog(event.data, showRawCheck.checked); };
+    }
+
+    // ----- Build Piano (fixed labels) -----
+    function buildPiano() {
+      pianoContainer.innerHTML = '';
+      pianoContainer.style.touchAction = 'none';
+      const whiteWrapper = document.createElement('div');
+      whiteWrapper.style.cssText = 'display:flex; width:100%; height:100%; position:relative; z-index:1;';
+      const blackWrapper = document.createElement('div');
+      blackWrapper.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:60%; pointer-events:none; z-index:2;';
+
+      const NOTE_START = 60, NOTE_END = 71;
+      const WHITE_STEPS = [0,2,4,5,7,9,11];
+      const whiteNotes=[], blackNotes=[];
+      for (let note=NOTE_START; note<=NOTE_END; note++) {
+        const step=(note-60)%12;
+        if (WHITE_STEPS.includes(step)) whiteNotes.push(note); else blackNotes.push(note);
+      }
+      const totalWhite = whiteNotes.length;
+      const whiteWidth = 100/totalWhite;
+
+      whiteNotes.forEach((note) => {
+        const key = document.createElement('div');
+        key.className = 'key key-white';
+        key.dataset.note = note;
+        const label = document.createElement('span');
+        label.className = 'key-label';
+        label.textContent = getNoteName(note);
+        key.appendChild(label);
+        attachEvents(key, note);
+        whiteWrapper.appendChild(key);
+      });
+
+      const blackIndexMap = {1:0,3:1,6:3,8:4,10:5};
+      blackNotes.forEach((note) => {
+        const step=(note-60)%12;
+        const whiteIdx = blackIndexMap[step];
+        if (whiteIdx===undefined) return;
+        const blackWidth = whiteWidth*0.65;
+        const leftPos = (whiteIdx+1)*whiteWidth - blackWidth/2;
+        const key = document.createElement('div');
+        key.className = 'key key-black';
+        key.dataset.note = note;
+        key.style.left = leftPos+'%';
+        key.style.width = blackWidth+'%';
+        const label = document.createElement('span');
+        label.className = 'key-label';
+        label.textContent = getNoteName(note);
+        key.appendChild(label);
+        attachEvents(key, note);
+        blackWrapper.appendChild(key);
+      });
+
+      pianoContainer.appendChild(whiteWrapper);
+      pianoContainer.appendChild(blackWrapper);
+    }
+
+    function attachEvents(key, note) {
+      const start = (e) => { e.preventDefault(); if (!selectedOutput) { alert('Connect to a MIDI output first.'); return; } noteOn(note); };
+      const end = (e) => { e.preventDefault(); noteOff(note); };
+      key.addEventListener('mousedown', start);
+      key.addEventListener('mouseup', end);
+      key.addEventListener('mouseleave', end);
+      key.addEventListener('touchstart', start, { passive: false });
+      key.addEventListener('touchend', end, { passive: false });
+      key.addEventListener('touchcancel', end, { passive: false });
+    }
+
+    // ----- MIDI connection -----
+    function updateOutputs() {
+      if (!midiAccess) { outputSelect.disabled=true; outputSelect.innerHTML='<option value="">— no outputs —</option>'; return; }
+      const outputs = Array.from(midiAccess.outputs.values());
+      if (outputs.length===0) { outputSelect.disabled=true; outputSelect.innerHTML='<option value="">— no MIDI outputs —</option>'; statusBadgeOut.textContent='⚪ none'; statusBadgeOut.className='status-badge'; return; }
+      outputSelect.disabled=false;
+      outputSelect.innerHTML = outputs.map(o=>`<option value="${o.id}">${o.name||'Unnamed'}</option>`).join('');
+      outputSelect.value = outputs[0].id;
+      selectedOutput = midiAccess.outputs.get(outputs[0].id)||null;
+      updateUI();
+    }
+    function updateInputs() {
+      if (!midiAccess) { inputSelect.disabled=true; inputSelect.innerHTML='<option value="">— no inputs —</option>'; return; }
+      const inputs = Array.from(midiAccess.inputs.values());
+      if (inputs.length===0) { inputSelect.disabled=true; inputSelect.innerHTML='<option value="">— no MIDI inputs —</option>'; statusBadgeIn.textContent='⚪ none'; statusBadgeIn.className='status-badge'; return; }
+      inputSelect.disabled=false;
+      inputSelect.innerHTML = inputs.map(inp=>`<option value="${inp.id}">${inp.name||'Unnamed'}</option>`).join('');
+      inputSelect.value = inputs[0].id;
+      selectedInput = midiAccess.inputs.get(inputs[0].id)||null;
+      if (selectedInput) { attachInputListener(selectedInput); statusBadgeIn.textContent='🟢 listening'; statusBadgeIn.className='status-badge online'; } else { statusBadgeIn.textContent='⚪ inactive'; statusBadgeIn.className='status-badge'; }
+      updateUI();
+    }
+    function connectMIDI() {
+      if (navigator.requestMIDIAccess) {
+        navigator.requestMIDIAccess({ sysex: true })
+          .then((access) => {
+            midiAccess = access;
+            connectBtn.textContent = '🔌 Refresh';
+            updateOutputs(); updateInputs();
+            midiAccess.onstatechange = () => { updateOutputs(); updateInputs(); };
+          })
+          .catch((err) => {
+            console.error('Web MIDI error:', err);
+            statusBadgeOut.textContent='🔴 error'; statusBadgeOut.className='status-badge';
+            statusBadgeIn.textContent='🔴 error'; statusBadgeIn.className='status-badge';
+            alert('Could not access MIDI. Please use Chrome/Edge and allow MIDI access.');
+          });
+      } else {
+        alert('Web MIDI API is not supported in this browser. Please use Chrome, Edge, or Opera.');
+      }
+    }
+    function updateUI() {
+      const hasOutput = !!selectedOutput;
+      const hasInput = !!selectedInput;
+      scaleBtn.disabled = !hasOutput;
+      arpeggioBtn.disabled = !hasOutput;
+      panSlider.disabled = !hasOutput;
+      sendPatchBtn.disabled = !hasOutput;
+      sendSinglePatchBtn.disabled = (loadedPatches.length===0 || !hasOutput);
+      sendFullBankBtn.disabled = (!fullBankData || !hasOutput);
+      statusBadgeOut.textContent = hasOutput ? '🟢 connected' : '⚪ off';
+      statusBadgeOut.className = hasOutput ? 'status-badge online' : 'status-badge';
+      statusBadgeIn.textContent = hasInput ? '🟢 listening' : '⚪ off';
+      statusBadgeIn.className = hasInput ? 'status-badge online' : 'status-badge';
+    }
+
+    // ----- Patterns -----
+    function playPattern(notes, delayMs=180) {
+      if (!selectedOutput) { alert('Please connect to a MIDI output first.'); return; }
+      for (const t of scheduledTimeouts) clearTimeout(t); scheduledTimeouts = []; allNotesOff();
+      const totalDuration = notes.length*delayMs+200;
+      notes.forEach((note,index) => {
+        const timeout = setTimeout(() => { noteOn(note,110);
+          const offTimeout = setTimeout(() => { noteOff(note); }, Math.min(delayMs-20,120));
+          scheduledTimeouts.push(offTimeout);
+        }, index*delayMs);
+        scheduledTimeouts.push(timeout);
+      });
+      const cleanup = setTimeout(() => { allNotesOff(); }, totalDuration);
+      scheduledTimeouts.push(cleanup);
+    }
+    function playScale() { const notes=[]; for(let i=0;i<8;i++) notes.push(60+i); for(let i=6;i>=0;i--) notes.push(60+i); playPattern(notes,170); }
+    function playArpeggio() { playPattern([60,64,67,72,67,64,60],200); }
+
+    // ----- Event listeners -----
+    connectBtn.addEventListener('click', connectMIDI);
+    outputSelect.addEventListener('change', () => { if(!midiAccess)return; selectedOutput=midiAccess.outputs.get(outputSelect.value)||null; allNotesOff(); updateUI(); });
+    inputSelect.addEventListener('change', () => {
+      if(!midiAccess)return;
+      if(selectedInput) selectedInput.onmidimessage=null;
+      selectedInput=midiAccess.inputs.get(inputSelect.value)||null;
+      if(selectedInput) { attachInputListener(selectedInput); statusBadgeIn.textContent='🟢 listening'; statusBadgeIn.className='status-badge online'; } else { statusBadgeIn.textContent='⚪ off'; statusBadgeIn.className='status-badge'; }
+      updateUI();
+    });
+    showRawCheck.addEventListener('change', () => {});
+    scaleBtn.addEventListener('click', playScale);
+    arpeggioBtn.addEventListener('click', playArpeggio);
+    panSlider.addEventListener('input', () => { const val=parseInt(panSlider.value,10); sendPan(val); });
+    clearLogBtn.addEventListener('click', () => { logArea.value=''; });
+    sendPatchBtn.addEventListener('click', () => {
+      let msb=parseInt(bankMsb.value,10)||0, lsb=parseInt(bankLsb.value,10)||0, prog=parseInt(patchProg.value,10)||0;
+      sendProgramChange(msb, lsb, prog);
+    });
+
+    destProg.addEventListener('change', () => {
+      let val = parseInt(destProg.value, 10);
+      if (!isNaN(val) && val >= 0 && val <= 127) patchProg.value = val;
+    });
+    patchProg.addEventListener('change', () => {
+      let val = parseInt(patchProg.value, 10);
+      if (!isNaN(val) && val >= 0 && val <= 127) destProg.value = val;
+    });
+
+    document.addEventListener('keydown', (e) => { if(e.repeat)return; const key=e.key.toLowerCase(); if(key in KEYBOARD_MAP) { e.preventDefault(); if(!selectedOutput){alert('Connect to a MIDI output first.'); return;} noteOn(KEYBOARD_MAP[key]); } });
+    document.addEventListener('keyup', (e) => { const key=e.key.toLowerCase(); if(key in KEYBOARD_MAP) { e.preventDefault(); noteOff(KEYBOARD_MAP[key]); } });
+    document.addEventListener('visibilitychange', () => { if(document.hidden) allNotesOff(); });
+    window.addEventListener('beforeunload', () => allNotesOff());
+
+    // Init
+    buildPiano();
+    setTimeout(connectMIDI, 400);
+  })();
+</script>
+</body>
+</html>
