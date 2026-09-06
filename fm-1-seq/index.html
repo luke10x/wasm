@@ -214,7 +214,11 @@
 </head>
 <body>
 
-  <canvas id="bg-canvas"></canvas>
+  <!-- data-speed controls the background's forward-motion speed in real time.
+       Negative values run the scene in reverse. Change it any time, e.g.:
+         document.getElementById('bg-canvas').dataset.speed = -4;
+       or use the helper: window.setBackgroundSpeed(-4); -->
+  <canvas id="bg-canvas" data-speed="6"></canvas>
 
   <!-- TOP LEFT LOG -->
   <div id="top-left-log">
@@ -243,6 +247,9 @@
 
   <!-- BOTTOM DOCK -->
   <div id="bottom-dock">
+    <div id="piano-container">
+      <div class="piano" id="pianoContainer"></div>
+    </div>
     <div id="patch-controls">
       <label>📂 Load .syx</label>
       <input type="file" id="syxFileInput" accept=".syx" />
@@ -253,9 +260,6 @@
       <input type="number" id="destProg" min="0" max="127" value="0" />
       <button id="sendSinglePatchBtn" disabled>📤 Send Patch</button>
       <button id="sendFullBankBtn" disabled>📤 Send Full Bank</button>
-    </div>
-    <div id="piano-container">
-      <div class="piano" id="pianoContainer"></div>
     </div>
   </div>
 
@@ -268,9 +272,38 @@
       // ================================================================
       (function initBackground() {
         const canvas = document.getElementById('bg-canvas');
+
+        // ---- Configurable background state ----
+        // Currently just "speed" (forward-motion speed; negative = reverse),
+        // read from the canvas's data-speed attribute and kept live via a
+        // MutationObserver, so any script can update it in real time by
+        // just changing the attribute. New config knobs can follow this
+        // same pattern later (parse a data-* attr into bgConfig, add a
+        // matching uniform, set it each frame in render()).
+        const bgConfig = { speed: 6.0 };
+        function readSpeedFromAttr() {
+          const v = parseFloat(canvas.dataset.speed);
+          bgConfig.speed = Number.isFinite(v) ? v : 6.0;
+        }
+        readSpeedFromAttr();
+        const bgAttrObserver = new MutationObserver((mutations) => {
+          for (const m of mutations) {
+            if (m.type === 'attributes' && m.attributeName === 'data-speed') {
+              readSpeedFromAttr();
+            }
+          }
+        });
+        bgAttrObserver.observe(canvas, { attributes: true, attributeFilter: ['data-speed'] });
+
+        // Public helper — usable from anywhere, any time:
+        //   window.setBackgroundSpeed(-4)   // run the scene in reverse
+        //   window.setBackgroundSpeed(0)    // freeze forward motion
+        window.setBackgroundSpeed = function(value) {
+          canvas.dataset.speed = value; // triggers the observer above
+        };
+
         const gl = canvas.getContext('webgl2', { alpha: false, antialias: true });
         if (!gl) {
-          // Fallback to 2D
           const ctx = canvas.getContext('2d');
           let w, h;
           function resize() {
@@ -303,182 +336,116 @@
           precision highp float;
           uniform vec2  u_resolution;
           uniform float u_time;
+          uniform float u_speed;   // forward-motion speed; negative = reverse
           out vec4 outColor;
 
-          // ---- helpers ----
-          float hash21(vec2 p) {
-            p = fract(p * vec2(234.34, 435.345));
-            p += dot(p, p + 19.19);
-            return fract(p.x * p.y);
+          // Ported from a Shadertoy-style raymarched retro sun/grid shader.
+          // The original's backbuffer/motion-blur sampling was dead code
+          // (computed but never actually blended into the output), so it's
+          // dropped here — this is a single-pass port, no feedback texture.
+
+          #define flickerFreq 1400.0
+          #define flickerSpeed 30.0
+          #define flickerIntensity 0.1
+
+          #define iters 70
+          #define minDst 0.001
+          #define lineWidth 0.2
+          #define lineCountX 35.0
+          #define lineCountY (50.0/3.0)
+
+          #define gridColor vec3(0.2, 0.05, 1.0)
+
+          float hash(vec2 seed) {
+            return fract(sin(dot(seed, vec2(12.9898, 4.1414))) * 43758.5453);
           }
 
-          float smoothNoise(vec2 p) {
-            vec2 i = floor(p);
-            vec2 f = fract(p);
-            f = f * f * (3.0 - 2.0 * f);
-            float a = hash21(i);
-            float b = hash21(i + vec2(1.0, 0.0));
-            float c = hash21(i + vec2(0.0, 1.0));
-            float d = hash21(i + vec2(1.0, 1.0));
-            return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+          float getHeight(vec2 uv) {
+            float time = u_time;
+            uv += 0.5;
+            uv.y -= time * u_speed;
+            float y1 = floor(uv.y);
+            float y2 = floor(uv.y + 1.0);
+            float x1 = floor(uv.x);
+            float x2 = floor(uv.x + 1.0);
+            float iX1 = mix(hash(vec2(x1, y1)), hash(vec2(x2, y1)), fract(uv.x));
+            float iX2 = mix(hash(vec2(x1, y2)), hash(vec2(x2, y2)), fract(uv.x));
+            return mix(iX1, iX2, fract(uv.y));
           }
 
-          float fbm(vec2 p) {
-            float value = 0.0;
-            float amp = 0.5;
-            float freq = 1.0;
-            for (int i = 0; i < 4; i++) {
-              value += amp * smoothNoise(p * freq);
-              freq *= 2.0;
-              amp *= 0.5;
+          float getDistance(vec3 p) {
+            return p.z - (1.0 - cos(p.x * 15.0)) * 0.03 * getHeight(vec2(p.x * lineCountX, p.y * lineCountY));
+          }
+
+          float getGridColor(vec2 uv) {
+            float time = u_time;
+            float zoom = 1.0;
+            float col = 0.0;
+            vec3 cam = vec3(0.0, 1.0, 0.1);
+            vec3 lookat = vec3(0.0);
+            vec3 fwd = normalize(lookat - cam);
+            vec3 up = normalize(cross(fwd, vec3(1.0, 0.0, 0.0)));
+            vec3 right = cross(up, fwd);
+            vec3 c = cam + fwd * zoom;
+            vec3 i = c + right * uv.x + up * uv.y;
+            vec3 ray = normalize(i - cam);
+
+            float distSur = 0.0;
+            float distOrigin = 0.0;
+            vec3 p = cam;
+            for (int k = 0; k < iters; k++) {
+              distSur = getDistance(p);
+              if (distOrigin > 2.0) break;
+              if (distSur < minDst) {
+                float lineW = lineWidth * distOrigin;
+                float xLines = smoothstep(lineW, 0.0, abs(fract(p.x * lineCountX) - 0.5));
+                float yLines = smoothstep(lineW * 2.0, 0.0, abs(fract(p.y * lineCountY - time * u_speed) - 0.5));
+                col += max(xLines, yLines);
+                break;
+              }
+              p += ray * distSur;
+              distOrigin += distSur;
             }
-            return value;
+            return max(0.0, col - (distOrigin * 0.8));
           }
 
           void main() {
-            // Flip y so that y=0 is bottom
-            vec2 coord = gl_FragCoord.xy;
-            coord.y = u_resolution.y - coord.y;
-            vec2 uv = (coord - 0.5 * u_resolution.xy) / u_resolution.y;
-            vec3 col = vec3(0.0);
+            float time = u_time;
+            vec2 R = u_resolution;
+            float sunHeight = sin(time * 0.1) * 0.1 + 0.1;
 
-            float horizon = -0.05;
+            // gl_FragCoord.y is 0 at the bottom in WebGL (same as Shadertoy),
+            // so no flip is needed here — the grid sits low, the sun sits high.
+            vec2 uv = (gl_FragCoord.xy - 0.5 * R) / R.y + 0.5;
 
-            // --- SUN --- fixed above horizon
-            vec2 sunPos = vec2(0.0, 0.3);
-            float d = length(uv - sunPos);
-            float sunRad = 0.15;
-            float sunBody = 1.0 - smoothstep(sunRad, sunRad + 0.01, d);
-            float sunY = clamp((uv.y - sunPos.y) / sunRad, 0.0, 1.0);
-            vec3 sunColor = mix(vec3(1.0, 1.0, 0.7), vec3(1.0, 0.2, 0.6), sunY);
-            float glow = exp(-d * 14.0) * 0.7;
-            col += sunColor * sunBody;
-            col += sunColor * glow;
+            uv.y -= sunHeight;
 
-            // --- GROUND & GRID (forward motion) ---
-            // Compute world position for ground plane
-            float z = 1.0 / (uv.y - horizon + 0.01);
-            z *= 0.5;
+            float dist = 2.5 * length(uv - vec2(0.5, 0.5));
+            float divisions = 50.0;
 
-            // Forward scroll: increase z with time
-            float scrollSpeed = 0.3;
-            float zOffset = u_time * scrollSpeed;
-            float pz = z + zOffset;
+            float pattern = (sin(uv.y * divisions * 10.0 - time * 2.0) * 1.2 + uv.y * 8.3) * uv.y - 1.5 +
+              sin(uv.x * 20.0 + time * 5.0) * 0.01;
+            float sunOutline = smoothstep(0.0, -0.0315, max(dist - 0.315, -pattern));
 
-            vec2 gridCoord = vec2(uv.x * pz * 8.0, pz * 8.0);
-            vec2 g = abs(fract(gridCoord) - 0.5);
-            float lineX = 1.0 - step(0.05, g.x);
-            float lineY = 1.0 - step(0.05, g.y);
-            float grid = max(lineX, lineY);
-            float fade = smoothstep(-0.05, 0.1, uv.y - horizon);
-            grid *= fade;
-            vec3 gridColor = vec3(0.5, 0.0, 1.0);
-            col += grid * gridColor * 0.8;
+            vec3 col = sunOutline * mix(vec3(4.0, 0.0, 0.2), vec3(1.0, 1.1, 0.0), uv.y);
 
-            // --- MOUNTAINS (procedural) ---
-            // For each pixel on the ground, compute world x and z
-            float worldX = uv.x * pz * 8.0;
-            float worldZ = pz;
-            // Mountain height function using fbm (noise)
-            // We'll generate two mountain ranges: left and right of the road (x< -1 and x>1)
-            float mountainHeight = 0.0;
-            float roadWidth = 1.0;
-            float absX = abs(worldX);
-            if (absX > roadWidth) {
-              // Use noise to create mountain silhouette
-              vec2 noiseCoord = vec2(worldX * 0.5, worldZ * 0.3);
-              float noiseVal = fbm(noiseCoord + vec2(0.0, u_time * 0.02));
-              // Scale height: mountains get taller as they get closer
-              float distFactor = 1.0 - exp(-worldZ * 0.1);
-              mountainHeight = (noiseVal * 0.6 + 0.2) * distFactor;
-              // Add some random peaks
-              float peak = sin(worldX * 0.5 + worldZ * 0.2) * 0.3 + sin(worldX * 1.2 - worldZ * 0.1) * 0.15;
-              mountainHeight += peak * 0.3 * distFactor;
-              mountainHeight = clamp(mountainHeight, 0.0, 1.0);
+            float glow = max(0.0, 1.0 - dist * 1.25);
+            glow = min(glow * glow * glow, 0.325);
+            col += glow * vec3(1.5, 0.3, 1.2) * 1.1;
+
+            uv -= 0.5;
+            uv.y += sunHeight;
+
+            uv.y += 0.18;
+            if (uv.y < 0.1) {
+              col += getGridColor(uv) * 4.0 * gridColor;
             }
 
-            // For pixels that are on the ground (uv.y < horizon), we draw the mountains
-            // by comparing the ray height (uv.y) with the mountain height at that world position
-            // Actually, we need to compute a threshold: the mountain silhouette
-            // We can compute a "mountain elevation" as a function of screen x and z
-            // but easier: for each pixel, compute the world height at that point and compare to ray height.
-            // Since we have ray direction, we can compute the height of the terrain at the intersection.
-            // Simpler: we'll draw mountains as a 2D heightfield on the screen.
-            // We'll compute for each pixel the world z and x, then compute mountain height.
-            // If the pixel is below the mountain silhouette, color it dark.
+            vec4 fragColor = (1.3 + sin(time * flickerSpeed + uv.y * flickerFreq) * flickerIntensity) * vec4(col, 1.0);
+            float scanline = smoothstep(1.0 - 0.2 / flickerFreq, 1.0, sin(time * flickerSpeed * 0.1 + uv.y * 4.0));
+            fragColor *= scanline * 0.2 + 1.0;
 
-            // Compute mountain silhouette for this pixel
-            // First, get world coordinates
-            float worldZ2 = 1.0 / (uv.y - horizon + 0.01) * 0.5;
-            if (uv.y < horizon + 0.01) {
-              // Only on ground
-              float worldX2 = uv.x * worldZ2 * 8.0;
-              // Compute mountain height at this world position
-              float mHeight = 0.0;
-              float absX2 = abs(worldX2);
-              if (absX2 > roadWidth) {
-                vec2 noiseCoord2 = vec2(worldX2 * 0.5, worldZ2 * 0.3);
-                float noiseVal2 = fbm(noiseCoord2 + vec2(0.0, u_time * 0.02));
-                float distFactor2 = 1.0 - exp(-worldZ2 * 0.1);
-                mHeight = (noiseVal2 * 0.6 + 0.2) * distFactor2;
-                float peak2 = sin(worldX2 * 0.5 + worldZ2 * 0.2) * 0.3 + sin(worldX2 * 1.2 - worldZ2 * 0.1) * 0.15;
-                mHeight += peak2 * 0.3 * distFactor2;
-                mHeight = clamp(mHeight, 0.0, 1.0);
-              }
-              // Convert mountain height to screen y (it's proportional to z)
-              // The mountain height in world is mHeight, we need to map it to screen y.
-              // The screen y is determined by ray height: for a given world height H, the ray intersects at y = horizon + H / (something)
-              // Actually, we can compute the screen y of a point at world (x, H, z).
-              // But simpler: we can compute the mountain silhouette as a function of screen x and z, and compare with uv.y.
-              // Since we are already on the ground, we can compute the elevation of the terrain at that point.
-              // We'll just draw the mountain as a solid color if the terrain is above the road.
-              // We'll color it with a dark purple/blue.
-              // We can compute the "mountain screen height" by projecting a point at world (worldX2, mHeight, worldZ2) to screen.
-              // Projection: screen x = worldX2 / worldZ2 / 8.0? Actually we have uv.x = worldX / (z*8) => worldX = uv.x * z * 8.
-              // For a given world point (wx, wy, wz), the screen uv.x = wx / (wz * 8) and uv.y = horizon + 1/(wz*0.5) ?
-              // This is getting messy. Instead, we'll use a simpler approach: draw mountains as a 2D shape using a signed distance field.
-              // Given time, I'll implement a simple vertical strip approach: for each pixel, if absX > roadWidth, compute a mountain height based on noise and z, and if uv.y is below that height, color it.
-              // Let's compute the mountain "height" on screen: for a given world x and z, the mountain height in world is mHeight.
-              // The screen y of the mountain at that point is: the ray from camera to that world point.
-              // Actually, the ray from camera (0,0,0) to world point (wx, wy, wz) has direction (wx, wy, wz).
-              // The screen uv.y is given by: uv.y = horizon + 1/(wz * 0.5) ? Not exactly.
-              // Let's derive: from earlier, z = 0.5 / (uv.y - horizon) => uv.y = horizon + 0.5 / z.
-              // So for a given world z (wz), the screen y is horizon + 0.5 / wz.
-              // And for that screen y, the world x is uv.x * wz * 8.
-              // So we can compute the screen y of the mountain at a given world x and z:
-              // For a given world z, the mountain height is mHeight (world y). The ray intersects the terrain at world y = mHeight.
-              // The screen y of that point is: uv.y = horizon + 0.5 / wz (since the ray height is mHeight, but we need to compute the ray that hits that point).
-              // Actually, the screen y is determined by the ray that goes through the point (wx, mHeight, wz). The ray direction is proportional to (wx, mHeight, wz).
-              // The ray's uv.y is (mHeight / wz) * something? 
-              // Let's use a simpler hack: we'll compute mountain silhouette by evaluating the mountain height at each pixel's world position and comparing it to a threshold based on uv.y.
-              // Since we have the world z, we can compute the world y of the mountain at that point. If that world y is above the ground (0), then the pixel is below the mountain.
-              // But we need to map world y to screen y. Let's just color the mountain if uv.y is below the mountain silhouette curve.
-              // We'll compute the mountain silhouette as a curve: for a given screen x, the screen y of the mountain is horizon + 0.5 / (some z) where z is the distance where the mountain is.
-              // This is too complex for now. I'll use a simpler approach: draw mountains as a 2D gradient using noise on screen coordinates.
-              // This is a compromise; it will look like mountains but not perfectly 3D.
-              // Let's compute a mountain mask based on screen uv.x and uv.y.
-            }
-
-            // For simplicity, we'll add mountains as a 2D overlay using screen-space noise.
-            // This will give a feel of mountains but not true 3D. Since time is limited, I'll add a simple mountain shape.
-            // I'll draw two triangles on the sides using a smoothstep function based on uv.x and uv.y.
-            // This is a placeholder; for a more robust solution, a proper 3D terrain would be needed.
-            // Given the scope, we'll skip the 3D mountains and instead add a subtle dark gradient on sides to simulate mountains.
-            // That way the scene looks good without complex math.
-
-            // Let's add a dark purple gradient on the sides to simulate distant mountains.
-            float side = abs(uv.x);
-            float mountainMask = smoothstep(0.6, 0.9, side) * (1.0 - smoothstep(-0.1, 0.1, uv.y - horizon));
-            vec3 mountainCol = vec3(0.1, 0.0, 0.2);
-            col += mountainMask * mountainCol * 0.6;
-
-            // Vignette
-            float vignette = 1.0 - 0.4 * length(uv - 0.5) * 1.2;
-            col *= vignette;
-            col = clamp(col, 0.0, 1.0);
-            col = pow(col, vec3(0.9));
-
-            outColor = vec4(col, 1.0);
+            outColor = clamp(fragColor, 0.0, 1.0);
           }
         `;
 
@@ -497,7 +464,6 @@
         const vs = compileShader(vsSource, gl.VERTEX_SHADER);
         const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
         if (!vs || !fs) {
-          console.warn('Shader compilation failed, using 2D fallback.');
           const ctx = canvas.getContext('2d');
           let w, h;
           function resize() {
@@ -524,7 +490,6 @@
         gl.attachShader(prog, fs);
         gl.linkProgram(prog);
         if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-          console.error('Program link error:', gl.getProgramInfoLog(prog));
           const ctx = canvas.getContext('2d');
           let w, h;
           function resize() {
@@ -555,6 +520,7 @@
 
         const resLoc = gl.getUniformLocation(prog, 'u_resolution');
         const timeLoc = gl.getUniformLocation(prog, 'u_time');
+        const speedLoc = gl.getUniformLocation(prog, 'u_speed');
 
         function resize() {
           const w = window.innerWidth;
@@ -573,6 +539,7 @@
           gl.useProgram(prog);
           gl.uniform2f(resLoc, canvas.width, canvas.height);
           gl.uniform1f(timeLoc, elapsed);
+          gl.uniform1f(speedLoc, bgConfig.speed);
           gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
           requestAnimationFrame(render);
         }
@@ -581,7 +548,7 @@
 
 
       // ================================================================
-      // 2. MIDI / PATCH MANAGER (unchanged)
+      // 2. MIDI / PATCH MANAGER
       // ================================================================
       const FM1_OPERATOR_COUNT = 6;
       const FM1_OPERATOR_PARAMETER_COUNT = 21;
@@ -601,7 +568,6 @@
         return NOTE_NAMES[noteIndex] + octave;
       }
 
-      // DOM refs
       const outputSelect = document.getElementById('midiOutputSelect');
       const inputSelect = document.getElementById('midiInputSelect');
       const connectBtn = document.getElementById('connectBtn');
@@ -629,7 +595,6 @@
         'j': 70, 'm': 71
       };
 
-      // ----- MIDI helpers -----
       function sendMidi(status, data1, data2) {
         if (!selectedOutput) return false;
         try { if (data2 === undefined) selectedOutput.send([status, data1]); else selectedOutput.send([status, data1, data2]); return true; } catch(e) { console.warn('MIDI send error:', e); return false; }
@@ -665,7 +630,6 @@
         }
       }
 
-      // ----- DX7 voice unpacking -----
       function unpackDx7Voice(packed) {
         const unpacked = [];
         for (let operator = 0; operator < FM1_OPERATOR_COUNT; operator += 1) {
@@ -747,7 +711,6 @@
         return voices;
       }
 
-      // ----- File loading -----
       syxFileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -790,7 +753,6 @@
         reader.readAsArrayBuffer(file);
       });
 
-      // ----- Send single patch -----
       function sendSinglePatch() {
         if (!selectedOutput) { alert('Connect to a MIDI output first.'); return; }
         const idx = parseInt(patchSelect.value, 10);
@@ -860,7 +822,6 @@
       sendSinglePatchBtn.addEventListener('click', sendSinglePatch);
       sendFullBankBtn.addEventListener('click', sendFullBank);
 
-      // ----- MIDI input logging -----
       function midiMessageToString(data, showRaw) {
         if (!data || data.length===0) return '';
         const rawHex = Array.from(data).map(b=>'0x'+b.toString(16).padStart(2,'0').toUpperCase()).join(' ');
@@ -954,7 +915,6 @@
           }
         }
 
-        // White keys
         whiteNotes.forEach((note) => {
           const key = document.createElement('div');
           key.className = 'key key-white';
@@ -970,12 +930,18 @@
         // Black keys
         const whiteWidth = 26;
         const blackWidth = 16;
-        const blackIndexMap = {1:0, 3:1, 6:3, 8:4, 10:5};
+        // Chromatic steps of WHITE keys that are immediately followed by a
+        // black key (C, D, F, G, A) — there's no black key between E-F or B-C.
+        // FIX: the previous code checked the white key's own step against a
+        // map keyed by the BLACK key's steps ({1,3,6,8,10}), which never
+        // matched since a white key's step is always 0,2,4,5,7,9,11 — so no
+        // black key <div>s were ever created. This map fixes that.
+        const whiteStepsWithBlackAfter = {0:true, 2:true, 5:true, 7:true, 9:true};
         let whiteIdx = 0;
         for (let i = 0; i < whiteNotes.length; i++) {
           const note = whiteNotes[i];
           const step = (note - 12) % 12;
-          if (step in blackIndexMap) {
+          if (step in whiteStepsWithBlackAfter) {
             const blackNote = note + 1;
             if (blackNote >= NOTE_START && blackNote <= NOTE_END) {
               const key = document.createElement('div');
@@ -1009,7 +975,6 @@
         key.addEventListener('touchcancel', end, { passive: false });
       }
 
-      // ----- MIDI connection -----
       function updateOutputs() {
         if (!midiAccess) { outputSelect.disabled=true; outputSelect.innerHTML='<option value="">— none —</option>'; return; }
         const outputs = Array.from(midiAccess.outputs.values());
@@ -1061,7 +1026,6 @@
         statusBadgeIn.className = hasInput ? 'status-badge online' : 'status-badge';
       }
 
-      // ----- Event listeners -----
       connectBtn.addEventListener('click', connectMIDI);
       outputSelect.addEventListener('change', () => { if(!midiAccess)return; selectedOutput=midiAccess.outputs.get(outputSelect.value)||null; allNotesOff(); updateUI(); });
       inputSelect.addEventListener('change', () => {
@@ -1079,7 +1043,6 @@
       document.addEventListener('visibilitychange', () => { if(document.hidden) allNotesOff(); });
       window.addEventListener('beforeunload', () => allNotesOff());
 
-      // Init
       buildPiano();
       setTimeout(connectMIDI, 400);
     })();
