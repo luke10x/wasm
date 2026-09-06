@@ -16,9 +16,28 @@
       display: block; pointer-events: none;
     }
 
+    /* 2D NOTE-GRID TRACKER — sits between the 3D background and the UI chrome */
+    #note-grid-canvas {
+      position: fixed; top: 0; left: 0; z-index: 5;
+      display: block; touch-action: none;
+    }
+
+    /* Flashes the currently-snapped note duration while swiping/scrolling to record */
+    #durationFlash {
+      position: fixed; top: 38%; left: 50%; transform: translate(-50%, -50%) scale(0.85);
+      font-size: 3rem; font-weight: 800; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif;
+      text-shadow: 0 0 24px rgba(120,180,255,0.85), 0 2px 10px rgba(0,0,0,0.7);
+      opacity: 0; pointer-events: none; z-index: 25;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #durationFlash.show {
+      opacity: 1; transform: translate(-50%, -50%) scale(1);
+      transition: opacity 0.05s ease, transform 0.15s cubic-bezier(.2, 1.4, .4, 1);
+    }
+
     /* TOP LEFT LOG */
     #top-left-log {
-      position: fixed; top: 20px; left: 20px; z-index: 10;
+      position: fixed; top: 20px; left: 20px; z-index: 20;
       width: 320px; max-width: calc(100vw - 40px);
       background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       border-radius: 12px; padding: 10px 14px;
@@ -52,7 +71,7 @@
 
     /* TOP RIGHT MIDI */
     #top-right-midi {
-      position: fixed; top: 20px; right: 20px; z-index: 10;
+      position: fixed; top: 20px; right: 20px; z-index: 20;
       background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       border-radius: 60px; padding: 8px 16px;
       border: 1px solid rgba(255,255,255,0.08);
@@ -86,6 +105,12 @@
     }
     #top-right-midi .status-badge.online {
       background: rgba(26,74,58,0.6); color: #7de0b0; border-color: rgba(58,168,122,0.4);
+    }
+    #top-right-midi .status-badge.recording {
+      background: rgba(90,20,20,0.7); color: #ff9a9a; border-color: rgba(200,60,60,0.6);
+    }
+    #top-right-midi .status-badge.playing {
+      background: rgba(20,80,40,0.7); color: #8dffb0; border-color: rgba(60,180,90,0.6);
     }
 
     /* BOTTOM DOCK */
@@ -220,6 +245,11 @@
        or use the helper: window.setBackgroundSpeed(-4); -->
   <canvas id="bg-canvas" data-speed="6"></canvas>
 
+  <!-- 2D piano-roll tracker overlay: sits above the 3D background, below the
+       keyboard/UI. Captures the record/playback swipe-scroll gesture. -->
+  <canvas id="note-grid-canvas"></canvas>
+  <div id="durationFlash"></div>
+
   <!-- TOP LEFT LOG -->
   <div id="top-left-log">
     <div class="log-header">
@@ -243,6 +273,7 @@
     <button id="connectBtn">🔌 Connect</button>
     <span id="statusBadgeOut" class="status-badge">⚪ off</span>
     <span id="statusBadgeIn" class="status-badge">⚪ off</span>
+    <span id="transportStatus" class="status-badge">⏹ stopped</span>
   </div>
 
   <!-- BOTTOM DOCK -->
@@ -251,6 +282,8 @@
       <div class="piano" id="pianoContainer"></div>
     </div>
     <div id="patch-controls">
+      <label>🎵 BPM</label>
+      <input type="number" id="bpmInput" min="20" max="300" value="120" style="width:44px;" />
       <label>📂 Load .syx</label>
       <input type="file" id="syxFileInput" accept=".syx" />
       <span class="patch-status" id="bankInfo">No bank loaded</span>
@@ -574,6 +607,8 @@
       const statusBadgeOut = document.getElementById('statusBadgeOut');
       const statusBadgeIn = document.getElementById('statusBadgeIn');
       const pianoContainer = document.getElementById('pianoContainer');
+      const pianoScrollEl = document.getElementById('piano-container');
+      const bottomDockEl = document.getElementById('bottom-dock');
       const logArea = document.getElementById('logArea');
       const clearLogBtn = document.getElementById('clearLogBtn');
       const showRawCheck = document.getElementById('showRawCheck');
@@ -890,7 +925,22 @@
 
       function attachInputListener(input) {
         if (!input) return;
-        input.onmidimessage = (event) => { appendLog(event.data, showRawCheck.checked); };
+        input.onmidimessage = (event) => {
+          appendLog(event.data, showRawCheck.checked);
+          const data = event.data;
+          if (!data || data.length < 2) return;
+          const command = data[0] & 0xF0;
+          const note = data[1];
+          const velocity = data[2] || 0;
+          // Route incoming Note On/Off through the same noteOn/noteOff path
+          // the on-screen keyboard already uses, so activeNotes (and the
+          // key highlight, and the tracker's recording logic) see it too.
+          if (command === 0x90 && velocity > 0) {
+            noteOn(note, velocity);
+          } else if (command === 0x80 || (command === 0x90 && velocity === 0)) {
+            noteOff(note);
+          }
+        };
       }
 
       // ----- Build Piano (F0 to G8) -----
@@ -962,6 +1012,7 @@
         }
 
         pianoContainer.appendChild(wrapper);
+        if (typeof recomputeNoteColumns === 'function') recomputeNoteColumns();
       }
 
       function attachEvents(key, note) {
@@ -1026,7 +1077,459 @@
         statusBadgeIn.className = hasInput ? 'status-badge online' : 'status-badge';
       }
 
-      connectBtn.addEventListener('click', connectMIDI);
+      // ================================================================
+      // 3. TRACKER / SEQUENCER — gestural 2D piano-roll grid
+      // ================================================================
+      // Overview of the model (see reply for full rationale):
+      //  - A canonical chronological "sequence" of {startBar, durBar, notes}
+      //    events, always built forward in time regardless of which visual
+      //    direction is currently on screen.
+      //  - RECORDING: the keyboard/"now" line stays fixed on screen; already
+      //    recorded material recedes UPWARD as recordCursorBar advances.
+      //  - PLAYBACK: the "now" line stays fixed; upcoming notes fall DOWNWARD
+      //    from above and are consumed at the keyboard line, exactly like the
+      //    reference screenshot. Both directions reuse the same draw code,
+      //    just flipped by a `dir` sign and driven by a different "now" value.
+      //  - Note length is controlled purely by how far you scroll/drag while
+      //    recording (not by real elapsed time), snapped to musical
+      //    subdivisions, with an eased/spring-like visual settle.
+
+      const trackerCanvas = document.getElementById('note-grid-canvas');
+      const trackerCtx = trackerCanvas.getContext('2d');
+      const durationFlashEl = document.getElementById('durationFlash');
+      const transportStatusEl = document.getElementById('transportStatus');
+      const bpmInput = document.getElementById('bpmInput');
+
+      const BAR_BEATS = 4; // assumes 4/4
+      let bpm = parseFloat(bpmInput && bpmInput.value) || 120;
+      if (bpmInput) {
+        bpmInput.addEventListener('change', () => {
+          const v = parseFloat(bpmInput.value);
+          if (Number.isFinite(v) && v > 0) bpm = v;
+        });
+      }
+
+      // Duration ladder, shortest→longest. Index increases = longer note.
+      // "T" entries are triplets (3 in the time of 2), expressed as a
+      // fraction of a whole bar (4 beats).
+      const DURATIONS = [
+        { label: '1/16T', bars: 1 / 24 },
+        { label: '1/16',  bars: 1 / 16 },
+        { label: '1/8T',  bars: 1 / 12 },
+        { label: '1/8',   bars: 1 / 8  },
+        { label: '1/4T',  bars: 1 / 6  },
+        { label: '1/4',   bars: 1 / 4  },
+        { label: '1/2',   bars: 1 / 2  },
+        { label: '1/1',   bars: 1      },
+      ];
+      const SWIPE_STEP_PX = 42;    // on-screen px per duration step (equal for every pair, as requested)
+      const SWIPE_ENGAGE_PX = 46;  // px of net scroll needed to arm/stop the transport
+      const SWIPE_SESSION_GAP_MS = 220; // idle gap that ends a wheel "gesture session"
+      const DURATION_EASE_MS = 150; // time-boxed smoothstep tween: slow → fast → slow, snap-to-snap
+
+      // ---- Bar height (px per bar) — configurable, defaults to the
+      // keyboard's total rendered width per the request. Override any time
+      // with window.setBarHeight(px). ----
+      let pxPerBar = 600;
+      let pxPerBarUserSet = false;
+      window.setBarHeight = function(px) {
+        const v = parseFloat(px);
+        if (Number.isFinite(v) && v > 10) { pxPerBar = v; pxPerBarUserSet = true; }
+      };
+
+      // ---- Note-column layout, kept in sync with the keyboard below ----
+      const noteColumnMap = new Map(); // note -> { x, width, black }  (x is canonical, i.e. as if scrollLeft===0)
+      let totalPianoWidthPx = 0;
+
+      function recomputeNoteColumns() {
+        noteColumnMap.clear();
+        const scrollX = pianoScrollEl.scrollLeft;
+        const originLeft = pianoScrollEl.getBoundingClientRect().left;
+        let maxRight = 0;
+        pianoContainer.querySelectorAll('.key').forEach((el) => {
+          const note = parseInt(el.dataset.note, 10);
+          const r = el.getBoundingClientRect();
+          const x = (r.left - originLeft) + scrollX;
+          const width = r.width;
+          const black = el.classList.contains('key-black');
+          noteColumnMap.set(note, { x, width, black });
+          maxRight = Math.max(maxRight, x + width);
+        });
+        totalPianoWidthPx = maxRight;
+        if (!pxPerBarUserSet && totalPianoWidthPx > 0) pxPerBar = totalPianoWidthPx;
+      }
+
+      function resizeTrackerCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const dockH = bottomDockEl.offsetHeight;
+        const h = Math.max(120, window.innerHeight - dockH);
+        const w = window.innerWidth;
+        trackerCanvas.style.width = w + 'px';
+        trackerCanvas.style.height = h + 'px';
+        trackerCanvas.width = Math.round(w * dpr);
+        trackerCanvas.height = Math.round(h * dpr);
+        trackerCanvas._cssW = w;
+        trackerCanvas._cssH = h;
+      }
+
+      // ---- Transport / recording state ----
+      let transportMode = 'stopped'; // 'stopped' | 'recording' | 'playing'
+      let sequence = [];             // { startBar, durBar, notes:[...], onFired, offFired }
+      let recordCursorBar = 0;
+      let playheadBar = 0;
+      let playStartPerf = 0;
+
+      let sessionActive = false;
+      let sessionAccum = 0;
+      let sessionConsumed = false;
+      let sessionIdleTimer = null;
+
+      let liveSegmentAccum = 0;
+      let liveDurationIndex = 0;
+      let liveDisplayedBars = DURATIONS[0].bars;
+      let easeFromBars = DURATIONS[0].bars;
+      let easeToBars = DURATIONS[0].bars;
+      let easeStartMs = 0;
+      let segmentNotes = new Set();
+
+      function updateTransportStatus() {
+        if (!transportStatusEl) return;
+        if (transportMode === 'recording') {
+          transportStatusEl.textContent = '⏺ rec';
+          transportStatusEl.className = 'status-badge recording';
+        } else if (transportMode === 'playing') {
+          transportStatusEl.textContent = '▶ play';
+          transportStatusEl.className = 'status-badge playing';
+        } else {
+          transportStatusEl.textContent = '⏹ stopped';
+          transportStatusEl.className = 'status-badge';
+        }
+      }
+
+      let flashHideTimer = null;
+      function flashDuration(label) {
+        if (!durationFlashEl) return;
+        durationFlashEl.textContent = label;
+        durationFlashEl.classList.remove('show');
+        void durationFlashEl.offsetWidth; // restart transition
+        durationFlashEl.classList.add('show');
+        clearTimeout(flashHideTimer);
+        flashHideTimer = setTimeout(() => durationFlashEl.classList.remove('show'), 550);
+      }
+
+      // Smoothstep: slow at 0, fast through the middle, slow into 1 — this is
+      // what actually reads as "snappy" (a fixed-factor exponential lerp
+      // never really finishes, it just asymptotically crawls).
+      function smoothstep(t) {
+        t = Math.max(0, Math.min(1, t));
+        return t * t * (3 - 2 * t);
+      }
+
+      function updateLiveDurationFromAccum() {
+        const idx = Math.max(0, Math.min(DURATIONS.length - 1, Math.floor(liveSegmentAccum / SWIPE_STEP_PX)));
+        if (idx !== liveDurationIndex) {
+          easeFromBars = liveDisplayedBars; // continue smoothly from wherever we currently are
+          easeToBars = DURATIONS[idx].bars;
+          easeStartMs = performance.now();
+          liveDurationIndex = idx;
+          flashDuration(DURATIONS[idx].label);
+        }
+      }
+
+      function setsEqual(a, b) {
+        if (a.size !== b.size) return false;
+        for (const v of a) if (!b.has(v)) return false;
+        return true;
+      }
+
+      function commitLiveSegment() {
+        const durBar = DURATIONS[liveDurationIndex].bars;
+        if (segmentNotes.size > 0) {
+          sequence.push({
+            startBar: recordCursorBar,
+            durBar,
+            notes: Array.from(segmentNotes),
+            onFired: false,
+            offFired: false,
+          });
+        }
+        // A segment with no held notes is recorded as a rest: no event is
+        // stored, but the cursor still advances by the swiped duration.
+        recordCursorBar += durBar;
+        liveSegmentAccum = 0;
+        liveDurationIndex = 0;
+        liveDisplayedBars = DURATIONS[0].bars;
+        easeFromBars = DURATIONS[0].bars;
+        easeToBars = DURATIONS[0].bars;
+        easeStartMs = performance.now();
+      }
+
+      function startRecording() {
+        transportMode = 'recording';
+        segmentNotes = new Set(activeNotes);
+        liveSegmentAccum = 0;
+        liveDurationIndex = 0;
+        updateTransportStatus();
+        window.setBackgroundSpeed && window.setBackgroundSpeed(-6);
+      }
+      function stopRecording() {
+        commitLiveSegment();
+        transportMode = 'stopped';
+        updateTransportStatus();
+        window.setBackgroundSpeed && window.setBackgroundSpeed(1);
+      }
+      function startPlayback() {
+        if (recordCursorBar <= 0) return; // nothing recorded yet
+        transportMode = 'playing';
+        playheadBar = 0;
+        playStartPerf = performance.now();
+        sequence.forEach((ev) => { ev.onFired = false; ev.offFired = false; });
+        updateTransportStatus();
+        window.setBackgroundSpeed && window.setBackgroundSpeed(6);
+      }
+      function stopPlayback() {
+        transportMode = 'stopped';
+        sequence.forEach((ev) => {
+          if (ev.onFired && !ev.offFired) {
+            ev.notes.forEach((n) => noteOff(n));
+            ev.offFired = true;
+          }
+        });
+        updateTransportStatus();
+        window.setBackgroundSpeed && window.setBackgroundSpeed(1);
+      }
+
+      function checkSegmentNotesChanged() {
+        if (transportMode !== 'recording') return;
+        if (!setsEqual(activeNotes, segmentNotes)) {
+          commitLiveSegment();
+          segmentNotes = new Set(activeNotes);
+        }
+      }
+
+      // ---- Gesture handling: scroll (wheel) and drag (pointer) both feed
+      // the same accumulator-based state machine. ----
+      function beginSessionIfNeeded() {
+        if (!sessionActive) {
+          sessionActive = true;
+          sessionAccum = 0;
+          sessionConsumed = false;
+        }
+        clearTimeout(sessionIdleTimer);
+        sessionIdleTimer = setTimeout(endSession, SWIPE_SESSION_GAP_MS);
+      }
+      function endSession() {
+        sessionActive = false;
+        sessionAccum = 0;
+        sessionConsumed = false;
+        if (transportMode === 'recording') {
+          stopRecording(); // releasing the drag/scroll always finalizes the take
+        }
+      }
+
+      function handleScrollDelta(deltaY) {
+        beginSessionIfNeeded();
+        sessionAccum += deltaY;
+
+        if (transportMode === 'recording') {
+          liveSegmentAccum = Math.max(0, liveSegmentAccum + deltaY);
+          updateLiveDurationFromAccum();
+          return;
+        }
+
+        if (sessionConsumed) return;
+
+        if (transportMode === 'playing') {
+          if (sessionAccum >= SWIPE_ENGAGE_PX) {
+            stopPlayback();
+            sessionConsumed = true;
+          }
+        } else { // 'stopped'
+          if (sessionAccum >= SWIPE_ENGAGE_PX) {
+            const overshoot = sessionAccum - SWIPE_ENGAGE_PX;
+            startRecording();
+            liveSegmentAccum = Math.max(0, overshoot);
+            updateLiveDurationFromAccum();
+            sessionConsumed = true;
+          } else if (sessionAccum <= -SWIPE_ENGAGE_PX) {
+            startPlayback();
+            sessionConsumed = true;
+          }
+        }
+      }
+
+      trackerCanvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        handleScrollDelta(e.deltaY);
+      }, { passive: false });
+
+      // Explicit mousedown/mouseup + touchstart/touchend (rather than Pointer
+      // Events) to match the rest of this file's input handling. Touch
+      // devices fire a synthetic mousedown/mousemove/mouseup a few hundred ms
+      // after real touch events (for compatibility with mouse-only code), so
+      // we mute mouse handling for a short window after any touch to avoid
+      // double-triggering the same drag.
+      let dragging = false;
+      let lastDragY = 0;
+      let ignoreMouseUntil = 0;
+
+      function dragStart(y) {
+        dragging = true;
+        lastDragY = y;
+      }
+      function dragMove(y) {
+        if (!dragging) return;
+        const dy = y - lastDragY;
+        lastDragY = y;
+        if (dy !== 0) handleScrollDelta(dy);
+      }
+      function dragEnd() {
+        if (!dragging) return;
+        dragging = false;
+        endSession();
+      }
+
+      trackerCanvas.addEventListener('mousedown', (e) => {
+        if (Date.now() < ignoreMouseUntil || e.button !== 0) return;
+        e.preventDefault();
+        dragStart(e.clientY);
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (Date.now() < ignoreMouseUntil) return;
+        dragMove(e.clientY);
+      });
+      window.addEventListener('mouseup', (e) => {
+        if (Date.now() < ignoreMouseUntil) return;
+        dragEnd();
+      });
+
+      trackerCanvas.addEventListener('touchstart', (e) => {
+        ignoreMouseUntil = Date.now() + 800; // outlast the browser's synthetic-mouse-event delay
+        if (e.touches.length !== 1) return;
+        e.preventDefault();
+        dragStart(e.touches[0].clientY);
+      }, { passive: false });
+      trackerCanvas.addEventListener('touchmove', (e) => {
+        if (e.touches.length !== 1) return;
+        e.preventDefault();
+        dragMove(e.touches[0].clientY);
+      }, { passive: false });
+      function touchEnd() {
+        ignoreMouseUntil = Date.now() + 800;
+        dragEnd();
+      }
+      trackerCanvas.addEventListener('touchend', touchEnd, { passive: false });
+      trackerCanvas.addEventListener('touchcancel', touchEnd, { passive: false });
+
+      // ---- Playback ticking (real time → bars, driving MIDI note-out) ----
+      function tickPlayback() {
+        const elapsedSec = (performance.now() - playStartPerf) / 1000;
+        const barsPerSec = bpm / (60 * BAR_BEATS);
+        playheadBar = elapsedSec * barsPerSec;
+
+        sequence.forEach((ev) => {
+          if (!ev.onFired && playheadBar >= ev.startBar) {
+            ev.onFired = true;
+            ev.notes.forEach((n) => noteOn(n, 100));
+          }
+          if (ev.onFired && !ev.offFired && playheadBar >= ev.startBar + ev.durBar) {
+            ev.offFired = true;
+            ev.notes.forEach((n) => noteOff(n));
+          }
+        });
+
+        if (playheadBar > recordCursorBar + 0.001) {
+          stopPlayback();
+        }
+      }
+
+      // ---- Drawing ----
+      function drawTracker() {
+        const cssW = trackerCanvas._cssW || trackerCanvas.clientWidth;
+        const cssH = trackerCanvas._cssH || trackerCanvas.clientHeight;
+        const dpr = window.devicePixelRatio || 1;
+        trackerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        trackerCtx.clearRect(0, 0, cssW, cssH);
+
+        // Translucent wash so the 3D sun behind is still visible through it.
+        trackerCtx.fillStyle = 'rgba(6,4,16,0.42)';
+        trackerCtx.fillRect(0, 0, cssW, cssH);
+
+        const playheadY = cssH - 2;
+        const playing = transportMode === 'playing';
+        const dir = playing ? 1 : -1;
+        const now = playing ? playheadBar : recordCursorBar;
+        const barToY = (t) => playheadY - dir * (t - now) * pxPerBar;
+
+        // Row / bar grid lines
+        const visibleBars = cssH / pxPerBar;
+        const loT = playing ? now - 0.5 : now - visibleBars - 0.5;
+        const hiT = playing ? now + visibleBars + 0.5 : now + 0.5;
+        const kStart = Math.floor(loT * 16) - 1;
+        const kEnd = Math.ceil(hiT * 16) + 1;
+        for (let k = kStart; k <= kEnd; k++) {
+          const t = k / 16;
+          const y = barToY(t);
+          if (y < -4 || y > cssH + 4) continue;
+          const isBarLine = (k % 16 === 0);
+          trackerCtx.strokeStyle = isBarLine ? 'rgba(150,180,255,0.35)' : 'rgba(120,150,220,0.08)';
+          trackerCtx.lineWidth = isBarLine ? 1.5 : 1;
+          trackerCtx.beginPath();
+          trackerCtx.moveTo(0, y + 0.5);
+          trackerCtx.lineTo(cssW, y + 0.5);
+          trackerCtx.stroke();
+        }
+
+        // "Now" / playhead line (flush with the top of the keyboard)
+        trackerCtx.strokeStyle = 'rgba(200,225,255,0.55)';
+        trackerCtx.lineWidth = 1.5;
+        trackerCtx.beginPath();
+        trackerCtx.moveTo(0, playheadY + 0.5);
+        trackerCtx.lineTo(cssW, playheadY + 0.5);
+        trackerCtx.stroke();
+
+        // X alignment with the (horizontally scrollable) keyboard below
+        const scrollX = pianoScrollEl.scrollLeft;
+        const originLeft = pianoScrollEl.getBoundingClientRect().left;
+        const canvasLeft = trackerCanvas.getBoundingClientRect().left;
+        const xShift = (originLeft - canvasLeft) - scrollX;
+
+        function drawEvent(notes, startBar, durBar, isLive) {
+          const yA = barToY(startBar);
+          const yB = barToY(startBar + durBar);
+          const yTop = Math.min(yA, yB);
+          const yBot = Math.max(yA, yB);
+          if (yBot < -10 || yTop > cssH + 10) return;
+          notes.forEach((note) => {
+            const col = noteColumnMap.get(note);
+            if (!col) return;
+            const x = xShift + col.x + 1;
+            if (x + col.width < 0 || x > cssW) return;
+            const w = Math.max(2, col.width - 2);
+            trackerCtx.fillStyle = isLive
+              ? 'rgba(255,120,170,0.9)'
+              : (col.black ? 'rgba(120,190,255,0.85)' : 'rgba(255,150,190,0.85)');
+            trackerCtx.fillRect(x, yTop, w, Math.max(2, yBot - yTop));
+          });
+        }
+
+        sequence.forEach((ev) => drawEvent(ev.notes, ev.startBar, ev.durBar, false));
+
+        if (transportMode === 'recording' && segmentNotes.size > 0) {
+          const t = (performance.now() - easeStartMs) / DURATION_EASE_MS;
+          liveDisplayedBars = easeFromBars + (easeToBars - easeFromBars) * smoothstep(t);
+          drawEvent(Array.from(segmentNotes), recordCursorBar, liveDisplayedBars, true);
+        }
+      }
+
+      function trackerLoop() {
+        if (transportMode === 'playing') tickPlayback();
+        checkSegmentNotesChanged();
+        drawTracker();
+        requestAnimationFrame(trackerLoop);
+      }
+
+
       outputSelect.addEventListener('change', () => { if(!midiAccess)return; selectedOutput=midiAccess.outputs.get(outputSelect.value)||null; allNotesOff(); updateUI(); });
       inputSelect.addEventListener('change', () => {
         if(!midiAccess)return;
@@ -1044,6 +1547,18 @@
       window.addEventListener('beforeunload', () => allNotesOff());
 
       buildPiano();
+      resizeTrackerCanvas();
+      requestAnimationFrame(trackerLoop);
+
+      let resizeDebounce = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeDebounce);
+        resizeDebounce = setTimeout(() => {
+          buildPiano();          // also re-measures columns via recomputeNoteColumns()
+          resizeTrackerCanvas();
+        }, 150);
+      });
+
       setTimeout(connectMIDI, 400);
     })();
   </script>
