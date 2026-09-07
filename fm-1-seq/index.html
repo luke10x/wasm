@@ -19,7 +19,10 @@
     /* 2D NOTE-GRID TRACKER — sits between the 3D background and the UI chrome */
     #note-grid-canvas {
       position: fixed; top: 0; left: 0; z-index: 5;
-      display: block; touch-action: none;
+      display: block; touch-action: none; cursor: grab;
+    }
+    #note-grid-canvas.dragging {
+      cursor: grabbing;
     }
 
     /* Flashes the currently selected or committed step duration */
@@ -72,7 +75,10 @@
 
     /* TOP MIDI / INSTRUMENT BARS */
     #top-header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      --keyboard-width: 100%;
+      position: fixed; top: 0; left: 50%; z-index: 20;
+      width: min(var(--keyboard-width), calc(100vw - 16px));
+      transform: translateX(-50%);
       background: rgba(0,0,0,0.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       border-bottom: 1px solid rgba(255,255,255,0.06);
       padding: 7px 14px;
@@ -119,9 +125,9 @@
     }
     #top-right-midi button:active { transform: scale(0.95); }
     #top-right-midi .status-badge {
-      font-size: 0.55rem; padding: 2px 8px; border-radius: 30px;
+      font-size: 0.9rem; padding: 1px 7px; border-radius: 30px;
       background: rgba(42,42,74,0.6); color: #8a9fc0; border: 1px solid rgba(58,74,106,0.4);
-      white-space: nowrap; height: 22px; display: flex; align-items: center;
+      white-space: nowrap; height: 24px; min-width: 28px; display: flex; align-items: center; justify-content: center;
     }
     #top-right-midi .status-badge.online {
       background: rgba(26,74,58,0.6); color: #7de0b0; border-color: rgba(58,168,122,0.4);
@@ -209,6 +215,7 @@
 
     /* KEYBOARD / PERFORMANCE DOCK */
     #bottom-dock {
+      --keyboard-width: 100%;
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
       background: rgba(0,0,0,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
       border-top: 1px solid rgba(255,255,255,0.06);
@@ -228,6 +235,9 @@
       gap: 8px;
       align-items: center;
       min-height: 34px;
+      width: 100%;
+      max-width: var(--keyboard-width);
+      margin: 0 auto;
     }
     #composer-controls button,
     #composer-controls select,
@@ -264,6 +274,9 @@
       overflow-x: auto;
       scrollbar-width: thin;
       scrollbar-color: #2a4060 transparent;
+      width: 100%;
+      max-width: var(--keyboard-width);
+      margin: 0 auto;
     }
     #durationButtons button {
       min-width: 46px;
@@ -294,11 +307,14 @@
       text-align: center;
     }
     .piano {
-      display: inline-flex; height: 100px; position: relative;
+      --white-key-width: 26px;
+      --black-key-width: 16px;
+      display: flex; width: max-content; min-width: max-content; height: 100px; position: relative;
+      margin: 0 auto;
       background: rgba(0,0,0,0.2); border-radius: 6px;
     }
     .key-white {
-      flex: 0 0 26px; height: 100%;
+      flex: 0 0 var(--white-key-width); height: 100%;
       background: rgba(240,244,254,0.85);
       border: 1px solid rgba(176,200,232,0.5);
       border-radius: 0 0 4px 4px;
@@ -328,7 +344,7 @@
       font-size: 0.4rem;
       transition: background 0.06s, transform 0.06s, box-shadow 0.06s;
       touch-action: none;
-      width: 16px; margin: 0;
+      width: var(--black-key-width); margin: 0;
     }
     .key-black.active {
       background: rgba(58,74,106,0.9);
@@ -364,9 +380,9 @@
       #patch-controls label { font-size: 0.55rem; }
       #patch-controls select { min-width: 70px; font-size: 0.6rem; padding: 1px 4px; }
       #patch-controls button { font-size: 0.55rem; padding: 1px 8px; height: 20px; }
-      .key-white { flex: 0 0 18px; font-size: 0.35rem; }
-      .key-black { width: 12px; font-size: 0.35rem; }
-      .piano { height: 70px; }
+      .key-white { font-size: 0.35rem; }
+      .key-black { font-size: 0.35rem; }
+      .piano { --white-key-width: 18px; --black-key-width: 12px; height: 70px; }
     }
   </style>
 </head>
@@ -757,6 +773,7 @@
       const connectBtn = document.getElementById('connectBtn');
       const statusBadgeOut = document.getElementById('statusBadgeOut');
       const statusBadgeIn = document.getElementById('statusBadgeIn');
+      const topHeaderEl = document.getElementById('top-header');
       const pianoContainer = document.getElementById('pianoContainer');
       const pianoScrollEl = document.getElementById('piano-container');
       const bottomDockEl = document.getElementById('bottom-dock');
@@ -775,6 +792,9 @@
       let loadedPatches = [];
       let fullBankData = null;
 
+      const PIANO_NOTE_START = 17;  // F0
+      const PIANO_NOTE_END = 115;   // G8
+
       const KEYBOARD_MAP = {
         'z': 60, 's': 61, 'x': 62, 'd': 63, 'c': 64,
         'v': 65, 'g': 66, 'b': 67, 'h': 68, 'n': 69,
@@ -785,22 +805,27 @@
         if (!selectedOutput) return false;
         try { if (data2 === undefined) selectedOutput.send([status, data1]); else selectedOutput.send([status, data1, data2]); return true; } catch(e) { console.warn('MIDI send error:', e); return false; }
       }
-      function noteOn(note, velocity=105) {
+      function logKeyEvent(direction, note, velocity, source) {
+        console.log(`[FM-1 Seq] ${direction} ${getNoteName(note)} (${note}) vel ${velocity} via ${source}`);
+      }
+      function noteOn(note, velocity=105, source='manual') {
         if (activeNotes.has(note)) return;
         if (typeof captureComposerNoteOn === 'function') captureComposerNoteOn(note);
+        logKeyEvent('key down', note, velocity, source);
         activeNotes.add(note); sendMidi(0x90, note, velocity);
         if (typeof updateComposerChordCapture === 'function') updateComposerChordCapture();
         const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.add('active');
       }
-      function noteOff(note) {
+      function noteOff(note, source='manual') {
         if (!activeNotes.has(note)) return;
+        logKeyEvent('key up', note, 0, source);
         activeNotes.delete(note); sendMidi(0x80, note, 0);
         // Key-up releases sound/highlight only; the pending cursor chord stays until Add, Clear, or a new gesture.
         if (typeof updateComposerChordCapture === 'function') updateComposerChordCapture();
         const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.remove('active');
       }
       function allNotesOff() {
-        for (const note of activeNotes) { sendMidi(0x80, note, 0); const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.remove('active'); }
+        for (const note of activeNotes) { logKeyEvent('key up', note, 0, 'all-off'); sendMidi(0x80, note, 0); const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.remove('active'); }
         activeNotes.clear(); for (const t of scheduledTimeouts) clearTimeout(t); scheduledTimeouts = [];
       }
 
@@ -1091,9 +1116,9 @@
           // the on-screen keyboard already uses, so activeNotes (and the
           // key highlight, and the composer/playback logic) see it too.
           if (command === 0x90 && velocity > 0) {
-            noteOn(note, velocity);
+            noteOn(note, velocity, 'midi-in');
           } else if (command === 0x80 || (command === 0x90 && velocity === 0)) {
-            noteOff(note);
+            noteOff(note, 'midi-in');
           }
         };
       }
@@ -1101,17 +1126,16 @@
       // ----- Build Piano (F0 to G8) -----
       function buildPiano() {
         pianoContainer.innerHTML = '';
-        const wrapper = document.createElement('div');
-        wrapper.className = 'piano';
-        wrapper.style.position = 'relative';
+        pianoContainer.style.position = 'relative';
 
-        const NOTE_START = 29; // F0
-        const NOTE_END = 103;  // G8
         const WHITE_STEPS = [0, 2, 4, 5, 7, 9, 11];
+        const pianoStyle = getComputedStyle(pianoContainer);
+        const whiteWidth = parseFloat(pianoStyle.getPropertyValue('--white-key-width')) || 26;
+        const blackWidth = parseFloat(pianoStyle.getPropertyValue('--black-key-width')) || 16;
 
         const whiteNotes = [];
         const blackNotes = [];
-        for (let note = NOTE_START; note <= NOTE_END; note++) {
+        for (let note = PIANO_NOTE_START; note <= PIANO_NOTE_END; note++) {
           const step = (note - 12) % 12;
           if (WHITE_STEPS.includes(step)) {
             whiteNotes.push(note);
@@ -1129,12 +1153,10 @@
           label.textContent = getNoteName(note);
           key.appendChild(label);
           attachEvents(key, note);
-          wrapper.appendChild(key);
+          pianoContainer.appendChild(key);
         });
 
         // Black keys
-        const whiteWidth = 26;
-        const blackWidth = 16;
         // Chromatic steps of WHITE keys that are immediately followed by a
         // black key (C, D, F, G, A) — there's no black key between E-F or B-C.
         // FIX: the previous code checked the white key's own step against a
@@ -1148,7 +1170,7 @@
           const step = (note - 12) % 12;
           if (step in whiteStepsWithBlackAfter) {
             const blackNote = note + 1;
-            if (blackNote >= NOTE_START && blackNote <= NOTE_END) {
+            if (blackNote >= PIANO_NOTE_START && blackNote <= PIANO_NOTE_END) {
               const key = document.createElement('div');
               key.className = 'key key-black';
               key.dataset.note = blackNote;
@@ -1160,19 +1182,30 @@
               key.style.left = leftPos + 'px';
               key.style.width = blackWidth + 'px';
               attachEvents(key, blackNote);
-              wrapper.appendChild(key);
+              pianoContainer.appendChild(key);
             }
           }
           whiteIdx++;
         }
 
-        pianoContainer.appendChild(wrapper);
         if (typeof recomputeNoteColumns === 'function') recomputeNoteColumns();
+        scheduleKeyboardCenter(true);
+        console.log('[FM-1 Seq] keyboard layout', {
+          left: Math.round(pianoContainer.getBoundingClientRect().left),
+          width: Math.round(pianoContainer.offsetWidth),
+          viewport: Math.round(pianoScrollEl.clientWidth),
+          scrollLeft: Math.round(pianoScrollEl.scrollLeft),
+        });
+        console.assert(
+          pianoContainer.querySelector(`.key[data-note="${PIANO_NOTE_START}"]`) &&
+          pianoContainer.querySelector(`.key[data-note="${PIANO_NOTE_END}"]`),
+          `Piano range should be ${getNoteName(PIANO_NOTE_START)}-${getNoteName(PIANO_NOTE_END)}`
+        );
       }
 
       function attachEvents(key, note) {
-        const start = (e) => { e.preventDefault(); noteOn(note); };
-        const end = (e) => { e.preventDefault(); noteOff(note); };
+        const start = (e) => { e.preventDefault(); noteOn(note, 105, 'screen'); };
+        const end = (e) => { e.preventDefault(); noteOff(note, 'screen'); };
         key.addEventListener('mousedown', start);
         key.addEventListener('mouseup', end);
         key.addEventListener('mouseleave', end);
@@ -1297,6 +1330,8 @@
 
       const noteColumnMap = new Map(); // note -> { x, width, black }  (x is canonical, i.e. as if scrollLeft===0)
       let totalPianoWidthPx = 0;
+      let userPannedKeyboard = false;
+      let programmaticKeyboardScroll = false;
 
       function recomputeNoteColumns() {
         noteColumnMap.clear();
@@ -1313,6 +1348,32 @@
           maxRight = Math.max(maxRight, x + width);
         });
         totalPianoWidthPx = maxRight;
+      }
+
+      function centerKeyboardIfOverflow(force=false) {
+        if (!force && userPannedKeyboard) return;
+        const overflow = pianoContainer.offsetWidth - pianoScrollEl.clientWidth;
+        programmaticKeyboardScroll = true;
+        pianoScrollEl.scrollLeft = overflow > 0 ? Math.round(overflow / 2) : 0;
+        requestAnimationFrame(() => {
+          recomputeNoteColumns();
+          programmaticKeyboardScroll = false;
+        });
+      }
+
+      function updateKeyboardWidthVar() {
+        const keyboardWidth = `${Math.round(pianoContainer.offsetWidth)}px`;
+        bottomDockEl.style.setProperty('--keyboard-width', keyboardWidth);
+        if (topHeaderEl) topHeaderEl.style.setProperty('--keyboard-width', keyboardWidth);
+      }
+
+      function scheduleKeyboardCenter(force=false) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            updateKeyboardWidthVar();
+            centerKeyboardIfOverflow(force);
+          });
+        });
       }
 
       function resizeTrackerCanvas() {
@@ -1615,7 +1676,7 @@
         transportMode = 'stopped';
         sequence.forEach((ev) => {
           if (ev.onFired && !ev.offFired) {
-            ev.notes.forEach((n) => noteOff(n));
+            ev.notes.forEach((n) => noteOff(n, 'playback'));
             ev.offFired = true;
           }
         });
@@ -1631,11 +1692,11 @@
         sequence.forEach((ev) => {
           if (!ev.onFired && playheadBar >= ev.startBar) {
             ev.onFired = true;
-            ev.notes.forEach((n) => noteOn(n, 100));
+            ev.notes.forEach((n) => noteOn(n, 100, 'playback'));
           }
           if (ev.onFired && !ev.offFired && playheadBar >= ev.startBar + ev.durBar) {
             ev.offFired = true;
-            ev.notes.forEach((n) => noteOff(n));
+            ev.notes.forEach((n) => noteOff(n, 'playback'));
           }
         });
 
@@ -1827,7 +1888,13 @@
               : (playing
                 ? (col.black ? 'rgba(110,220,245,0.95)' : 'rgba(255,185,116,0.95)')
                 : (col.black ? 'rgba(120,190,255,0.85)' : 'rgba(255,150,190,0.85)'));
-            trackerCtx.fillRect(x, yTop, w, Math.max(3, yBot - yTop));
+            const h = Math.max(3, yBot - yTop);
+            trackerCtx.fillRect(x, yTop, w, h);
+            trackerCtx.strokeStyle = isLive
+              ? 'rgba(255,235,245,0.88)'
+              : (playing ? 'rgba(5,12,22,0.7)' : 'rgba(245,250,255,0.62)');
+            trackerCtx.lineWidth = 1;
+            trackerCtx.strokeRect(x + 0.5, yTop + 0.5, Math.max(1, w - 1), Math.max(1, h - 1));
           });
         }
 
@@ -1849,6 +1916,38 @@
         requestAnimationFrame(trackerLoop);
       }
 
+      let gridDrag = null;
+      function endGridDrag(e) {
+        if (gridDrag && e && e.pointerId === gridDrag.pointerId && trackerCanvas.hasPointerCapture(e.pointerId)) {
+          trackerCanvas.releasePointerCapture(e.pointerId);
+        }
+        gridDrag = null;
+        trackerCanvas.classList.remove('dragging');
+      }
+      trackerCanvas.addEventListener('pointerdown', (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        userPannedKeyboard = true;
+        gridDrag = {
+          pointerId: e.pointerId,
+          startX: e.clientX,
+          scrollLeft: pianoScrollEl.scrollLeft,
+        };
+        trackerCanvas.classList.add('dragging');
+        trackerCanvas.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      });
+      trackerCanvas.addEventListener('pointermove', (e) => {
+        if (!gridDrag || e.pointerId !== gridDrag.pointerId) return;
+        pianoScrollEl.scrollLeft = gridDrag.scrollLeft - (e.clientX - gridDrag.startX);
+        e.preventDefault();
+      });
+      trackerCanvas.addEventListener('pointerup', endGridDrag);
+      trackerCanvas.addEventListener('pointercancel', endGridDrag);
+      pianoScrollEl.addEventListener('scroll', () => {
+        if (!programmaticKeyboardScroll) userPannedKeyboard = true;
+        recomputeNoteColumns();
+      }, { passive: true });
+
 
       outputSelect.addEventListener('change', () => { if(!midiAccess)return; selectedOutput=midiAccess.outputs.get(outputSelect.value)||null; allNotesOff(); updateUI(); });
       inputSelect.addEventListener('change', () => {
@@ -1869,7 +1968,7 @@
         if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
         if (key in KEYBOARD_MAP) {
           e.preventDefault();
-          noteOn(KEYBOARD_MAP[key]);
+          noteOn(KEYBOARD_MAP[key], 105, 'computer');
           return;
         }
         if (e.code === 'Space') {
@@ -1886,11 +1985,12 @@
           clearCursorNotes();
         }
       });
-      document.addEventListener('keyup', (e) => { if (e.ctrlKey || e.metaKey || e.altKey) return; const key=e.key.toLowerCase(); if(key in KEYBOARD_MAP) { e.preventDefault(); noteOff(KEYBOARD_MAP[key]); } });
+      document.addEventListener('keyup', (e) => { if (e.ctrlKey || e.metaKey || e.altKey) return; const key=e.key.toLowerCase(); if(key in KEYBOARD_MAP) { e.preventDefault(); noteOff(KEYBOARD_MAP[key], 'computer'); } });
       document.addEventListener('visibilitychange', () => { if(document.hidden) allNotesOff(); });
       window.addEventListener('beforeunload', () => allNotesOff());
 
       buildPiano();
+      scheduleKeyboardCenter(true);
       resizeTrackerCanvas();
       initComposerControls();
       requestAnimationFrame(trackerLoop);
