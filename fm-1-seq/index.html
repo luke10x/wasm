@@ -22,7 +22,7 @@
       display: block; touch-action: none;
     }
 
-    /* Flashes the currently-snapped note duration while swiping/scrolling to record */
+    /* Flashes the currently selected or committed step duration */
     #durationFlash {
       position: fixed; top: 38%; left: 50%; transform: translate(-50%, -50%) scale(0.85);
       font-size: 3rem; font-weight: 800; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif;
@@ -38,6 +38,7 @@
     /* TOP LEFT LOG */
     #top-left-log {
       position: fixed; top: 20px; left: 20px; z-index: 20;
+      display: none;
       width: 320px; max-width: calc(100vw - 40px);
       background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       border-radius: 12px; padding: 10px 14px;
@@ -69,15 +70,34 @@
     #logArea::-webkit-scrollbar { width: 4px; }
     #logArea::-webkit-scrollbar-thumb { background: #2a4060; border-radius: 10px; }
 
-    /* TOP RIGHT MIDI */
+    /* TOP MIDI / INSTRUMENT BARS */
+    #top-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      background: rgba(0,0,0,0.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 7px 14px;
+      pointer-events: auto;
+      display: grid;
+      grid-template-columns: minmax(220px, 0.85fr) minmax(360px, 1.8fr) minmax(150px, 0.55fr);
+      gap: 10px;
+      align-items: start;
+    }
+    #top-right-midi,
+    #patch-controls,
+    #grid-tools {
+      position: static;
+      background: rgba(9,14,28,0.62);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 7px 9px;
+      pointer-events: auto;
+    }
     #top-right-midi {
-      position: fixed; top: 20px; right: 20px; z-index: 20;
-      background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border-radius: 60px; padding: 8px 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      pointer-events: auto; max-width: calc(100vw - 40px);
+      display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+    }
+    #midi-connect-row,
+    #midi-status-row {
+      display: contents;
     }
     #top-right-midi .connect-section {
       display: flex; align-items: center; gap: 4px;
@@ -113,17 +133,8 @@
       background: rgba(20,80,40,0.7); color: #8dffb0; border-color: rgba(60,180,90,0.6);
     }
 
-    /* BOTTOM DOCK */
-    #bottom-dock {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 6px 16px 8px 16px;
-      pointer-events: auto;
-      display: flex; flex-direction: column; gap: 4px;
-    }
     #patch-controls {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
       min-height: 32px;
     }
     #patch-controls label {
@@ -147,7 +158,7 @@
     #patch-controls select {
       background: rgba(30,45,74,0.8); border: 1px solid rgba(61,90,128,0.6);
       color: #d6e6ff; padding: 2px 8px; border-radius: 30px; font-size: 0.7rem;
-      outline: none; cursor: pointer; min-width: 110px; max-width: 160px;
+      outline: none; cursor: pointer; min-width: 82px; max-width: 126px;
       -webkit-appearance: none; appearance: none;
     }
     #patch-controls select:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -163,13 +174,125 @@
       font-size: 0.65rem; color: #7a9abb; white-space: nowrap;
     }
 
-    /* PIANO */
+    #grid-tools {
+      display: grid;
+      grid-template-columns: auto 54px;
+      align-items: center;
+      gap: 6px 7px;
+    }
+    #grid-tools label,
+    #grid-tools span {
+      color: #9fbfe8;
+      font-size: 0.66rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    #grid-tools button,
+    #grid-tools select,
+    #grid-tools input {
+      background: rgba(30,45,74,0.82);
+      border: 1px solid rgba(74,96,136,0.55);
+      color: #d6e6ff;
+      border-radius: 18px;
+      font-size: 0.66rem;
+      font-weight: 650;
+      height: 24px;
+      outline: none;
+    }
+    #grid-tools button { cursor: pointer; padding: 2px 9px; }
+    #grid-tools button.danger {
+      background: rgba(96,38,58,0.82);
+      border-color: rgba(190,90,118,0.5);
+    }
+    #grid-tools input { padding: 2px 8px; }
+    #grid-tools input[type="number"] { width: 48px; text-align: center; }
+
+    /* KEYBOARD / PERFORMANCE DOCK */
+    #bottom-dock {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+      background: rgba(0,0,0,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 6px 16px 8px 16px;
+      pointer-events: auto;
+      display: flex; flex-direction: column; gap: 5px;
+    }
     #piano-container {
       overflow-x: auto; padding: 2px 0 4px 0;
       scrollbar-width: thin; scrollbar-color: #2a4060 transparent;
     }
     #piano-container::-webkit-scrollbar { height: 4px; }
     #piano-container::-webkit-scrollbar-thumb { background: #2a4060; border-radius: 10px; }
+    #composer-controls {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      align-items: center;
+      min-height: 34px;
+    }
+    #composer-controls button,
+    #composer-controls select,
+    #composer-controls input {
+      background: rgba(30,45,74,0.82);
+      border: 1px solid rgba(74,96,136,0.55);
+      color: #d6e6ff;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 650;
+      height: 42px;
+      outline: none;
+    }
+    #composer-controls button {
+      cursor: pointer;
+      padding: 2px 10px;
+      white-space: nowrap;
+      width: 100%;
+    }
+    #composer-controls button:active { transform: scale(0.96); }
+    #composer-controls button.primary {
+      background: rgba(38,102,124,0.9);
+      border-color: rgba(90,190,210,0.55);
+      color: #ecfdff;
+    }
+    #composer-controls button.danger {
+      background: rgba(96,38,58,0.82);
+      border-color: rgba(190,90,118,0.5);
+    }
+    #durationButtons {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #2a4060 transparent;
+    }
+    #durationButtons button {
+      min-width: 46px;
+      padding: 4px 8px;
+      width: 100%;
+      height: 40px;
+      font-size: 0.76rem;
+      font-weight: 750;
+    }
+    #durationButtons button.active {
+      background: rgba(255,145,92,0.92);
+      border-color: rgba(255,205,150,0.75);
+      color: #170b04;
+      box-shadow: 0 0 16px rgba(255,145,92,0.35);
+    }
+    #composer-controls button.active {
+      background: rgba(116,210,184,0.88);
+      border-color: rgba(190,255,228,0.72);
+      color: #06120f;
+      box-shadow: 0 0 16px rgba(116,210,184,0.28);
+    }
+    #stepReadout {
+      grid-column: 1 / -1;
+      color: #9fbfe8;
+      font-size: 0.66rem;
+      font-weight: 700;
+      white-space: nowrap;
+      text-align: center;
+    }
     .piano {
       display: inline-flex; height: 100px; position: relative;
       background: rgba(0,0,0,0.2); border-radius: 6px;
@@ -223,10 +346,20 @@
     @media (max-width: 700px) {
       #top-left-log { top: 10px; left: 10px; width: 200px; padding: 6px 8px; }
       #logArea { height: 50px; font-size: 0.5rem; }
-      #top-right-midi { top: 10px; right: 10px; padding: 4px 10px; gap: 6px; }
+      #top-header { grid-template-columns: 1fr; gap: 5px; padding: 5px 8px; }
+      #top-right-midi { padding: 4px 8px; gap: 4px; }
+      #midi-connect-row, #midi-status-row { gap: 5px; }
       #top-right-midi .connect-section select { min-width: 50px; font-size: 0.6rem; padding: 1px 4px; }
       #top-right-midi button { font-size: 0.6rem; padding: 1px 10px; height: 22px; }
+      #patch-controls { justify-content: flex-start; gap: 4px; min-height: 26px; padding: 4px 8px; overflow-x: auto; flex-wrap: nowrap; }
+      #grid-tools { display: flex; gap: 4px; padding: 5px 6px; }
       #bottom-dock { padding: 4px 8px 6px 8px; }
+      #composer-controls { gap: 5px; grid-template-columns: repeat(6, minmax(62px, 1fr)); overflow-x: auto; }
+      #composer-controls button { height: 46px; font-size: 0.72rem; }
+      #durationButtons { grid-template-columns: repeat(9, minmax(54px, 1fr)); }
+      #durationButtons button { height: 44px; font-size: 0.72rem; }
+      #stepReadout { grid-column: 1 / -1; }
+      #patternNameInput, #patternSelect { min-width: 0; }
       #patch-controls { gap: 4px; min-height: 26px; }
       #patch-controls label { font-size: 0.55rem; }
       #patch-controls select { min-width: 70px; font-size: 0.6rem; padding: 1px 4px; }
@@ -243,10 +376,9 @@
        Negative values run the scene in reverse. Change it any time, e.g.:
          document.getElementById('bg-canvas').dataset.speed = -4;
        or use the helper: window.setBackgroundSpeed(-4); -->
-  <canvas id="bg-canvas" data-speed="6"></canvas>
+  <canvas id="bg-canvas" data-speed="0"></canvas>
 
-  <!-- 2D piano-roll tracker overlay: sits above the 3D background, below the
-       keyboard/UI. Captures the record/playback swipe-scroll gesture. -->
+  <!-- 2D piano-roll tracker overlay: visualizes composed steps and playback. -->
   <canvas id="note-grid-canvas"></canvas>
   <div id="durationFlash"></div>
 
@@ -260,20 +392,43 @@
     <textarea id="logArea" readonly placeholder="MIDI messages appear here..." spellcheck="false"></textarea>
   </div>
 
-  <!-- TOP RIGHT MIDI CONTROLS -->
-  <div id="top-right-midi">
-    <div class="connect-section">
-      <label>🎛️ Out</label>
-      <select id="midiOutputSelect" disabled><option value="">— none —</option></select>
+  <div id="top-header">
+    <div id="top-right-midi">
+      <div id="midi-connect-row">
+        <div class="connect-section">
+          <label>Out</label>
+          <select id="midiOutputSelect" disabled><option value="">— none —</option></select>
+        </div>
+        <div class="connect-section">
+          <label>In</label>
+          <select id="midiInputSelect" disabled><option value="">— none —</option></select>
+        </div>
+        <button id="connectBtn" title="Refresh MIDI" aria-label="Refresh MIDI">🔄</button>
+      </div>
+      <div id="midi-status-row">
+        <span id="statusBadgeOut" class="status-badge" title="Output off" aria-label="Output off">○</span>
+        <span id="statusBadgeIn" class="status-badge" title="Input off" aria-label="Input off">○</span>
+        <span id="transportStatus" class="status-badge" title="Stopped" aria-label="Stopped">⏹</span>
+      </div>
     </div>
-    <div class="connect-section">
-      <label>🎤 In</label>
-      <select id="midiInputSelect" disabled><option value="">— none —</option></select>
+
+    <div id="patch-controls">
+      <input type="file" id="syxFileInput" accept=".syx" />
+      <span class="patch-status" id="bankInfo">no bank</span>
+      <label>P</label>
+      <select id="patchSelect" disabled><option value="">— load a bank —</option></select>
+      <label>Dest</label>
+      <input type="number" id="destProg" min="0" max="127" value="0" />
+      <button id="sendSinglePatchBtn" disabled>Send P</button>
+      <button id="sendFullBankBtn" disabled>Send Bank</button>
     </div>
-    <button id="connectBtn">🔌 Connect</button>
-    <span id="statusBadgeOut" class="status-badge">⚪ off</span>
-    <span id="statusBadgeIn" class="status-badge">⚪ off</span>
-    <span id="transportStatus" class="status-badge">⏹ stopped</span>
+
+    <div id="grid-tools">
+      <label>BPM</label>
+      <input type="number" id="bpmInput" min="20" max="300" value="120" />
+      <button id="clearPatternBtn" class="danger">Reset</button>
+      <span id="stepReadout">0 steps · 0 bars</span>
+    </div>
   </div>
 
   <!-- BOTTOM DOCK -->
@@ -281,18 +436,14 @@
     <div id="piano-container">
       <div class="piano" id="pianoContainer"></div>
     </div>
-    <div id="patch-controls">
-      <label>🎵 BPM</label>
-      <input type="number" id="bpmInput" min="20" max="300" value="120" style="width:44px;" />
-      <label>📂 Load .syx</label>
-      <input type="file" id="syxFileInput" accept=".syx" />
-      <span class="patch-status" id="bankInfo">No bank loaded</span>
-      <label>🎯 Patch</label>
-      <select id="patchSelect" disabled><option value="">— load a bank —</option></select>
-      <label>➡️ Dest</label>
-      <input type="number" id="destProg" min="0" max="127" value="0" />
-      <button id="sendSinglePatchBtn" disabled>📤 Send Patch</button>
-      <button id="sendFullBankBtn" disabled>📤 Send Full Bank</button>
+    <div id="durationButtons"></div>
+    <div id="composer-controls">
+      <button id="playPatternBtn" class="primary">Play</button>
+      <button id="cursorBackBtn">Back</button>
+      <button id="cursorForwardBtn">Fwd</button>
+      <button id="editModeBtn">Replace</button>
+      <button id="restStepBtn">Clear</button>
+      <button id="addStepBtn">Add</button>
     </div>
   </div>
 
@@ -313,10 +464,10 @@
         // just changing the attribute. New config knobs can follow this
         // same pattern later (parse a data-* attr into bgConfig, add a
         // matching uniform, set it each frame in render()).
-        const bgConfig = { speed: 6.0 };
+        const bgConfig = { speed: 0.0 };
         function readSpeedFromAttr() {
           const v = parseFloat(canvas.dataset.speed);
-          bgConfig.speed = Number.isFinite(v) ? v : 6.0;
+          bgConfig.speed = Number.isFinite(v) ? v : 0.0;
         }
         readSpeedFromAttr();
         const bgAttrObserver = new MutationObserver((mutations) => {
@@ -636,12 +787,16 @@
       }
       function noteOn(note, velocity=105) {
         if (activeNotes.has(note)) return;
+        if (typeof captureComposerNoteOn === 'function') captureComposerNoteOn(note);
         activeNotes.add(note); sendMidi(0x90, note, velocity);
+        if (typeof updateComposerChordCapture === 'function') updateComposerChordCapture();
         const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.add('active');
       }
       function noteOff(note) {
         if (!activeNotes.has(note)) return;
         activeNotes.delete(note); sendMidi(0x80, note, 0);
+        // Key-up releases sound/highlight only; the pending cursor chord stays until Add, Clear, or a new gesture.
+        if (typeof updateComposerChordCapture === 'function') updateComposerChordCapture();
         const el = document.querySelector(`.key[data-note="${note}"]`); if (el) el.classList.remove('active');
       }
       function allNotesOff() {
@@ -761,7 +916,7 @@
             if (loadedPatches.length === 0) {
               patchSelect.innerHTML = '<option value="">— no patches —</option>';
               patchSelect.disabled = true;
-              bankInfo.textContent = 'No patches found';
+              bankInfo.textContent = '0p';
               sendSinglePatchBtn.disabled = true;
               sendFullBankBtn.disabled = true;
               return;
@@ -774,7 +929,7 @@
               patchSelect.appendChild(opt);
             });
             patchSelect.value = 0;
-            bankInfo.textContent = `Loaded ${loadedPatches.length} patches`;
+            bankInfo.textContent = `${loadedPatches.length}p`;
             sendSinglePatchBtn.disabled = !selectedOutput;
             sendFullBankBtn.disabled = !selectedOutput;
             const ts = new Date().toLocaleTimeString();
@@ -826,7 +981,7 @@
 
             sendSysEx(syx, () => {
               sendSinglePatchBtn.disabled = (loadedPatches.length===0 || !selectedOutput);
-              sendSinglePatchBtn.textContent = '📤 Send Patch';
+              sendSinglePatchBtn.textContent = 'Send P';
               const ts = new Date().toLocaleTimeString();
               logArea.value += `[${ts}] ✅ Patch "${loadedPatches[idx].name}" sent to slot ${dest}\n`;
               logArea.scrollTop = logArea.scrollHeight;
@@ -835,7 +990,7 @@
             console.error('Error building SysEx:', e);
             alert('Error: ' + e.message);
             sendSinglePatchBtn.disabled = false;
-            sendSinglePatchBtn.textContent = '📤 Send Patch';
+            sendSinglePatchBtn.textContent = 'Send P';
           }
         }, 50);
       }
@@ -847,7 +1002,7 @@
         sendFullBankBtn.textContent = '⏳ Sending...';
         sendSysEx(fullBankData, () => {
           sendFullBankBtn.disabled = !selectedOutput;
-          sendFullBankBtn.textContent = '📤 Send Full Bank';
+          sendFullBankBtn.textContent = 'Send Bank';
           const ts = new Date().toLocaleTimeString();
           logArea.value += `[${ts}] ✅ Full bank sent to FM-1\n`;
           logArea.scrollTop = logArea.scrollHeight;
@@ -934,7 +1089,7 @@
           const velocity = data[2] || 0;
           // Route incoming Note On/Off through the same noteOn/noteOff path
           // the on-screen keyboard already uses, so activeNotes (and the
-          // key highlight, and the tracker's recording logic) see it too.
+          // key highlight, and the composer/playback logic) see it too.
           if (command === 0x90 && velocity > 0) {
             noteOn(note, velocity);
           } else if (command === 0x80 || (command === 0x90 && velocity === 0)) {
@@ -1016,7 +1171,7 @@
       }
 
       function attachEvents(key, note) {
-        const start = (e) => { e.preventDefault(); if (!selectedOutput) { alert('Connect to a MIDI output first.'); return; } noteOn(note); };
+        const start = (e) => { e.preventDefault(); noteOn(note); };
         const end = (e) => { e.preventDefault(); noteOff(note); };
         key.addEventListener('mousedown', start);
         key.addEventListener('mouseup', end);
@@ -1029,7 +1184,7 @@
       function updateOutputs() {
         if (!midiAccess) { outputSelect.disabled=true; outputSelect.innerHTML='<option value="">— none —</option>'; return; }
         const outputs = Array.from(midiAccess.outputs.values());
-        if (outputs.length===0) { outputSelect.disabled=true; outputSelect.innerHTML='<option value="">— none —</option>'; statusBadgeOut.textContent='⚪ none'; statusBadgeOut.className='status-badge'; return; }
+        if (outputs.length===0) { outputSelect.disabled=true; outputSelect.innerHTML='<option value="">— none —</option>'; statusBadgeOut.textContent='∅'; statusBadgeOut.title='No MIDI output'; statusBadgeOut.setAttribute('aria-label','No MIDI output'); statusBadgeOut.className='status-badge'; return; }
         outputSelect.disabled=false;
         outputSelect.innerHTML = outputs.map(o=>`<option value="${o.id}">${o.name||'Unnamed'}</option>`).join('');
         outputSelect.value = outputs[0].id;
@@ -1039,12 +1194,12 @@
       function updateInputs() {
         if (!midiAccess) { inputSelect.disabled=true; inputSelect.innerHTML='<option value="">— none —</option>'; return; }
         const inputs = Array.from(midiAccess.inputs.values());
-        if (inputs.length===0) { inputSelect.disabled=true; inputSelect.innerHTML='<option value="">— none —</option>'; statusBadgeIn.textContent='⚪ none'; statusBadgeIn.className='status-badge'; return; }
+        if (inputs.length===0) { inputSelect.disabled=true; inputSelect.innerHTML='<option value="">— none —</option>'; statusBadgeIn.textContent='∅'; statusBadgeIn.title='No MIDI input'; statusBadgeIn.setAttribute('aria-label','No MIDI input'); statusBadgeIn.className='status-badge'; return; }
         inputSelect.disabled=false;
         inputSelect.innerHTML = inputs.map(inp=>`<option value="${inp.id}">${inp.name||'Unnamed'}</option>`).join('');
         inputSelect.value = inputs[0].id;
         selectedInput = midiAccess.inputs.get(inputs[0].id)||null;
-        if (selectedInput) { attachInputListener(selectedInput); statusBadgeIn.textContent='🟢 listening'; statusBadgeIn.className='status-badge online'; } else { statusBadgeIn.textContent='⚪ inactive'; statusBadgeIn.className='status-badge'; }
+        if (selectedInput) { attachInputListener(selectedInput); statusBadgeIn.textContent='👂'; statusBadgeIn.title='Listening'; statusBadgeIn.setAttribute('aria-label','Listening'); statusBadgeIn.className='status-badge online'; } else { statusBadgeIn.textContent='○'; statusBadgeIn.title='Input off'; statusBadgeIn.setAttribute('aria-label','Input off'); statusBadgeIn.className='status-badge'; }
         updateUI();
       }
       function connectMIDI() {
@@ -1052,14 +1207,14 @@
           navigator.requestMIDIAccess({ sysex: true })
             .then((access) => {
               midiAccess = access;
-              connectBtn.textContent = '🔌 Refresh';
+              connectBtn.textContent = '🔄';
               updateOutputs(); updateInputs();
               midiAccess.onstatechange = () => { updateOutputs(); updateInputs(); };
             })
             .catch((err) => {
               console.error('Web MIDI error:', err);
-              statusBadgeOut.textContent='🔴 error'; statusBadgeOut.className='status-badge';
-              statusBadgeIn.textContent='🔴 error'; statusBadgeIn.className='status-badge';
+              statusBadgeOut.textContent='⚠️'; statusBadgeOut.title='Output error'; statusBadgeOut.setAttribute('aria-label','Output error'); statusBadgeOut.className='status-badge';
+              statusBadgeIn.textContent='⚠️'; statusBadgeIn.title='Input error'; statusBadgeIn.setAttribute('aria-label','Input error'); statusBadgeIn.className='status-badge';
               alert('Could not access MIDI. Please use Chrome/Edge and allow MIDI access.');
             });
         } else {
@@ -1071,36 +1226,45 @@
         const hasInput = !!selectedInput;
         sendSinglePatchBtn.disabled = (loadedPatches.length===0 || !hasOutput);
         sendFullBankBtn.disabled = (!fullBankData || !hasOutput);
-        statusBadgeOut.textContent = hasOutput ? '🟢 connected' : '⚪ off';
+        statusBadgeOut.textContent = hasOutput ? '🔌' : '○';
+        statusBadgeOut.title = hasOutput ? 'Output connected' : 'Output off';
+        statusBadgeOut.setAttribute('aria-label', statusBadgeOut.title);
         statusBadgeOut.className = hasOutput ? 'status-badge online' : 'status-badge';
-        statusBadgeIn.textContent = hasInput ? '🟢 listening' : '⚪ off';
+        statusBadgeIn.textContent = hasInput ? '👂' : '○';
+        statusBadgeIn.title = hasInput ? 'Listening' : 'Input off';
+        statusBadgeIn.setAttribute('aria-label', statusBadgeIn.title);
         statusBadgeIn.className = hasInput ? 'status-badge online' : 'status-badge';
       }
 
       // ================================================================
-      // 3. TRACKER / SEQUENCER — gestural 2D piano-roll grid
+      // 3. PATTERN COMPOSER / SEQUENCER
       // ================================================================
-      // Overview of the model (see reply for full rationale):
-      //  - A canonical chronological "sequence" of {startBar, durBar, notes}
-      //    events, always built forward in time regardless of which visual
-      //    direction is currently on screen.
-      //  - RECORDING: the keyboard/"now" line stays fixed on screen; already
-      //    recorded material recedes UPWARD as recordCursorBar advances.
-      //  - PLAYBACK: the "now" line stays fixed; upcoming notes fall DOWNWARD
-      //    from above and are consumed at the keyboard line, exactly like the
-      //    reference screenshot. Both directions reuse the same draw code,
-      //    just flipped by a `dir` sign and driven by a different "now" value.
-      //  - Note length is controlled purely by how far you scroll/drag while
-      //    recording (not by real elapsed time), snapped to musical
-      //    subdivisions, with an eased/spring-like visual settle.
+      // Step entry replaces the old swipe recorder: hold/play notes, choose a
+      // duration, then commit a chord or a rest. The keyboard stays docked at
+      // the bottom while playback drops notes into it from above.
 
       const trackerCanvas = document.getElementById('note-grid-canvas');
       const trackerCtx = trackerCanvas.getContext('2d');
       const durationFlashEl = document.getElementById('durationFlash');
       const transportStatusEl = document.getElementById('transportStatus');
       const bpmInput = document.getElementById('bpmInput');
+      const durationButtonsEl = document.getElementById('durationButtons');
+      const playPatternBtn = document.getElementById('playPatternBtn');
+      const cursorBackBtn = document.getElementById('cursorBackBtn');
+      const cursorForwardBtn = document.getElementById('cursorForwardBtn');
+      const editModeBtn = document.getElementById('editModeBtn');
+      const addStepBtn = document.getElementById('addStepBtn');
+      const restStepBtn = document.getElementById('restStepBtn');
+      const savePatternBtn = document.getElementById('savePatternBtn');
+      const loadPatternBtn = document.getElementById('loadPatternBtn');
+      const undoStepBtn = document.getElementById('undoStepBtn');
+      const clearPatternBtn = document.getElementById('clearPatternBtn');
+      const patternNameInput = document.getElementById('patternNameInput');
+      const patternSelect = document.getElementById('patternSelect');
+      const stepReadout = document.getElementById('stepReadout');
 
       const BAR_BEATS = 4; // assumes 4/4
+      const PATTERN_STORAGE_KEY = 'fm1-step-patterns-v1';
       let bpm = parseFloat(bpmInput && bpmInput.value) || 120;
       if (bpmInput) {
         bpmInput.addEventListener('change', () => {
@@ -1109,35 +1273,28 @@
         });
       }
 
-      // Duration ladder, shortest→longest. Index increases = longer note.
       // "T" entries are triplets (3 in the time of 2), expressed as a
       // fraction of a whole bar (4 beats).
       const DURATIONS = [
-        { label: '1/16T', bars: 1 / 24 },
-        { label: '1/16',  bars: 1 / 16 },
-        { label: '1/8T',  bars: 1 / 12 },
-        { label: '1/8',   bars: 1 / 8  },
-        { label: '1/4T',  bars: 1 / 6  },
-        { label: '1/4',   bars: 1 / 4  },
-        { label: '1/2',   bars: 1 / 2  },
         { label: '1/1',   bars: 1      },
+        { label: '1/2',   bars: 1 / 2  },
+        { label: '1/2T',  bars: 1 / 3  },
+        { label: '1/4',   bars: 1 / 4  },
+        { label: '1/4T',  bars: 1 / 6  },
+        { label: '1/8',   bars: 1 / 8  },
+        { label: '1/8T',  bars: 1 / 12 },
+        { label: '1/16',  bars: 1 / 16 },
+        { label: '1/16T', bars: 1 / 24 },
       ];
-      const SWIPE_STEP_PX = 42;    // on-screen px per duration step (equal for every pair, as requested)
-      const SWIPE_ENGAGE_PX = 46;  // px of net scroll needed to arm/stop the transport
-      const SWIPE_SESSION_GAP_MS = 220; // idle gap that ends a wheel "gesture session"
-      const DURATION_EASE_MS = 150; // time-boxed smoothstep tween: slow → fast → slow, snap-to-snap
+      let selectedDurationIndex = 3; // 1/4
 
-      // ---- Bar height (px per bar) — configurable, defaults to the
-      // keyboard's total rendered width per the request. Override any time
-      // with window.setBarHeight(px). ----
-      let pxPerBar = 600;
+      let pxPerBar = 320;
       let pxPerBarUserSet = false;
       window.setBarHeight = function(px) {
         const v = parseFloat(px);
         if (Number.isFinite(v) && v > 10) { pxPerBar = v; pxPerBarUserSet = true; }
       };
 
-      // ---- Note-column layout, kept in sync with the keyboard below ----
       const noteColumnMap = new Map(); // note -> { x, width, black }  (x is canonical, i.e. as if scrollLeft===0)
       let totalPianoWidthPx = 0;
 
@@ -1156,13 +1313,11 @@
           maxRight = Math.max(maxRight, x + width);
         });
         totalPianoWidthPx = maxRight;
-        if (!pxPerBarUserSet && totalPianoWidthPx > 0) pxPerBar = totalPianoWidthPx;
       }
 
       function resizeTrackerCanvas() {
         const dpr = window.devicePixelRatio || 1;
-        const dockH = bottomDockEl.offsetHeight;
-        const h = Math.max(120, window.innerHeight - dockH);
+        const h = Math.max(120, window.innerHeight);
         const w = window.innerWidth;
         trackerCanvas.style.width = w + 'px';
         trackerCanvas.style.height = h + 'px';
@@ -1172,37 +1327,31 @@
         trackerCanvas._cssH = h;
       }
 
-      // ---- Transport / recording state ----
-      let transportMode = 'stopped'; // 'stopped' | 'recording' | 'playing'
-      let sequence = [];             // { startBar, durBar, notes:[...], onFired, offFired }
+      let transportMode = 'stopped'; // 'stopped' | 'playing'
+      let steps = [];                // { durBar, label, notes:[...] }; empty notes = rest
+      let sequence = [];             // derived note events: { startBar, durBar, notes, onFired, offFired }
       let recordCursorBar = 0;
+      let cursorBar = 0;
       let playheadBar = 0;
       let playStartPerf = 0;
-
-      let sessionActive = false;
-      let sessionAccum = 0;
-      let sessionConsumed = false;
-      let sessionIdleTimer = null;
-
-      let liveSegmentAccum = 0;
-      let liveDurationIndex = 0;
-      let liveDisplayedBars = DURATIONS[0].bars;
-      let easeFromBars = DURATIONS[0].bars;
-      let easeToBars = DURATIONS[0].bars;
-      let easeStartMs = 0;
-      let segmentNotes = new Set();
+      let cursorNotes = [];
+      let capturePeakNotes = [];
+      let editMode = 'replace'; // 'replace' | 'add'
 
       function updateTransportStatus() {
         if (!transportStatusEl) return;
-        if (transportMode === 'recording') {
-          transportStatusEl.textContent = '⏺ rec';
-          transportStatusEl.className = 'status-badge recording';
-        } else if (transportMode === 'playing') {
-          transportStatusEl.textContent = '▶ play';
+        if (transportMode === 'playing') {
+          transportStatusEl.textContent = '▶';
+          transportStatusEl.title = 'Playing';
+          transportStatusEl.setAttribute('aria-label', 'Playing');
           transportStatusEl.className = 'status-badge playing';
+          if (playPatternBtn) playPatternBtn.textContent = 'Stop';
         } else {
-          transportStatusEl.textContent = '⏹ stopped';
+          transportStatusEl.textContent = '⏹';
+          transportStatusEl.title = 'Stopped';
+          transportStatusEl.setAttribute('aria-label', 'Stopped');
           transportStatusEl.className = 'status-badge';
+          if (playPatternBtn) playPatternBtn.textContent = 'Play';
         }
       }
 
@@ -1217,69 +1366,243 @@
         flashHideTimer = setTimeout(() => durationFlashEl.classList.remove('show'), 550);
       }
 
-      // Smoothstep: slow at 0, fast through the middle, slow into 1 — this is
-      // what actually reads as "snappy" (a fixed-factor exponential lerp
-      // never really finishes, it just asymptotically crawls).
-      function smoothstep(t) {
-        t = Math.max(0, Math.min(1, t));
-        return t * t * (3 - 2 * t);
+      function getSelectedDuration() {
+        return DURATIONS[selectedDurationIndex] || DURATIONS[3];
       }
 
-      function updateLiveDurationFromAccum() {
-        const idx = Math.max(0, Math.min(DURATIONS.length - 1, Math.floor(liveSegmentAccum / SWIPE_STEP_PX)));
-        if (idx !== liveDurationIndex) {
-          easeFromBars = liveDisplayedBars; // continue smoothly from wherever we currently are
-          easeToBars = DURATIONS[idx].bars;
-          easeStartMs = performance.now();
-          liveDurationIndex = idx;
-          flashDuration(DURATIONS[idx].label);
+      function sortedUniqueNotes(notes) {
+        return Array.from(new Set(notes || [])).map((n) => parseInt(n, 10)).filter(Number.isFinite).sort((a, b) => a - b);
+      }
+
+      function notesEqual(a, b) {
+        const aa = sortedUniqueNotes(a);
+        const bb = sortedUniqueNotes(b);
+        if (aa.length !== bb.length) return false;
+        return aa.every((note, idx) => note === bb[idx]);
+      }
+
+      function unionNotes(a, b) {
+        return sortedUniqueNotes([...(a || []), ...(b || [])]);
+      }
+
+      function withoutNotes(source, removed) {
+        const removeSet = new Set(sortedUniqueNotes(removed));
+        return sortedUniqueNotes(source).filter((note) => !removeSet.has(note));
+      }
+
+      function captureComposerNoteOn() {
+        if (transportMode === 'playing') return;
+        if (activeNotes.size === 0) {
+          capturePeakNotes = editMode === 'add' ? cursorNotes.slice() : [];
+          if (editMode !== 'add') cursorNotes = [];
         }
       }
 
-      function setsEqual(a, b) {
-        if (a.size !== b.size) return false;
-        for (const v of a) if (!b.has(v)) return false;
-        return true;
-      }
-
-      function commitLiveSegment() {
-        const durBar = DURATIONS[liveDurationIndex].bars;
-        if (segmentNotes.size > 0) {
-          sequence.push({
-            startBar: recordCursorBar,
-            durBar,
-            notes: Array.from(segmentNotes),
-            onFired: false,
-            offFired: false,
-          });
+      function updateComposerChordCapture() {
+        if (transportMode === 'playing') return;
+        const held = sortedUniqueNotes(activeNotes);
+        const captured = editMode === 'add' ? unionNotes(cursorNotes, held) : held;
+        if (captured.length > capturePeakNotes.length) {
+          capturePeakNotes = captured;
+          cursorNotes = captured;
+          updateComposerUI();
         }
-        // A segment with no held notes is recorded as a rest: no event is
-        // stored, but the cursor still advances by the swiped duration.
-        recordCursorBar += durBar;
-        liveSegmentAccum = 0;
-        liveDurationIndex = 0;
-        liveDisplayedBars = DURATIONS[0].bars;
-        easeFromBars = DURATIONS[0].bars;
-        easeToBars = DURATIONS[0].bars;
-        easeStartMs = performance.now();
       }
 
-      function startRecording() {
-        transportMode = 'recording';
-        segmentNotes = new Set(activeNotes);
-        liveSegmentAccum = 0;
-        liveDurationIndex = 0;
-        updateTransportStatus();
-        window.setBackgroundSpeed && window.setBackgroundSpeed(-6);
+      function rebuildSequence() {
+        sequence = [];
+        let t = 0;
+        steps.forEach((step) => {
+          const durBar = Number(step.durBar) || 0;
+          const notes = Array.isArray(step.notes) ? step.notes.slice().sort((a, b) => a - b) : [];
+          if (notes.length > 0) {
+            sequence.push({ startBar: t, durBar, notes, onFired: false, offFired: false });
+          }
+          t += durBar;
+        });
+        recordCursorBar = t;
+        cursorBar = Math.max(0, Math.min(cursorBar, recordCursorBar));
+        updateComposerUI();
       }
-      function stopRecording() {
-        commitLiveSegment();
-        transportMode = 'stopped';
-        updateTransportStatus();
-        window.setBackgroundSpeed && window.setBackgroundSpeed(1);
+
+      function getStepSegments() {
+        let t = 0;
+        return steps.map((step) => {
+          const durBar = Number(step.durBar) || 0;
+          const segment = {
+            start: t,
+            end: t + durBar,
+            notes: sortedUniqueNotes(step.notes),
+          };
+          t += durBar;
+          return segment;
+        }).filter((segment) => segment.end > segment.start);
       }
+
+      function notesAtTime(segments, time) {
+        const segment = segments.find((s) => time >= s.start - 0.0001 && time < s.end - 0.0001);
+        return segment ? segment.notes : [];
+      }
+
+      function rebuildStepsFromSegments(segments) {
+        const merged = [];
+        segments.forEach((segment) => {
+          if (segment.end <= segment.start) return;
+          const notes = sortedUniqueNotes(segment.notes);
+          const last = merged[merged.length - 1];
+          if (last && notesEqual(last.notes, notes)) {
+            last.durBar += segment.end - segment.start;
+          } else {
+            merged.push({ durBar: segment.end - segment.start, label: '', notes });
+          }
+        });
+        steps = merged.map((step) => ({
+          durBar: step.durBar,
+          label: durationLabelForBars(step.durBar),
+          notes: step.notes,
+        }));
+        rebuildSequence();
+      }
+
+      function durationLabelForBars(bars) {
+        const match = DURATIONS.find((dur) => Math.abs(dur.bars - bars) < 0.0001);
+        return match ? match.label : formatBars(bars);
+      }
+
+      function editRange(startBar, durBar, notes) {
+        const editStart = Math.max(0, startBar);
+        const editEnd = Math.max(editStart, startBar + durBar);
+        const normalized = sortedUniqueNotes(notes);
+        const sourceSegments = getStepSegments();
+        const bounds = new Set([0, editStart, editEnd, recordCursorBar]);
+        sourceSegments.forEach((segment) => {
+          bounds.add(segment.start);
+          bounds.add(segment.end);
+        });
+        const sortedBounds = Array.from(bounds).filter(Number.isFinite).sort((a, b) => a - b);
+        const editedSegments = [];
+        for (let i = 0; i < sortedBounds.length - 1; i += 1) {
+          const a = sortedBounds[i];
+          const b = sortedBounds[i + 1];
+          if (b <= a) continue;
+          const mid = (a + b) / 2;
+          const overlapsEdit = mid >= editStart - 0.0001 && mid < editEnd - 0.0001;
+          const existing = notesAtTime(sourceSegments, mid);
+          let segmentNotes = existing;
+          if (overlapsEdit) {
+            if (editMode === 'add') {
+              segmentNotes = normalized.length > 0 ? unionNotes(withoutNotes(existing, normalized), normalized) : existing;
+            } else {
+              segmentNotes = normalized;
+            }
+          }
+          editedSegments.push({ start: a, end: b, notes: segmentNotes });
+        }
+        rebuildStepsFromSegments(editedSegments);
+      }
+
+      function formatBars(value) {
+        if (Math.abs(value - Math.round(value)) < 0.001) return String(Math.round(value));
+        return value.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+      }
+
+      function updateDurationButtons() {
+        if (!durationButtonsEl) return;
+        durationButtonsEl.querySelectorAll('button').forEach((btn, idx) => {
+          btn.classList.toggle('active', idx === selectedDurationIndex);
+        });
+      }
+
+      function updateSavedPatternSelect() {
+        if (!patternSelect) return;
+        const patterns = loadPatternMap();
+        const names = Object.keys(patterns).sort((a, b) => a.localeCompare(b));
+        const selected = patternSelect.value;
+        patternSelect.innerHTML = '<option value="">Saved patterns</option>';
+        names.forEach((name) => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          patternSelect.appendChild(opt);
+        });
+        if (patterns[selected]) patternSelect.value = selected;
+      }
+
+      function updateComposerUI() {
+        updateDurationButtons();
+        if (stepReadout) {
+          const noteSteps = steps.filter((s) => s.notes && s.notes.length).length;
+          const cursorLabel = cursorNotes.length ? cursorNotes.map(getNoteName).join('+') : 'rest';
+          stepReadout.textContent = `${steps.length} steps · ${noteSteps} chords · ${formatBars(cursorBar)}/${formatBars(recordCursorBar)} bars · ${cursorLabel}`;
+        }
+        if (editModeBtn) {
+          editModeBtn.textContent = editMode === 'add' ? 'Additive' : 'Replace';
+          editModeBtn.classList.toggle('active', editMode === 'add');
+        }
+        if (addStepBtn) addStepBtn.disabled = transportMode === 'playing';
+        if (restStepBtn) restStepBtn.disabled = transportMode === 'playing';
+        if (cursorBackBtn) cursorBackBtn.disabled = cursorBar <= 0 || transportMode === 'playing';
+        if (cursorForwardBtn) cursorForwardBtn.disabled = cursorBar >= recordCursorBar || transportMode === 'playing';
+        if (undoStepBtn) undoStepBtn.disabled = steps.length === 0 || transportMode === 'playing';
+        if (clearPatternBtn) clearPatternBtn.disabled = steps.length === 0 || transportMode === 'playing';
+        if (savePatternBtn) savePatternBtn.disabled = steps.length === 0;
+      }
+
+      function commitStep(notes) {
+        if (transportMode === 'playing') stopPlayback();
+        const dur = getSelectedDuration();
+        const normalized = sortedUniqueNotes(notes);
+        editRange(cursorBar, dur.bars, normalized);
+        cursorBar = Math.max(0, cursorBar + dur.bars);
+        rebuildSequence();
+        flashDuration(normalized.length ? dur.label : `Rest ${dur.label}`);
+      }
+
+      function commitCursorStep() {
+        commitStep(cursorNotes);
+        cursorNotes = [];
+        capturePeakNotes = [];
+        updateComposerUI();
+      }
+
+      function clearCursorNotes() {
+        cursorNotes = [];
+        capturePeakNotes = [];
+        updateComposerUI();
+      }
+
+      function undoStep() {
+        if (transportMode === 'playing' || steps.length === 0) return;
+        steps.pop();
+        rebuildSequence();
+        cursorBar = recordCursorBar;
+        updateComposerUI();
+      }
+
+      function clearPattern() {
+        if (transportMode === 'playing') stopPlayback();
+        steps = [];
+        cursorBar = 0;
+        rebuildSequence();
+      }
+
+      function moveCursor(direction) {
+        if (transportMode === 'playing') return;
+        const dur = getSelectedDuration();
+        cursorBar = direction > 0
+          ? Math.min(recordCursorBar, cursorBar + dur.bars)
+          : Math.max(0, cursorBar - dur.bars);
+        updateComposerUI();
+      }
+
+      function toggleEditMode() {
+        editMode = editMode === 'add' ? 'replace' : 'add';
+        updateComposerUI();
+      }
+
       function startPlayback() {
         if (recordCursorBar <= 0) return; // nothing recorded yet
+        allNotesOff();
         transportMode = 'playing';
         playheadBar = 0;
         playStartPerf = performance.now();
@@ -1287,6 +1610,7 @@
         updateTransportStatus();
         window.setBackgroundSpeed && window.setBackgroundSpeed(6);
       }
+
       function stopPlayback() {
         transportMode = 'stopped';
         sequence.forEach((ev) => {
@@ -1296,132 +1620,9 @@
           }
         });
         updateTransportStatus();
-        window.setBackgroundSpeed && window.setBackgroundSpeed(1);
+        window.setBackgroundSpeed && window.setBackgroundSpeed(0);
       }
 
-      function checkSegmentNotesChanged() {
-        if (transportMode !== 'recording') return;
-        if (!setsEqual(activeNotes, segmentNotes)) {
-          commitLiveSegment();
-          segmentNotes = new Set(activeNotes);
-        }
-      }
-
-      // ---- Gesture handling: scroll (wheel) and drag (pointer) both feed
-      // the same accumulator-based state machine. ----
-      function beginSessionIfNeeded() {
-        if (!sessionActive) {
-          sessionActive = true;
-          sessionAccum = 0;
-          sessionConsumed = false;
-        }
-        clearTimeout(sessionIdleTimer);
-        sessionIdleTimer = setTimeout(endSession, SWIPE_SESSION_GAP_MS);
-      }
-      function endSession() {
-        sessionActive = false;
-        sessionAccum = 0;
-        sessionConsumed = false;
-        if (transportMode === 'recording') {
-          stopRecording(); // releasing the drag/scroll always finalizes the take
-        }
-      }
-
-      function handleScrollDelta(deltaY) {
-        beginSessionIfNeeded();
-        sessionAccum += deltaY;
-
-        if (transportMode === 'recording') {
-          liveSegmentAccum = Math.max(0, liveSegmentAccum + deltaY);
-          updateLiveDurationFromAccum();
-          return;
-        }
-
-        if (sessionConsumed) return;
-
-        if (transportMode === 'playing') {
-          if (sessionAccum >= SWIPE_ENGAGE_PX) {
-            stopPlayback();
-            sessionConsumed = true;
-          }
-        } else { // 'stopped'
-          if (sessionAccum >= SWIPE_ENGAGE_PX) {
-            const overshoot = sessionAccum - SWIPE_ENGAGE_PX;
-            startRecording();
-            liveSegmentAccum = Math.max(0, overshoot);
-            updateLiveDurationFromAccum();
-            sessionConsumed = true;
-          } else if (sessionAccum <= -SWIPE_ENGAGE_PX) {
-            startPlayback();
-            sessionConsumed = true;
-          }
-        }
-      }
-
-      trackerCanvas.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        handleScrollDelta(e.deltaY);
-      }, { passive: false });
-
-      // Explicit mousedown/mouseup + touchstart/touchend (rather than Pointer
-      // Events) to match the rest of this file's input handling. Touch
-      // devices fire a synthetic mousedown/mousemove/mouseup a few hundred ms
-      // after real touch events (for compatibility with mouse-only code), so
-      // we mute mouse handling for a short window after any touch to avoid
-      // double-triggering the same drag.
-      let dragging = false;
-      let lastDragY = 0;
-      let ignoreMouseUntil = 0;
-
-      function dragStart(y) {
-        dragging = true;
-        lastDragY = y;
-      }
-      function dragMove(y) {
-        if (!dragging) return;
-        const dy = y - lastDragY;
-        lastDragY = y;
-        if (dy !== 0) handleScrollDelta(dy);
-      }
-      function dragEnd() {
-        if (!dragging) return;
-        dragging = false;
-        endSession();
-      }
-
-      trackerCanvas.addEventListener('mousedown', (e) => {
-        if (Date.now() < ignoreMouseUntil || e.button !== 0) return;
-        e.preventDefault();
-        dragStart(e.clientY);
-      });
-      window.addEventListener('mousemove', (e) => {
-        if (Date.now() < ignoreMouseUntil) return;
-        dragMove(e.clientY);
-      });
-      window.addEventListener('mouseup', (e) => {
-        if (Date.now() < ignoreMouseUntil) return;
-        dragEnd();
-      });
-
-      trackerCanvas.addEventListener('touchstart', (e) => {
-        ignoreMouseUntil = Date.now() + 800; // outlast the browser's synthetic-mouse-event delay
-        if (e.touches.length !== 1) return;
-        e.preventDefault();
-        dragStart(e.touches[0].clientY);
-      }, { passive: false });
-      trackerCanvas.addEventListener('touchmove', (e) => {
-        if (e.touches.length !== 1) return;
-        e.preventDefault();
-        dragMove(e.touches[0].clientY);
-      }, { passive: false });
-      function touchEnd() {
-        ignoreMouseUntil = Date.now() + 800;
-        dragEnd();
-      }
-      trackerCanvas.addEventListener('touchend', touchEnd, { passive: false });
-      trackerCanvas.addEventListener('touchcancel', touchEnd, { passive: false });
-
-      // ---- Playback ticking (real time → bars, driving MIDI note-out) ----
       function tickPlayback() {
         const elapsedSec = (performance.now() - playStartPerf) / 1000;
         const barsPerSec = bpm / (60 * BAR_BEATS);
@@ -1443,7 +1644,84 @@
         }
       }
 
-      // ---- Drawing ----
+      function loadPatternMap() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(PATTERN_STORAGE_KEY) || '{}');
+          return parsed && typeof parsed === 'object' ? parsed : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function savePatternMap(patterns) {
+        localStorage.setItem(PATTERN_STORAGE_KEY, JSON.stringify(patterns));
+      }
+
+      function saveCurrentPattern() {
+        const rawName = patternNameInput ? patternNameInput.value.trim() : '';
+        const name = rawName || `Pattern ${new Date().toLocaleTimeString()}`;
+        const patterns = loadPatternMap();
+        patterns[name] = { steps, bpm };
+        savePatternMap(patterns);
+        if (patternNameInput) patternNameInput.value = name;
+        updateSavedPatternSelect();
+        if (patternSelect) patternSelect.value = name;
+        flashDuration('Saved');
+      }
+
+      function loadSelectedPattern() {
+        if (!patternSelect || !patternSelect.value) return;
+        const patterns = loadPatternMap();
+        const pattern = patterns[patternSelect.value];
+        if (!pattern || !Array.isArray(pattern.steps)) return;
+        if (transportMode === 'playing') stopPlayback();
+        steps = pattern.steps.map((step) => ({
+          durBar: Number(step.durBar) || DURATIONS[3].bars,
+          label: step.label || DURATIONS[3].label,
+          notes: Array.isArray(step.notes) ? step.notes.map((n) => parseInt(n, 10)).filter(Number.isFinite) : [],
+        }));
+        if (Number.isFinite(pattern.bpm) && bpmInput) {
+          bpm = pattern.bpm;
+          bpmInput.value = String(Math.round(bpm));
+        }
+        if (patternNameInput) patternNameInput.value = patternSelect.value;
+        rebuildSequence();
+        cursorBar = recordCursorBar;
+        updateComposerUI();
+      }
+
+      function initComposerControls() {
+        if (durationButtonsEl) {
+          durationButtonsEl.innerHTML = '';
+          DURATIONS.forEach((dur, idx) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = dur.label;
+            btn.addEventListener('click', () => {
+              selectedDurationIndex = idx;
+              updateComposerUI();
+              flashDuration(dur.label);
+            });
+            durationButtonsEl.appendChild(btn);
+          });
+        }
+        if (playPatternBtn) playPatternBtn.addEventListener('click', () => transportMode === 'playing' ? stopPlayback() : startPlayback());
+        if (cursorBackBtn) cursorBackBtn.addEventListener('click', () => moveCursor(-1));
+        if (cursorForwardBtn) cursorForwardBtn.addEventListener('click', () => moveCursor(1));
+        if (editModeBtn) editModeBtn.addEventListener('click', toggleEditMode);
+        if (addStepBtn) addStepBtn.addEventListener('click', commitCursorStep);
+        if (restStepBtn) restStepBtn.addEventListener('click', clearCursorNotes);
+        if (undoStepBtn) undoStepBtn.addEventListener('click', undoStep);
+        if (clearPatternBtn) clearPatternBtn.addEventListener('click', clearPattern);
+        if (savePatternBtn) savePatternBtn.addEventListener('click', saveCurrentPattern);
+        if (loadPatternBtn) loadPatternBtn.addEventListener('click', loadSelectedPattern);
+        if (patternSelect) patternSelect.addEventListener('change', () => {
+          if (patternSelect.value && patternNameInput) patternNameInput.value = patternSelect.value;
+        });
+        updateSavedPatternSelect();
+        updateComposerUI();
+      }
+
       function drawTracker() {
         const cssW = trackerCanvas._cssW || trackerCanvas.clientWidth;
         const cssH = trackerCanvas._cssH || trackerCanvas.clientHeight;
@@ -1455,16 +1733,17 @@
         trackerCtx.fillStyle = 'rgba(6,4,16,0.42)';
         trackerCtx.fillRect(0, 0, cssW, cssH);
 
-        const playheadY = cssH - 2;
         const playing = transportMode === 'playing';
-        const dir = playing ? 1 : -1;
-        const now = playing ? playheadBar : recordCursorBar;
-        const barToY = (t) => playheadY - dir * (t - now) * pxPerBar;
+        const dockRect = bottomDockEl.getBoundingClientRect();
+        const playheadY = dockRect.top;
+        const previewDur = getSelectedDuration().bars;
+        const visibleBars = Math.max(0.25, playheadY / pxPerBar);
+        const composeViewBar = Math.max(0, cursorBar + previewDur - visibleBars * 0.82);
+        const now = playing ? playheadBar : composeViewBar;
+        const barToY = (t) => playheadY - (t - now) * pxPerBar;
 
-        // Row / bar grid lines
-        const visibleBars = cssH / pxPerBar;
-        const loT = playing ? now - 0.5 : now - visibleBars - 0.5;
-        const hiT = playing ? now + visibleBars + 0.5 : now + 0.5;
+        const loT = now - visibleBars - 0.5;
+        const hiT = now + visibleBars + 0.5;
         const kStart = Math.floor(loT * 16) - 1;
         const kEnd = Math.ceil(hiT * 16) + 1;
         for (let k = kStart; k <= kEnd; k++) {
@@ -1478,9 +1757,47 @@
           trackerCtx.moveTo(0, y + 0.5);
           trackerCtx.lineTo(cssW, y + 0.5);
           trackerCtx.stroke();
+          if (isBarLine && t >= 0) {
+            trackerCtx.fillStyle = 'rgba(2,5,14,0.58)';
+            trackerCtx.fillRect(5, y - 8, 24, 16);
+            trackerCtx.fillStyle = 'rgba(205,225,255,0.72)';
+            trackerCtx.font = '700 11px Segoe UI, system-ui, sans-serif';
+            trackerCtx.textAlign = 'center';
+            trackerCtx.textBaseline = 'middle';
+            trackerCtx.fillText(String(Math.floor(t) + 1), 17, y);
+          }
         }
 
-        // "Now" / playhead line (flush with the top of the keyboard)
+        const scrollX = pianoScrollEl.scrollLeft;
+        const originLeft = pianoScrollEl.getBoundingClientRect().left;
+        const canvasLeft = trackerCanvas.getBoundingClientRect().left;
+        const xShift = (originLeft - canvasLeft) - scrollX;
+
+        noteColumnMap.forEach((col) => {
+          const x = xShift + col.x;
+          if (x < -col.width || x > cssW) return;
+          trackerCtx.fillStyle = col.black ? 'rgba(50,70,102,0.13)' : 'rgba(210,230,255,0.045)';
+          trackerCtx.fillRect(x, 0, Math.max(1, col.width), cssH);
+        });
+
+        if (!playing) {
+          const nextStartY = barToY(cursorBar);
+          const nextEndY = barToY(cursorBar + previewDur);
+          const yTop = Math.min(nextStartY, nextEndY);
+          const yBot = Math.max(nextStartY, nextEndY);
+          const cursorFill = editMode === 'add' ? 'rgba(116,210,184,0.16)' : 'rgba(255,145,92,0.13)';
+          const cursorStroke = editMode === 'add' ? 'rgba(170,255,220,0.82)' : 'rgba(255,190,120,0.75)';
+          trackerCtx.fillStyle = cursorFill;
+          trackerCtx.fillRect(0, yTop, cssW, Math.max(4, yBot - yTop));
+          trackerCtx.strokeStyle = cursorStroke;
+          trackerCtx.lineWidth = 2;
+          trackerCtx.beginPath();
+          trackerCtx.moveTo(0, nextStartY + 0.5);
+          trackerCtx.lineTo(cssW, nextStartY + 0.5);
+          trackerCtx.stroke();
+        }
+
+        // "Now" / playhead line, glued to the active edge of the keyboard dock.
         trackerCtx.strokeStyle = 'rgba(200,225,255,0.55)';
         trackerCtx.lineWidth = 1.5;
         trackerCtx.beginPath();
@@ -1488,18 +1805,17 @@
         trackerCtx.lineTo(cssW, playheadY + 0.5);
         trackerCtx.stroke();
 
-        // X alignment with the (horizontally scrollable) keyboard below
-        const scrollX = pianoScrollEl.scrollLeft;
-        const originLeft = pianoScrollEl.getBoundingClientRect().left;
-        const canvasLeft = trackerCanvas.getBoundingClientRect().left;
-        const xShift = (originLeft - canvasLeft) - scrollX;
-
-        function drawEvent(notes, startBar, durBar, isLive) {
+        function drawEvent(notes, startBar, durBar, isLive, isRest) {
           const yA = barToY(startBar);
           const yB = barToY(startBar + durBar);
           const yTop = Math.min(yA, yB);
           const yBot = Math.max(yA, yB);
           if (yBot < -10 || yTop > cssH + 10) return;
+          if (isRest) {
+            trackerCtx.fillStyle = 'rgba(255,255,255,0.055)';
+            trackerCtx.fillRect(0, yTop, cssW, Math.max(2, yBot - yTop));
+            return;
+          }
           notes.forEach((note) => {
             const col = noteColumnMap.get(note);
             if (!col) return;
@@ -1508,23 +1824,27 @@
             const w = Math.max(2, col.width - 2);
             trackerCtx.fillStyle = isLive
               ? 'rgba(255,120,170,0.9)'
-              : (col.black ? 'rgba(120,190,255,0.85)' : 'rgba(255,150,190,0.85)');
-            trackerCtx.fillRect(x, yTop, w, Math.max(2, yBot - yTop));
+              : (playing
+                ? (col.black ? 'rgba(110,220,245,0.95)' : 'rgba(255,185,116,0.95)')
+                : (col.black ? 'rgba(120,190,255,0.85)' : 'rgba(255,150,190,0.85)'));
+            trackerCtx.fillRect(x, yTop, w, Math.max(3, yBot - yTop));
           });
         }
 
-        sequence.forEach((ev) => drawEvent(ev.notes, ev.startBar, ev.durBar, false));
+        let t = 0;
+        steps.forEach((step) => {
+          drawEvent(step.notes, t, step.durBar, false, !step.notes || step.notes.length === 0);
+          t += step.durBar;
+        });
 
-        if (transportMode === 'recording' && segmentNotes.size > 0) {
-          const t = (performance.now() - easeStartMs) / DURATION_EASE_MS;
-          liveDisplayedBars = easeFromBars + (easeToBars - easeFromBars) * smoothstep(t);
-          drawEvent(Array.from(segmentNotes), recordCursorBar, liveDisplayedBars, true);
+        if (!playing && cursorNotes.length > 0) {
+          drawEvent(cursorNotes, cursorBar, previewDur, true, false);
         }
       }
 
       function trackerLoop() {
         if (transportMode === 'playing') tickPlayback();
-        checkSegmentNotesChanged();
+        updateComposerUI();
         drawTracker();
         requestAnimationFrame(trackerLoop);
       }
@@ -1535,19 +1855,44 @@
         if(!midiAccess)return;
         if(selectedInput) selectedInput.onmidimessage=null;
         selectedInput=midiAccess.inputs.get(inputSelect.value)||null;
-        if(selectedInput) { attachInputListener(selectedInput); statusBadgeIn.textContent='🟢 listening'; statusBadgeIn.className='status-badge online'; } else { statusBadgeIn.textContent='⚪ off'; statusBadgeIn.className='status-badge'; }
+        if(selectedInput) { attachInputListener(selectedInput); statusBadgeIn.textContent='👂'; statusBadgeIn.title='Listening'; statusBadgeIn.setAttribute('aria-label','Listening'); statusBadgeIn.className='status-badge online'; } else { statusBadgeIn.textContent='○'; statusBadgeIn.title='Input off'; statusBadgeIn.setAttribute('aria-label','Input off'); statusBadgeIn.className='status-badge'; }
         updateUI();
       });
       showRawCheck.addEventListener('change', () => {});
       clearLogBtn.addEventListener('click', () => { logArea.value=''; });
 
-      document.addEventListener('keydown', (e) => { if(e.repeat)return; const key=e.key.toLowerCase(); if(key in KEYBOARD_MAP) { e.preventDefault(); if(!selectedOutput){alert('Connect to a MIDI output first.'); return;} noteOn(KEYBOARD_MAP[key]); } });
-      document.addEventListener('keyup', (e) => { const key=e.key.toLowerCase(); if(key in KEYBOARD_MAP) { e.preventDefault(); noteOff(KEYBOARD_MAP[key]); } });
+      document.addEventListener('keydown', (e) => {
+        if (e.repeat) return;
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        const key = e.key.toLowerCase();
+        const tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+        if (key in KEYBOARD_MAP) {
+          e.preventDefault();
+          noteOn(KEYBOARD_MAP[key]);
+          return;
+        }
+        if (e.code === 'Space') {
+          e.preventDefault();
+          transportMode === 'playing' ? stopPlayback() : startPlayback();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          commitCursorStep();
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          undoStep();
+        } else if (key === 'r') {
+          e.preventDefault();
+          clearCursorNotes();
+        }
+      });
+      document.addEventListener('keyup', (e) => { if (e.ctrlKey || e.metaKey || e.altKey) return; const key=e.key.toLowerCase(); if(key in KEYBOARD_MAP) { e.preventDefault(); noteOff(KEYBOARD_MAP[key]); } });
       document.addEventListener('visibilitychange', () => { if(document.hidden) allNotesOff(); });
       window.addEventListener('beforeunload', () => allNotesOff());
 
       buildPiano();
       resizeTrackerCanvas();
+      initComposerControls();
       requestAnimationFrame(trackerLoop);
 
       let resizeDebounce = null;
