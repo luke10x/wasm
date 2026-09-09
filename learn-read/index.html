@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Grand Staff Note Trainer</title>
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#16213e" />
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            background: #1a1a2e;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .app-container {
+            background: #16213e;
+            border-radius: 28px;
+            padding: 20px 18px 20px;
+            max-width: 900px;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8px 10px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 12px;
+            flex-wrap: nowrap;           /* 🔥 Force all items in one line */
+            gap: 8px 12px;
+            flex-shrink: 0;
+        }
+
+        .header-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            color: #b0b8d1;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;             /* Prevent shrinking */
+        }
+        .header-item .value { color: #f0f4ff; font-size: 22px; font-weight: 600; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }
+        .header-item .value.accuracy-val { min-width: 46px; }
+        .header-item .label { opacity: 0.7; font-size: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .btn-check-update {
+            background: transparent;
+            border: 1px solid #4a6fa5;
+            color: #b0bcdd;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            flex-shrink: 0;             /* Prevent shrinking */
+            margin-left: auto;           /* Push to the right */
+            white-space: nowrap;
+        }
+        .btn-check-update:hover {
+            background: #2a3760;
+            color: #fff;
+        }
+
+        .staff-wrapper {
+            background: #0f1629;
+            border-radius: 18px;
+            padding: 8px 8px 4px 8px;
+            margin-bottom: 10px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+            max-height: 45vh;
+            overflow: hidden;
+        }
+        .staff-svg { display: block; width: 100%; height: auto; background: #0f1629; border-radius: 12px; }
+
+        .piano-wrapper {
+            background: #0f1629;
+            border-radius: 16px;
+            padding: 8px 6px 6px 6px;
+            margin-bottom: 12px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+            flex: 1 1 auto;
+            min-height: 120px;
+            display: flex;
+            align-items: stretch;
+        }
+        .piano-svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: #0f1629;
+            border-radius: 10px;
+            touch-action: manipulation;
+            preserveAspectRatio: none;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 4px;
+            margin-top: 4px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            touch-action: manipulation;
+        }
+        .btn-skip-next {
+            background: #4a6fa5;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(74, 111, 165, 0.3);
+            min-width: 100px;
+        }
+        .btn-skip-next:hover { background: #5a7fb5; }
+
+        .feedback {
+            flex: 1 1 auto;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 14px;
+            background: #111c38;
+            font-size: 16px;
+            font-weight: 500;
+            color: #c8d0ec;
+            flex-wrap: wrap;
+            overflow: hidden;
+        }
+        .feedback .fb-correct { color: #7bdfa8; }
+        .feedback .fb-wrong { color: #f58b8b; }
+        .feedback .fb-answer { color: #f0f4ff; font-weight: 600; }
+        .feedback .fb-user { color: #b8c4f0; font-weight: 400; }
+        .feedback .fb-divider { opacity: 0.25; margin: 0 4px; }
+        .feedback .fb-empty { color: #4a5780; font-weight: 400; font-size: 15px; }
+        .feedback .fb-octave { color: #d4b8a0; font-size: 0.9em; margin-left: 4px; }
+
+        @media (max-width: 600px) {
+            .app-container { padding: 10px 8px 12px; border-radius: 20px; }
+            .header { padding: 0 4px 8px 4px; gap: 4px 8px; }
+            .header-item .value { font-size: 16px; min-width: 32px; }
+            .header-item .label { font-size: 9px; }
+            .btn-check-update { font-size: 10px; padding: 4px 6px; }
+            .staff-wrapper { padding: 4px 2px 2px 2px; max-height: 42vh; }
+            .piano-wrapper { padding: 4px 2px 2px 2px; min-height: 80px; }
+            .controls { gap: 6px; }
+            .btn { padding: 8px 14px; font-size: 14px; min-width: 80px; }
+            .feedback { font-size: 13px; padding: 4px 6px; min-height: 36px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <div class="header-item"><span class="label">Time</span><span class="value" id="timerDisplay">00:00</span></div>
+        <div class="header-item"><span class="label">Score</span><span class="value" id="scoreDisplay">0</span></div>
+        <div class="header-item"><span class="label">Accuracy</span><span class="value accuracy-val" id="accuracyDisplay">—</span></div>
+        <button id="checkUpdateBtn" class="btn-check-update">Check Update</button>
+    </div>
+
+    <div class="staff-wrapper">
+        <svg class="staff-svg" viewBox="0 0 760 380" preserveAspectRatio="xMidYMid meet">
+            <g id="staffGroup"></g>
+        </svg>
+    </div>
+
+    <div class="piano-wrapper">
+        <svg class="piano-svg" viewBox="0 0 700 200" preserveAspectRatio="none">
+            <g id="pianoGroup"></g>
+        </svg>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-skip-next" id="actionBtn">Skip</button>
+        <div class="feedback" id="feedback"><span class="fb-empty">—</span></div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---------- CONFIG ----------
+        const AMBIGUOUS_ZONE = 7; // semitones around C4 where clef choice is random
+
+        // ---------- NOTE DATA (C2 – B5) ----------
+        const CHROMATIC = [
+            { name: 'C', display: 'C' },
+            { name: 'C#', display: 'C♯', enharmonic: 'Db' },
+            { name: 'D', display: 'D' },
+            { name: 'D#', display: 'D♯', enharmonic: 'Eb' },
+            { name: 'E', display: 'E' },
+            { name: 'F', display: 'F' },
+            { name: 'F#', display: 'F♯', enharmonic: 'Gb' },
+            { name: 'G', display: 'G' },
+            { name: 'G#', display: 'G♯', enharmonic: 'Ab' },
+            { name: 'A', display: 'A' },
+            { name: 'A#', display: 'A♯', enharmonic: 'Bb' },
+            { name: 'B', display: 'B' }
+        ];
+
+        const OCTAVES = [2, 3, 4, 5];
+        const ALL_NOTES = [];
+        for (const oct of OCTAVES) {
+            for (const c of CHROMATIC) {
+                ALL_NOTES.push({
+                    id: c.name + oct,
+                    display: c.display + oct,
+                    pitchClass: c.name,
+                    octave: oct,
+                    enharmonic: c.enharmonic ? c.enharmonic + oct : null,
+                    accidental: c.name.length === 2 ? c.name[1] : null,
+                    baseName: c.name,
+                });
+            }
+        }
+
+        // ✅ FIXED MIDI calculation: MIDI = (octave + 1) * 12 + noteIndex
+        function getMidiNumber(noteId) {
+            const pitch = noteId.slice(0, -1);
+            const octave = parseInt(noteId.slice(-1));
+            const noteIndex = CHROMATIC.findIndex(c => c.name === pitch);
+            return (octave + 1) * 12 + noteIndex;
+        }
+
+        function computeStaffPositions(noteId) {
+            const pitch = noteId.slice(0, -1);
+            const octave = parseInt(noteId.slice(-1));
+            const letterIndex = ['C','D','E','F','G','A','B'].indexOf(pitch[0]);
+            const absIndex = octave * 7 + letterIndex;
+            const yTreble = 80 - (absIndex - 30) * 10;
+            const yBass   = 80 - (absIndex - 18) * 10;
+            return { yTreble, yBass };
+        }
+
+        for (const note of ALL_NOTES) {
+            const pos = computeStaffPositions(note.id);
+            note.yTreble = pos.yTreble;
+            note.yBass = pos.yBass;
+            note.midi = getMidiNumber(note.id);
+        }
+
+        // ---------- STATE ----------
+        let state = {
+            currentNote: null,
+            currentClef: 'treble',
+            score: 0,
+            totalAttempts: 0,
+            correctAttempts: 0,
+            isAnswered: false,
+            timerSeconds: 0,
+            timerInterval: null,
+        };
+
+        const staffGroup = document.getElementById('staffGroup');
+        const pianoGroup = document.getElementById('pianoGroup');
+        const actionBtn = document.getElementById('actionBtn');
+        const feedbackEl = document.getElementById('feedback');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const accuracyDisplay = document.getElementById('accuracyDisplay');
+
+        function svgEl(tag, attrs, children) {
+            const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (const [k, v] of Object.entries(attrs || {})) el.setAttribute(k, v);
+            if (children) {
+                for (const c of children) {
+                    if (typeof c === 'string') el.appendChild(document.createTextNode(c));
+                    else if (c) el.appendChild(c);
+                }
+            }
+            return el;
+        }
+
+        // ---------- DRAW GRAND STAFF ----------
+        function drawStaff() {
+            const g = staffGroup;
+            g.innerHTML = '';
+
+            const x0 = 70, x1 = 690;
+            const lineSpacing = 20;
+            const trebleTop = 60, trebleBottom = 140;
+            const bassTop = 220, bassBottom = 300;
+
+            // Treble staff lines
+            for (let i = 0; i < 5; i++) {
+                const y = trebleBottom - i * lineSpacing;
+                g.appendChild(svgEl('line', { x1: x0, y1: y, x2: x1, y2: y, stroke: '#6a7a9f', 'stroke-width': 1.8, opacity: 0.6 }));
+            }
+            // Bass staff lines
+            for (let i = 0; i < 5; i++) {
+                const y = bassBottom - i * lineSpacing;
+                g.appendChild(svgEl('line', { x1: x0, y1: y, x2: x1, y2: y, stroke: '#6a7a9f', 'stroke-width': 1.8, opacity: 0.6 }));
+            }
+
+            // Bar lines
+            g.appendChild(svgEl('line', { x1: x0 - 12, y1: trebleTop, x2: x0 - 12, y2: bassBottom, stroke: '#8a9abf', 'stroke-width': 2.5, opacity: 0.6 }));
+            g.appendChild(svgEl('line', { x1: x1 + 12, y1: trebleTop, x2: x1 + 12, y2: bassBottom, stroke: '#8a9abf', 'stroke-width': 2.5, opacity: 0.6 }));
+
+            // 🎼 Treble clef (Unicode 𝄞)
+            g.appendChild(svgEl('text', {
+                x: 42, y: 100,
+                'font-size': '70',
+                'font-family': '"Segoe UI Symbol", "Noto Music", "Arial Unicode MS", "Arial", sans-serif',
+                fill: '#c8d4f0',
+                opacity: 0.9,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'central'
+            }, ['𝄞']));
+
+            // 🎵 Bass clef (Unicode 𝄢)
+            g.appendChild(svgEl('text', {
+                x: 42, y: 240,
+                'font-size': '60',
+                'font-family': '"Segoe UI Symbol", "Noto Music", "Arial Unicode MS", "Arial", sans-serif',
+                fill: '#c8d4f0',
+                opacity: 0.9,
+                'text-anchor': 'middle',
+                'dominant-baseline': 'central'
+            }, ['𝄢']));
+
+            // Current note
+            if (state.currentNote) {
+                const note = state.currentNote;
+                const clef = state.currentClef;
+                const staffTop = (clef === 'treble') ? trebleTop : bassTop;
+                const staffBottom = (clef === 'treble') ? trebleBottom : bassBottom;
+                const yOffset = (clef === 'treble') ? note.yTreble : note.yBass;
+                const ny = staffTop + yOffset;
+                const nx = 370;
+
+                // Ledger lines
+                if (yOffset < 0) {
+                    let ly = -20;
+                    while (ly >= yOffset - 8) {
+                        g.appendChild(svgEl('line', { x1: nx - 22, y1: staffTop + ly, x2: nx + 22, y2: staffTop + ly, stroke: '#6a7a9f', 'stroke-width': 1.6, opacity: 0.5 }));
+                        ly -= 20;
+                    }
+                } else if (yOffset > 80) {
+                    let ly = 100;
+                    while (ly <= yOffset + 8) {
+                        g.appendChild(svgEl('line', { x1: nx - 22, y1: staffTop + ly, x2: nx + 22, y2: staffTop + ly, stroke: '#6a7a9f', 'stroke-width': 1.6, opacity: 0.5 }));
+                        ly += 20;
+                    }
+                }
+
+                // Note head
+                g.appendChild(svgEl('ellipse', { cx: nx, cy: ny, rx: 14, ry: 9, fill: '#f0f4ff', stroke: '#c8d4f0', 'stroke-width': 1.2 }));
+
+                // Stem
+                const stemUp = ny > (staffTop + 40);
+                const stemDir = stemUp ? -1 : 1;
+                const stemX = nx + (stemUp ? 12 : -12);
+                g.appendChild(svgEl('line', { x1: stemX, y1: ny, x2: stemX, y2: ny + stemDir * 45, stroke: '#f0f4ff', 'stroke-width': 2.2, 'stroke-linecap': 'round' }));
+
+                // Accidental
+                if (note.accidental) {
+                    const accX = nx - 32;
+                    const accY = ny - 2;
+                    const symbol = note.accidental === '#' ? '♯' : '♭';
+                    g.appendChild(svgEl('text', { x: accX, y: accY, 'font-size': 24, 'font-weight': 700, fill: '#f0e68c', 'font-family': 'Arial', 'text-anchor': 'middle', 'dominant-baseline': 'central', opacity: 0.95 }, [symbol]));
+                }
+            }
+        }
+
+        // ---------- DRAW PIANO ----------
+        function drawPiano() {
+            const g = pianoGroup;
+            g.innerHTML = '';
+
+            const totalWidth = 700;
+            const leftMargin = 20;
+            const rightMargin = 20;
+            const usableWidth = totalWidth - leftMargin - rightMargin;
+            const whiteKeyCount = 7;
+            const whiteKeyWidth = usableWidth / whiteKeyCount;
+            const whiteKeyHeight = 150;
+            const blackKeyHeight = 90;
+            // 👇 Black keys now 85% of white key width (much wider, still narrower)
+            const blackKeyWidth = whiteKeyWidth * 0.85;
+            const topY = 20;
+
+            const whiteLabels = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+            const blackKeys = [
+                { index: 0, sharp: 'C#', flat: 'Db' },
+                { index: 1, sharp: 'D#', flat: 'Eb' },
+                { index: 3, sharp: 'F#', flat: 'Gb' },
+                { index: 4, sharp: 'G#', flat: 'Ab' },
+                { index: 5, sharp: 'A#', flat: 'Bb' },
+            ];
+
+            for (let i = 0; i < whiteKeyCount; i++) {
+                const x = leftMargin + i * whiteKeyWidth;
+                const label = whiteLabels[i];
+                const keyGroup = svgEl('g', { 'data-pitch': label, style: 'cursor:pointer;' });
+                keyGroup.appendChild(svgEl('rect', { x: x, y: topY, width: whiteKeyWidth - 1, height: whiteKeyHeight, fill: '#1a2545', stroke: '#3a4a6f', 'stroke-width': 1.5, rx: 4, ry: 4 }));
+                keyGroup.appendChild(svgEl('text', { x: x + whiteKeyWidth / 2, y: topY + whiteKeyHeight - 25, 'font-size': 24, 'font-weight': 600, fill: '#d0ddf0', 'font-family': 'Arial', 'text-anchor': 'middle', 'dominant-baseline': 'central' }, [label]));
+                g.appendChild(keyGroup);
+            }
+
+            for (const bk of blackKeys) {
+                const x = leftMargin + (bk.index + 1) * whiteKeyWidth - blackKeyWidth / 2;
+                const keyGroup = svgEl('g', { 'data-pitch': bk.sharp, style: 'cursor:pointer;' });
+                keyGroup.appendChild(svgEl('rect', { x: x, y: topY, width: blackKeyWidth, height: blackKeyHeight, fill: '#0a0f1f', stroke: '#2a3a5f', 'stroke-width': 1.2, rx: 3, ry: 3 }));
+                keyGroup.appendChild(svgEl('text', { x: x + blackKeyWidth / 2, y: topY + blackKeyHeight - 12, 'font-size': 14, 'font-weight': 500, fill: '#8899c0', 'font-family': 'Arial', 'text-anchor': 'middle', 'dominant-baseline': 'central', opacity: 0.7 }, [bk.sharp]));
+                g.appendChild(keyGroup);
+            }
+        }
+
+        // ---------- RENDER ----------
+        function render() {
+            drawStaff();
+            drawPiano();
+            updateStats();
+            updateButton();
+        }
+
+        function updateStats() {
+            scoreDisplay.textContent = state.score;
+            if (state.totalAttempts === 0) accuracyDisplay.textContent = '—';
+            else accuracyDisplay.textContent = Math.round((state.correctAttempts / state.totalAttempts) * 100) + '%';
+            const mins = String(Math.floor(state.timerSeconds / 60)).padStart(2, '0');
+            const secs = String(state.timerSeconds % 60).padStart(2, '0');
+            timerDisplay.textContent = mins + ':' + secs;
+        }
+
+        function updateButton() {
+            actionBtn.textContent = state.isAnswered ? 'Next' : 'Skip';
+        }
+
+        function startTimer() {
+            if (state.timerInterval) return;
+            state.timerInterval = setInterval(() => {
+                state.timerSeconds++;
+                updateStats();
+            }, 1000);
+        }
+
+        // ✅ FIXED: Corrected clef selection using proper MIDI numbers
+        function pickRandomNoteAndClef() {
+            const note = ALL_NOTES[Math.floor(Math.random() * ALL_NOTES.length)];
+            const midiC4 = 60;
+            const distance = Math.abs(note.midi - midiC4);
+            let clef;
+            if (distance <= AMBIGUOUS_ZONE) {
+                clef = Math.random() < 0.5 ? 'treble' : 'bass';
+            } else {
+                clef = note.midi > midiC4 ? 'treble' : 'bass';
+            }
+            state.currentNote = note;
+            state.currentClef = clef;
+            state.isAnswered = false;
+        }
+
+        function loadNewNote() {
+            pickRandomNoteAndClef();
+            feedbackEl.innerHTML = '<span class="fb-empty">—</span>';
+            state.isAnswered = false;
+            render();
+        }
+
+        function checkAnswer(pitch) {
+            if (state.isAnswered || !state.currentNote || !pitch) return;
+            const userInput = pitch;
+            let normalized = userInput.trim().replace(/\s/g, '').replace(/♯/g, '#').replace(/♭/g, 'b').replace(/sharp/gi, '#').replace(/flat/gi, 'b');
+            const note = state.currentNote;
+            const correctPitchClasses = [note.baseName];
+            if (note.enharmonic) correctPitchClasses.push(note.enharmonic.slice(0, -1));
+            const isCorrect = correctPitchClasses.some(pc => pc.replace(/♯/g, '#').replace(/♭/g, 'b').toLowerCase() === normalized.toLowerCase());
+
+            state.isAnswered = true;
+            state.totalAttempts++;
+            if (isCorrect) { state.correctAttempts++; state.score++; }
+
+            const fb = document.createElement('span');
+            if (isCorrect) {
+                fb.innerHTML = `<span class="fb-correct">✓ Correct!</span> <span class="fb-divider">·</span> <span class="fb-user">You clicked</span> <span class="fb-answer">${userInput}</span> <span class="fb-octave">(octave ${note.octave})</span>`;
+            } else {
+                fb.innerHTML = `<span class="fb-wrong">✗ Incorrect</span> <span class="fb-divider">·</span> <span class="fb-user">You clicked</span> <span class="fb-answer">${userInput}</span> <span class="fb-divider">·</span> <span class="fb-user">Correct is</span> <span class="fb-answer">${note.display}</span>`;
+            }
+            feedbackEl.innerHTML = '';
+            feedbackEl.appendChild(fb);
+            updateStats();
+            render();
+        }
+
+        function skipNote() {
+            if (state.isAnswered) return;
+            state.totalAttempts++;
+            const note = state.currentNote;
+            feedbackEl.innerHTML = `<span style="color:#d4a06a;">⏭ Skipped</span> <span class="fb-divider">·</span> <span class="fb-user">Correct is</span> <span class="fb-answer">${note.display}</span>`;
+            state.isAnswered = true;
+            updateStats();
+            render();
+        }
+
+        // ---------- EVENTS ----------
+        actionBtn.addEventListener('click', () => {
+            if (state.isAnswered) loadNewNote();
+            else skipNote();
+        });
+
+        pianoGroup.addEventListener('click', (e) => {
+            if (state.isAnswered) return;
+            const target = e.target.closest('g[data-pitch]');
+            if (!target) return;
+            checkAnswer(target.getAttribute('data-pitch'));
+        });
+
+        // ---------- INIT ----------
+        function init() {
+            state.score = 0;
+            state.totalAttempts = 0;
+            state.correctAttempts = 0;
+            state.timerSeconds = 0;
+            state.isAnswered = false;
+            state.currentNote = ALL_NOTES[0];
+            state.currentClef = 'treble';
+            feedbackEl.innerHTML = '<span class="fb-empty">—</span>';
+            render();
+            startTimer();
+            loadNewNote();
+        }
+
+        init();
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => render(), 100);
+        });
+
+        console.log('🎹 Grand Staff Note Trainer ready – C major, no octave needed!');
+    })();
+</script>
+
+<!-- PWA Service Worker Registration & Improved Update Check -->
+<script>
+    // Service Worker registration
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW registered:', reg.scope))
+                .catch(err => console.error('SW registration failed:', err));
+        });
+    }
+
+    // Fallback hash function (FNV-1a)
+    function fnv1aHash(str) {
+        let hash = 0x811c9dc5;
+        for (let i = 0; i < str.length; i++) {
+            hash ^= str.charCodeAt(i);
+            hash = (hash * 0x01000193) >>> 0;
+        }
+        return hash.toString(16);
+    }
+
+    // Update check function
+    async function performUpdateCheck(showAlert = true) {
+        console.log('Update check started');
+        if (!navigator.onLine) {
+            console.log('Offline, skipping update check');
+            if (showAlert) alert('You are offline. Unable to check for updates.');
+            return;
+        }
+
+        const url = 'https://wasm.neocities.org/noteg/?v=' + Date.now() + '&nocache=' + Math.random();
+        try {
+            console.log('Fetching:', url);
+            const response = await fetch(url, { cache: 'reload' });
+            if (!response.ok) {
+                console.warn('Fetch failed with status:', response.status);
+                if (showAlert) alert('Update check failed. Please try again later.');
+                return;
+            }
+            const text = await response.text();
+            console.log('Fetched HTML length:', text.length);
+
+            let hash;
+            try {
+                const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch (e) {
+                console.warn('crypto.subtle failed, using fallback hash', e);
+                hash = fnv1aHash(text);
+            }
+            console.log('Computed hash:', hash);
+
+            const storedHash = localStorage.getItem('note-trainer-hash');
+            console.log('Stored hash:', storedHash);
+
+            if (!storedHash) {
+                localStorage.setItem('note-trainer-hash', hash);
+                console.log('First visit, hash stored');
+                if (showAlert) alert('This is your first visit. Hash stored. No update needed.');
+                return;
+            }
+
+            if (storedHash !== hash) {
+                console.log('New version detected');
+                const update = confirm('A new version is available. Update now?');
+                if (update) {
+                    localStorage.setItem('note-trainer-hash', hash);
+                    if ('caches' in window) {
+                        const keys = await caches.keys();
+                        await Promise.all(keys.map(key => caches.delete(key)));
+                    }
+                    if ('serviceWorker' in navigator) {
+                        const registrations = await navigator.serviceWorker.getRegistrations();
+                        await Promise.all(registrations.map(reg => reg.unregister()));
+                    }
+                    location.reload(true);
+                } else {
+                    if (showAlert) alert('Update cancelled. You can update later via "Check Update" button.');
+                }
+            } else {
+                console.log('No update needed');
+                if (showAlert) alert('You are already using the latest version.');
+            }
+        } catch (err) {
+            console.error('Update check failed:', err);
+            if (showAlert) alert('Update check failed. See console for details.');
+        }
+    }
+
+    // Auto-run on page load (silent)
+    performUpdateCheck(false);
+
+    // Manual button trigger
+    document.getElementById('checkUpdateBtn').addEventListener('click', () => {
+        performUpdateCheck(true);
+    });
+</script>
+</body>
+</html>
