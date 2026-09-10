@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>MIDI Stereo · DX7 Patch Manager</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0a0a12" />
   <style>
     * { box-sizing: border-box; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
     html, body {
@@ -84,10 +86,11 @@
       padding: 7px 14px;
       pointer-events: auto;
       display: grid;
-      grid-template-columns: minmax(220px, 0.85fr) minmax(360px, 1.8fr) minmax(150px, 0.55fr);
+      grid-template-columns: auto minmax(220px, 0.85fr) minmax(360px, 1.8fr) minmax(150px, 0.55fr);
       gap: 10px;
       align-items: start;
     }
+    #app-nav,
     #top-right-midi,
     #patch-controls,
     #grid-tools {
@@ -98,6 +101,49 @@
       padding: 7px 9px;
       pointer-events: auto;
     }
+    #app-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+    }
+    .home-menu {
+      width: 30px;
+      height: 26px;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 7px;
+      border: 1px solid rgba(138,172,216,0.55);
+      border-radius: 8px;
+      background: rgba(30,45,74,0.62);
+      flex: 0 0 auto;
+      text-decoration: none;
+    }
+    .home-menu span {
+      display: block;
+      height: 2px;
+      border-radius: 999px;
+      background: #d6e6ff;
+    }
+    .home-menu:hover { background: rgba(47,61,94,0.9); }
+    pwa-check-update { display: inline-block; flex-shrink: 0; min-width: 58px; }
+    .btn-check-update {
+      background: rgba(248,250,255,0.94);
+      color: #152033;
+      padding: 1px 10px;
+      border-radius: 40px;
+      font: inherit;
+      font-weight: 750;
+      font-size: 0.72rem;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.78);
+      height: 26px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.22), inset 0 -1px 0 rgba(0,0,0,0.1);
+    }
+    .btn-check-update:active { transform: scale(0.95); }
     #top-right-midi {
       display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
     }
@@ -378,6 +424,10 @@
       #top-left-log { top: 10px; left: 10px; width: 200px; padding: 6px 8px; }
       #logArea { height: 50px; font-size: 0.5rem; }
       #top-header { grid-template-columns: 1fr; gap: 5px; padding: 5px 8px; }
+      #app-nav { padding: 4px 8px; min-height: 26px; justify-content: space-between; }
+      .home-menu { height: 22px; width: 28px; }
+      .btn-check-update { font-size: 0.6rem; padding: 1px 8px; height: 22px; }
+      pwa-check-update { min-width: 52px; }
       #top-right-midi { padding: 4px 8px; gap: 4px; }
       #midi-connect-row, #midi-status-row { gap: 5px; }
       #top-right-midi .connect-section select { min-width: 50px; font-size: 0.6rem; padding: 1px 4px; }
@@ -432,6 +482,11 @@
   </div>
 
   <div id="top-header">
+    <div id="app-nav">
+      <a class="home-menu" href="../" aria-label="Open music tools index"><span></span><span></span><span></span></a>
+      <pwa-check-update><button class="btn-check-update" type="button" onclick="location.reload()">Update</button></pwa-check-update>
+    </div>
+
     <div id="top-right-midi">
       <div id="midi-connect-row">
         <div class="connect-section">
@@ -2353,5 +2408,14 @@
       setTimeout(connectMIDI, 400);
     })();
   </script>
+  <script>
+    window.PWA_UPDATE_CONFIG = {
+      serviceWorkerUrl: 'sw.js?v=1',
+      updateUrl: './',
+      storageKey: 'fm-1-seq-hash',
+      autoCheck: true
+    };
+  </script>
+  <script src="../pwa/update-pwa.js?v=4"></script>
 </body>
 </html>
