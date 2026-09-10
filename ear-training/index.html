@@ -110,7 +110,7 @@
             display: flex;
             align-items: stretch;
         }
-        .degree-grid { display: grid; grid-template-columns: repeat(8, minmax(64px, 1fr)); gap: 4px; width: 100%; }
+        .degree-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; width: 100%; min-width: 0; }
         .degree-key {
             border: 2px solid #4f8079;
             border-radius: 8px;
@@ -126,6 +126,7 @@
             justify-content: center;
             gap: 8px;
             min-width: 0;
+            overflow: hidden;
             touch-action: manipulation;
         }
         .degree-key:hover { background: #255d55; }
@@ -202,9 +203,11 @@
             pwa-check-update { width: 100%; margin-left: 0; }
             .btn-check-update { font-size: 10px; padding: 4px 6px; }
             .staff-wrapper { padding: 4px 2px 2px; max-height: 40vh; }
-            .keyboard-wrapper { min-height: 96px; padding: 4px 2px 2px; overflow-x: auto; }
-            .degree-grid { min-width: 640px; }
-            .degree-key { font-size: 20px; }
+            .keyboard-wrapper { min-height: 96px; padding: 4px 2px 2px; overflow: hidden; }
+            .degree-grid { min-width: 0; gap: 2px; }
+            .degree-key { font-size: clamp(14px, 5vw, 20px); gap: 4px; border-radius: 6px; }
+            .degree-note { font-size: 10px; }
+            .degree-marker { font-size: 8px; min-height: 10px; }
             .controls { gap: 6px; }
             .btn { padding: 8px 14px; font-size: 14px; min-width: 80px; }
             .feedback { font-size: 13px; padding: 4px 6px; min-height: 36px; }
