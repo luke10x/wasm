@@ -267,12 +267,14 @@
                         color: var(--pwa-update-hover-color, #fff);
                     }
                     .popover {
-                        position: absolute;
-                        top: calc(100% + 8px);
-                        right: 0;
+                        position: fixed;
+                        top: var(--pwa-popover-top, 48px);
+                        left: var(--pwa-popover-left, 12px);
                         z-index: 10000;
                         display: none;
                         width: min(280px, calc(100vw - 28px));
+                        max-height: calc(100vh - 24px);
+                        overflow: auto;
                         padding: 12px 14px;
                         border: 1px solid var(--pwa-popover-border, rgba(176, 188, 221, 0.28));
                         border-radius: 10px;
@@ -331,11 +333,16 @@
                 this.outsideClickHandler = event => {
                     if (!this.contains(event.target)) this.closeInstallHelp();
                 };
+                this.repositionHandler = () => this.positionInstallHelp();
                 document.addEventListener('click', this.outsideClickHandler);
+                window.addEventListener('resize', this.repositionHandler, { passive: true });
+                window.addEventListener('scroll', this.repositionHandler, { passive: true });
             }
 
             disconnectedCallback() {
                 document.removeEventListener('click', this.outsideClickHandler);
+                window.removeEventListener('resize', this.repositionHandler);
+                window.removeEventListener('scroll', this.repositionHandler);
             }
 
             renderMode() {
@@ -361,9 +368,40 @@
                 this.noteEl.textContent = instructions.note;
             }
 
+            positionInstallHelp() {
+                if (!this.installPopover.classList.contains('open')) return;
+                const margin = 12;
+                const gap = 8;
+                const buttonRect = this.button.getBoundingClientRect();
+
+                this.installPopover.style.setProperty('--pwa-popover-left', margin + 'px');
+                this.installPopover.style.setProperty('--pwa-popover-top', margin + 'px');
+                const popoverRect = this.installPopover.getBoundingClientRect();
+
+                const centeredLeft = buttonRect.left + (buttonRect.width - popoverRect.width) / 2;
+                const clampedLeft = Math.min(
+                    Math.max(margin, centeredLeft),
+                    Math.max(margin, window.innerWidth - popoverRect.width - margin)
+                );
+                const roomBelow = window.innerHeight - buttonRect.bottom - gap - margin;
+                const roomAbove = buttonRect.top - gap - margin;
+                const preferBelow = roomBelow >= Math.min(popoverRect.height, roomAbove);
+                const rawTop = preferBelow
+                    ? buttonRect.bottom + gap
+                    : buttonRect.top - popoverRect.height - gap;
+                const clampedTop = Math.min(
+                    Math.max(margin, rawTop),
+                    Math.max(margin, window.innerHeight - popoverRect.height - margin)
+                );
+
+                this.installPopover.style.setProperty('--pwa-popover-left', Math.round(clampedLeft) + 'px');
+                this.installPopover.style.setProperty('--pwa-popover-top', Math.round(clampedTop) + 'px');
+            }
+
             toggleInstallHelp() {
                 this.renderInstallInstructions();
                 this.installPopover.classList.toggle('open');
+                this.positionInstallHelp();
             }
 
             closeInstallHelp() {
