@@ -1,6 +1,6 @@
 {
-  "name": "Grand Staff Note Trainer",
-  "short_name": "NoteTrainer",
+  "name": "Sight Reading Trainer",
+  "short_name": "SightRead",
   "description": "Practice reading notes on the grand staff.",
   "start_url": "./",
   "display": "standalone",

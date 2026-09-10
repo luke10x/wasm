@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Grand Staff Note Trainer</title>
+    <title>Sight Reading Trainer</title>
     
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json" />
@@ -47,7 +47,7 @@
             padding: 0 8px 10px 8px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             margin-bottom: 12px;
-            flex-wrap: nowrap;           /* 🔥 Force all items in one line */
+            flex-wrap: wrap;
             gap: 8px 12px;
             flex-shrink: 0;
         }
@@ -83,6 +83,14 @@
         .btn-check-update:hover {
             background: #2a3760;
             color: #fff;
+        }
+
+
+        pwa-check-update {
+            display: inline-block;
+            flex-shrink: 0;
+            margin-left: auto;
+            min-width: 64px;
         }
 
         .staff-wrapper {
@@ -182,6 +190,7 @@
             .controls { gap: 6px; }
             .btn { padding: 8px 14px; font-size: 14px; min-width: 80px; }
             .feedback { font-size: 13px; padding: 4px 6px; min-height: 36px; }
+            pwa-check-update { width: 100%; margin-left: 0; }
         }
     </style>
 </head>
@@ -191,7 +200,7 @@
         <div class="header-item"><span class="label">Time</span><span class="value" id="timerDisplay">00:00</span></div>
         <div class="header-item"><span class="label">Score</span><span class="value" id="scoreDisplay">0</span></div>
         <div class="header-item"><span class="label">Accuracy</span><span class="value accuracy-val" id="accuracyDisplay">—</span></div>
-        <button id="checkUpdateBtn" class="btn-check-update">Check Update</button>
+        <pwa-check-update></pwa-check-update>
     </div>
 
     <div class="staff-wrapper">
@@ -255,6 +264,65 @@
             const octave = parseInt(noteId.slice(-1));
             const noteIndex = CHROMATIC.findIndex(c => c.name === pitch);
             return (octave + 1) * 12 + noteIndex;
+        }
+
+
+        // ---------- AUDIO ----------
+        let audioCtx = null;
+        let audioUnlocked = false;
+
+        function ensureAudioContext() {
+            const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextCtor) return null;
+            if (!audioCtx) audioCtx = new AudioContextCtor();
+            audioUnlocked = true;
+            if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+            return audioCtx;
+        }
+
+        function midiToFrequency(midi) {
+            return 440 * Math.pow(2, (midi - 69) / 12);
+        }
+
+        function midiForPitchInCurrentOctave(pitchClass) {
+            if (!state.currentNote || !pitchClass) return null;
+            const noteIndex = CHROMATIC.findIndex(c => c.name === pitchClass || c.enharmonic === pitchClass);
+            if (noteIndex < 0) return null;
+            return (state.currentNote.octave + 1) * 12 + noteIndex;
+        }
+
+        function playMidiNote(midi, duration = 0.55) {
+            if (!audioUnlocked) return;
+            const ctx = ensureAudioContext();
+            if (!ctx || typeof midi !== 'number') return;
+
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const tone = ctx.createBiquadFilter();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(midiToFrequency(midi), now);
+            tone.type = 'lowpass';
+            tone.frequency.setValueAtTime(1800, now);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.22, now + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+            osc.connect(tone);
+            tone.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + duration + 0.04);
+        }
+
+        function playCurrentQuestionNote() {
+            if (state.currentNote) playMidiNote(state.currentNote.midi, 0.65);
+        }
+
+        function playAnswerPitch(pitchClass) {
+            const midi = midiForPitchInCurrentOctave(pitchClass);
+            if (midi !== null) playMidiNote(midi, 0.45);
         }
 
         function computeStaffPositions(noteId) {
@@ -491,10 +559,12 @@
             feedbackEl.innerHTML = '<span class="fb-empty">—</span>';
             state.isAnswered = false;
             render();
+            playCurrentQuestionNote();
         }
 
         function checkAnswer(pitch) {
             if (state.isAnswered || !state.currentNote || !pitch) return;
+            playAnswerPitch(pitch);
             const userInput = pitch;
             let normalized = userInput.trim().replace(/\s/g, '').replace(/♯/g, '#').replace(/♭/g, 'b').replace(/sharp/gi, '#').replace(/flat/gi, 'b');
             const note = state.currentNote;
@@ -530,11 +600,13 @@
 
         // ---------- EVENTS ----------
         actionBtn.addEventListener('click', () => {
+            ensureAudioContext();
             if (state.isAnswered) loadNewNote();
             else skipNote();
         });
 
         pianoGroup.addEventListener('click', (e) => {
+            ensureAudioContext();
             if (state.isAnswered) return;
             const target = e.target.closest('g[data-pitch]');
             if (!target) return;
@@ -564,107 +636,19 @@
             resizeTimeout = setTimeout(() => render(), 100);
         });
 
-        console.log('🎹 Grand Staff Note Trainer ready – C major, no octave needed!');
+        console.log('🎹 Sight Reading Trainer ready – C major, no octave needed!');
     })();
 </script>
 
-<!-- PWA Service Worker Registration & Improved Update Check -->
+<!-- PWA Service Worker Registration & Update Check -->
 <script>
-    // Service Worker registration
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('SW registered:', reg.scope))
-                .catch(err => console.error('SW registration failed:', err));
-        });
-    }
-
-    // Fallback hash function (FNV-1a)
-    function fnv1aHash(str) {
-        let hash = 0x811c9dc5;
-        for (let i = 0; i < str.length; i++) {
-            hash ^= str.charCodeAt(i);
-            hash = (hash * 0x01000193) >>> 0;
-        }
-        return hash.toString(16);
-    }
-
-    // Update check function
-    async function performUpdateCheck(showAlert = true) {
-        console.log('Update check started');
-        if (!navigator.onLine) {
-            console.log('Offline, skipping update check');
-            if (showAlert) alert('You are offline. Unable to check for updates.');
-            return;
-        }
-
-        const url = 'https://wasm.neocities.org/noteg/?v=' + Date.now() + '&nocache=' + Math.random();
-        try {
-            console.log('Fetching:', url);
-            const response = await fetch(url, { cache: 'reload' });
-            if (!response.ok) {
-                console.warn('Fetch failed with status:', response.status);
-                if (showAlert) alert('Update check failed. Please try again later.');
-                return;
-            }
-            const text = await response.text();
-            console.log('Fetched HTML length:', text.length);
-
-            let hash;
-            try {
-                const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            } catch (e) {
-                console.warn('crypto.subtle failed, using fallback hash', e);
-                hash = fnv1aHash(text);
-            }
-            console.log('Computed hash:', hash);
-
-            const storedHash = localStorage.getItem('note-trainer-hash');
-            console.log('Stored hash:', storedHash);
-
-            if (!storedHash) {
-                localStorage.setItem('note-trainer-hash', hash);
-                console.log('First visit, hash stored');
-                if (showAlert) alert('This is your first visit. Hash stored. No update needed.');
-                return;
-            }
-
-            if (storedHash !== hash) {
-                console.log('New version detected');
-                const update = confirm('A new version is available. Update now?');
-                if (update) {
-                    localStorage.setItem('note-trainer-hash', hash);
-                    if ('caches' in window) {
-                        const keys = await caches.keys();
-                        await Promise.all(keys.map(key => caches.delete(key)));
-                    }
-                    if ('serviceWorker' in navigator) {
-                        const registrations = await navigator.serviceWorker.getRegistrations();
-                        await Promise.all(registrations.map(reg => reg.unregister()));
-                    }
-                    location.reload(true);
-                } else {
-                    if (showAlert) alert('Update cancelled. You can update later via "Check Update" button.');
-                }
-            } else {
-                console.log('No update needed');
-                if (showAlert) alert('You are already using the latest version.');
-            }
-        } catch (err) {
-            console.error('Update check failed:', err);
-            if (showAlert) alert('Update check failed. See console for details.');
-        }
-    }
-
-    // Auto-run on page load (silent)
-    performUpdateCheck(false);
-
-    // Manual button trigger
-    document.getElementById('checkUpdateBtn').addEventListener('click', () => {
-        performUpdateCheck(true);
-    });
+    window.PWA_UPDATE_CONFIG = {
+        serviceWorkerUrl: 'sw.js?v=2',
+        updateUrl: 'https://wasm.neocities.org/noteg/',
+        storageKey: 'sight-reading-hash',
+        autoCheck: true
+    };
 </script>
+<script src="../pwa/update-pwa.js?v=4"></script>
 </body>
 </html>
