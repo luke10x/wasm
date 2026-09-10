@@ -128,6 +128,10 @@
       background: #d6e6ff;
     }
     .home-menu:hover { background: rgba(47,61,94,0.9); }
+    @media (display-mode: standalone), (display-mode: window-controls-overlay) {
+      .home-menu { display: none; }
+    }
+    html.pwa-standalone .home-menu { display: none; }
     pwa-check-update { display: inline-block; flex-shrink: 0; min-width: 58px; }
     .btn-check-update {
       background: rgba(248,250,255,0.94);
@@ -2416,6 +2420,6 @@
       autoCheck: true
     };
   </script>
-  <script src="../pwa/update-pwa.js?v=5"></script>
+  <script src="../pwa/update-pwa.js?v=6"></script>
 </body>
 </html>

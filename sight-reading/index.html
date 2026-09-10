@@ -74,6 +74,10 @@
             background: #b0bcdd;
         }
         .home-menu:hover { background: #2a3760; }
+        @media (display-mode: standalone), (display-mode: window-controls-overlay) {
+            .home-menu { display: none; }
+        }
+        html.pwa-standalone .home-menu { display: none; }
 
         .header-item {
             display: flex;
@@ -673,6 +677,6 @@
         autoCheck: true
     };
 </script>
-<script src="../pwa/update-pwa.js?v=5"></script>
+<script src="../pwa/update-pwa.js?v=6"></script>
 </body>
 </html>

@@ -60,6 +60,10 @@
             background: #bad8d3;
         }
         .home-menu:hover { background: #255d55; }
+        @media (display-mode: standalone), (display-mode: window-controls-overlay) {
+            .home-menu { display: none; }
+        }
+        html.pwa-standalone .home-menu { display: none; }
 
         .header-item { display: flex; align-items: baseline; gap: 6px; color: #bad8d3; flex-shrink: 0; }
         .label { opacity: 0.72; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -565,6 +569,6 @@
         autoCheck: true
     };
 </script>
-<script src="../pwa/update-pwa.js?v=5"></script>
+<script src="../pwa/update-pwa.js?v=6"></script>
 </body>
 </html>

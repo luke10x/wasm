@@ -24,6 +24,10 @@
             window.navigator.standalone === true;
     }
 
+    function syncStandaloneClass() {
+        document.documentElement.classList.toggle('pwa-standalone', isPwaStandalone());
+    }
+
     function registerPwaServiceWorker() {
         if (!('serviceWorker' in navigator)) return;
         window.addEventListener('load', () => {
@@ -410,6 +414,7 @@
         });
     }
 
+    syncStandaloneClass();
     registerPwaServiceWorker();
     defineCheckUpdateElement();
     bindUpdateButton();
