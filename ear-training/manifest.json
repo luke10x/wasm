@@ -1,0 +1,17 @@
+{
+  "name": "Ear Training",
+  "short_name": "EarTrain",
+  "description": "Practice hearing scale-degree intervals from a selected root and mode.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#102522",
+  "theme_color": "#14322f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

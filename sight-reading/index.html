@@ -52,6 +52,29 @@
             flex-shrink: 0;
         }
 
+
+        .home-menu {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            padding: 0 8px;
+            border: 1px solid #4a6fa5;
+            border-radius: 8px;
+            background: transparent;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+        .home-menu span {
+            display: block;
+            height: 2px;
+            border-radius: 999px;
+            background: #b0bcdd;
+        }
+        .home-menu:hover { background: #2a3760; }
+
         .header-item {
             display: flex;
             align-items: baseline;
@@ -197,10 +220,11 @@
 <body>
 <div class="app-container">
     <div class="header">
+        <a class="home-menu" href="../" aria-label="Open music tools index"><span></span><span></span><span></span></a>
         <div class="header-item"><span class="label">Time</span><span class="value" id="timerDisplay">00:00</span></div>
         <div class="header-item"><span class="label">Score</span><span class="value" id="scoreDisplay">0</span></div>
         <div class="header-item"><span class="label">Accuracy</span><span class="value accuracy-val" id="accuracyDisplay">—</span></div>
-        <pwa-check-update></pwa-check-update>
+        <pwa-check-update><button class="btn-check-update" type="button" onclick="location.reload()">Update</button></pwa-check-update>
     </div>
 
     <div class="staff-wrapper">
@@ -644,7 +668,7 @@
 <script>
     window.PWA_UPDATE_CONFIG = {
         serviceWorkerUrl: 'sw.js?v=2',
-        updateUrl: 'https://wasm.neocities.org/noteg/',
+        updateUrl: './',
         storageKey: 'sight-reading-hash',
         autoCheck: true
     };

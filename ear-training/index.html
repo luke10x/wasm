@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Ear Training</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#14322f" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            height: 100%;
+            background: #102522;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+        }
+        body { display: flex; justify-content: center; align-items: center; padding: 10px; }
+        .app-container {
+            background: #14322f;
+            border-radius: 28px;
+            padding: 18px;
+            max-width: 980px;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px 14px;
+            padding: 0 8px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .home-menu {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            padding: 0 8px;
+            border: 1px solid #4f8079;
+            border-radius: 8px;
+            background: transparent;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+        .home-menu span {
+            display: block;
+            height: 2px;
+            border-radius: 999px;
+            background: #bad8d3;
+        }
+        .home-menu:hover { background: #255d55; }
+
+        .header-item { display: flex; align-items: baseline; gap: 6px; color: #bad8d3; flex-shrink: 0; }
+        .label { opacity: 0.72; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+        .value { color: #f0fffb; font-size: 22px; font-weight: 650; min-width: 46px; text-align: center; font-variant-numeric: tabular-nums; }
+        .selectors { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        select {
+            height: 34px;
+            border: 1px solid #4f8079;
+            border-radius: 8px;
+            background: #0f2422;
+            color: #e6fffa;
+            padding: 0 10px;
+            font: inherit;
+            font-size: 13px;
+        }
+        pwa-check-update { display: inline-block; flex-shrink: 0; margin-left: auto; min-width: 64px; }
+        .btn-check-update {
+            background: transparent;
+            border: 1px solid #4f8079;
+            color: #bad8d3;
+            padding: 6px 10px;
+            font: inherit;
+            font-size: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-check-update:hover { background: #255d55; color: #fff; }
+        .staff-wrapper {
+            background: #0d1b1f;
+            border-radius: 18px;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.45);
+            flex-shrink: 0;
+            max-height: 44vh;
+            overflow: hidden;
+        }
+        .staff-svg { display: block; width: 100%; height: auto; background: #0d1b1f; border-radius: 12px; }
+        .keyboard-wrapper {
+            background: #0d1b1f;
+            border-radius: 16px;
+            padding: 8px 6px 6px;
+            margin-bottom: 12px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.45);
+            flex: 1 1 auto;
+            min-height: 128px;
+            display: flex;
+            align-items: stretch;
+        }
+        .degree-grid { display: grid; grid-template-columns: repeat(8, minmax(64px, 1fr)); gap: 4px; width: 100%; }
+        .degree-key {
+            border: 2px solid #4f8079;
+            border-radius: 8px;
+            background: #1c4b45;
+            color: #ecfffb;
+            font: inherit;
+            font-size: clamp(18px, 4vh, 34px);
+            font-weight: 750;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 0;
+            touch-action: manipulation;
+        }
+        .degree-key:hover { background: #255d55; }
+        .degree-key[disabled] { cursor: default; opacity: 0.65; }
+        .degree-key.selected { border-color: #f2c36b; box-shadow: inset 0 0 0 2px rgba(242,195,107,0.28); }
+        .degree-key.guessed {
+            border-color: #ffc08f;
+            background: #6b3a25;
+            box-shadow: inset 0 0 0 2px rgba(255,192,143,0.32);
+        }
+        .degree-key.actual {
+            border-color: #f69090;
+            background: #672f3a;
+            box-shadow: inset 0 0 0 2px rgba(246,144,144,0.34);
+        }
+        .degree-key.guessed.actual {
+            border-color: #ffd2b5;
+            background: linear-gradient(135deg, #6b3a25 0 50%, #672f3a 50% 100%);
+        }
+        .degree-note { color: #a8c9c4; font-size: 12px; font-weight: 600; }
+        .degree-key.guessed .degree-note,
+        .degree-key.actual .degree-note { color: #fff0e2; }
+        .degree-marker {
+            min-height: 14px;
+            color: rgba(255,255,255,0.82);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .controls { display: flex; align-items: center; gap: 12px; padding: 0 4px; margin-top: 4px; flex-shrink: 0; flex-wrap: wrap; }
+        .btn {
+            min-width: 104px;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 12px;
+            background: #d39348;
+            color: #102522;
+            font: inherit;
+            font-size: 17px;
+            font-weight: 750;
+            cursor: pointer;
+            white-space: nowrap;
+            touch-action: manipulation;
+        }
+        .btn:hover { background: #e2a75f; }
+        .feedback {
+            flex: 1 1 auto;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 14px;
+            background: #102a2f;
+            font-size: 16px;
+            font-weight: 500;
+            color: #c5ded9;
+            flex-wrap: wrap;
+            overflow: hidden;
+        }
+        .fb-correct { color: #8ee2a4; font-weight: 700; }
+        .fb-wrong { color: #f59a8d; font-weight: 700; }
+        .fb-answer { color: #fff1c7; font-weight: 700; }
+        .fb-guessed { color: #ffc08f; font-weight: 800; }
+        .fb-actual { color: #f69090; font-weight: 800; }
+        .fb-empty { color: #55736e; }
+        @media (max-width: 700px) {
+            .app-container { padding: 10px 8px 12px; border-radius: 20px; }
+            .header { padding: 0 4px 8px; gap: 6px 8px; }
+            .value { font-size: 16px; min-width: 32px; }
+            .label { font-size: 9px; }
+            select { height: 30px; font-size: 12px; padding: 0 6px; }
+            pwa-check-update { width: 100%; margin-left: 0; }
+            .btn-check-update { font-size: 10px; padding: 4px 6px; }
+            .staff-wrapper { padding: 4px 2px 2px; max-height: 40vh; }
+            .keyboard-wrapper { min-height: 96px; padding: 4px 2px 2px; overflow-x: auto; }
+            .degree-grid { min-width: 640px; }
+            .degree-key { font-size: 20px; }
+            .controls { gap: 6px; }
+            .btn { padding: 8px 14px; font-size: 14px; min-width: 80px; }
+            .feedback { font-size: 13px; padding: 4px 6px; min-height: 36px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <a class="home-menu" href="../" aria-label="Open music tools index"><span></span><span></span><span></span></a>
+        <div class="header-item"><span class="label">Time</span><span class="value" id="timerDisplay">00:00</span></div>
+        <div class="header-item"><span class="label">Score</span><span class="value" id="scoreDisplay">0</span></div>
+        <div class="header-item"><span class="label">Accuracy</span><span class="value" id="accuracyDisplay">-</span></div>
+        <div class="selectors">
+            <label class="header-item"><span class="label">Root</span><select id="rootSelect"></select></label>
+            <label class="header-item"><span class="label">Mode</span><select id="modeSelect"></select></label>
+        </div>
+        <pwa-check-update><button class="btn-check-update" type="button" onclick="location.reload()">Update</button></pwa-check-update>
+    </div>
+
+    <div class="staff-wrapper">
+        <svg class="staff-svg" viewBox="0 0 760 380" preserveAspectRatio="xMidYMid meet">
+            <g id="staffGroup"></g>
+        </svg>
+    </div>
+
+    <div class="keyboard-wrapper">
+        <div class="degree-grid" id="degreeGrid"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="actionBtn">Replay</button>
+        <div class="feedback" id="feedback"><span class="fb-empty">Select the interval you hear.</span></div>
+    </div>
+</div>
+
+<script>
+(function () {
+    const CHROMATIC = [
+        { name: 'C', sharp: 'C' },
+        { name: 'C#', sharp: 'C#', flat: 'Db' },
+        { name: 'D', sharp: 'D' },
+        { name: 'D#', sharp: 'D#', flat: 'Eb' },
+        { name: 'E', sharp: 'E' },
+        { name: 'F', sharp: 'F' },
+        { name: 'F#', sharp: 'F#', flat: 'Gb' },
+        { name: 'G', sharp: 'G' },
+        { name: 'G#', sharp: 'G#', flat: 'Ab' },
+        { name: 'A', sharp: 'A' },
+        { name: 'A#', sharp: 'A#', flat: 'Bb' },
+        { name: 'B', sharp: 'B' }
+    ];
+    const ROOTS = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+    const MODES = {
+        major: { label: 'Major', intervals: [0, 2, 4, 5, 7, 9, 11, 12], degrees: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°', 'I'] },
+        minor: { label: 'Natural minor', intervals: [0, 2, 3, 5, 7, 8, 10, 12], degrees: ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII', 'i'] }
+    };
+    const KEY_ROOT = 'ear-training-root';
+    const KEY_MODE = 'ear-training-mode';
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    const staffGroup = document.getElementById('staffGroup');
+    const degreeGrid = document.getElementById('degreeGrid');
+    const actionBtn = document.getElementById('actionBtn');
+    const feedbackEl = document.getElementById('feedback');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const accuracyDisplay = document.getElementById('accuracyDisplay');
+    const rootSelect = document.getElementById('rootSelect');
+    const modeSelect = document.getElementById('modeSelect');
+
+    const state = {
+        root: localStorage.getItem(KEY_ROOT) || 'C',
+        mode: localStorage.getItem(KEY_MODE) || 'major',
+        targetIndex: 4,
+        answeredIndex: null,
+        isAnswered: false,
+        score: 0,
+        totalAttempts: 0,
+        correctAttempts: 0,
+        timerSeconds: 0,
+        timerInterval: null
+    };
+
+    let audioCtx = null;
+    let audioUnlocked = false;
+
+    function ensureAudioContext() {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextCtor) return null;
+        if (!audioCtx) audioCtx = new AudioContextCtor();
+        audioUnlocked = true;
+        if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+        return audioCtx;
+    }
+
+    function midiToFrequency(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+    function rootIndex(root) {
+        const normalized = root.replace('Db','C#').replace('Eb','D#').replace('Gb','F#').replace('Ab','G#').replace('Bb','A#');
+        return CHROMATIC.findIndex(n => n.name === normalized);
+    }
+    function preferFlat(root) { return /b/.test(root) && root !== 'B'; }
+    function noteName(midi) {
+        const pc = ((midi % 12) + 12) % 12;
+        const note = CHROMATIC[pc];
+        return preferFlat(state.root) && note.flat ? note.flat : note.sharp;
+    }
+    function rootMidi() { return 60 + rootIndex(state.root); }
+    function targetMidi(index) { return rootMidi() + MODES[state.mode].intervals[index]; }
+    function noteInfoForMidi(midi) {
+        const name = noteName(midi);
+        const octave = Math.floor(midi / 12) - 1;
+        const pitch = name[0];
+        const accidental = name.includes('#') ? '#' : (name.includes('b') ? 'b' : null);
+        const letterIndex = ['C','D','E','F','G','A','B'].indexOf(pitch);
+        const absIndex = octave * 7 + letterIndex;
+        return {
+            name,
+            octave,
+            accidental,
+            yTreble: 80 - (absIndex - 30) * 10,
+            yBass: 80 - (absIndex - 18) * 10,
+        };
+    }
+    function clefForMidi(midi) {
+        return midi >= 60 ? 'treble' : 'bass';
+    }
+
+    function playMidiNote(midi, start, duration, level) {
+        const ctx = audioCtx;
+        if (!ctx || typeof midi !== 'number') return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const tone = ctx.createBiquadFilter();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(midiToFrequency(midi), start);
+        tone.type = 'lowpass';
+        tone.frequency.setValueAtTime(1900, start);
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(level, start + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+        osc.connect(tone);
+        tone.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + duration + 0.04);
+    }
+
+    function playInterval(answerIndex = state.targetIndex) {
+        if (!audioUnlocked) return;
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime + 0.02;
+        playMidiNote(rootMidi(), now, 0.58, 0.20);
+        playMidiNote(targetMidi(answerIndex), now + 0.54, 0.68, 0.22);
+    }
+
+    function makeSvg(tag, attrs) {
+        const el = document.createElementNS(SVG_NS, tag);
+        Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+        return el;
+    }
+
+    function drawStaffNote(midi, x, fill) {
+        const info = noteInfoForMidi(midi);
+        const clef = clefForMidi(midi);
+        const staffTop = clef === 'treble' ? 60 : 220;
+        const yOffset = clef === 'treble' ? info.yTreble : info.yBass;
+        const y = staffTop + yOffset;
+        const group = makeSvg('g', {});
+
+        if (yOffset < 0) {
+            let ly = -20;
+            while (ly >= yOffset - 8) {
+                group.appendChild(makeSvg('line', { x1: x - 26, y1: staffTop + ly, x2: x + 26, y2: staffTop + ly, stroke: '#6a7a9f', 'stroke-width': '1.6', opacity: '0.55' }));
+                ly -= 20;
+            }
+        } else if (yOffset > 80) {
+            let ly = 100;
+            while (ly <= yOffset + 8) {
+                group.appendChild(makeSvg('line', { x1: x - 26, y1: staffTop + ly, x2: x + 26, y2: staffTop + ly, stroke: '#6a7a9f', 'stroke-width': '1.6', opacity: '0.55' }));
+                ly += 20;
+            }
+        }
+
+        group.appendChild(makeSvg('ellipse', { cx: x, cy: y, rx: 16, ry: 10, fill, stroke: '#dfe7ff', 'stroke-width': '1.5', transform: `rotate(-8 ${x} ${y})` }));
+        const stemUp = y > (staffTop + 40);
+        const stemDir = stemUp ? -1 : 1;
+        const stemX = x + (stemUp ? 14 : -14);
+        group.appendChild(makeSvg('line', { x1: stemX, y1: y, x2: stemX, y2: y + stemDir * 56, stroke: fill, 'stroke-width': '2.6', 'stroke-linecap': 'round' }));
+
+        if (info.accidental) {
+            const symbol = info.accidental === '#' ? '♯' : '♭';
+            group.appendChild(makeSvg('text', { x: x - 38, y: y - 2, fill: '#f0e68c', 'font-size': '26', 'font-weight': '700', 'font-family': 'Arial', 'text-anchor': 'middle', 'dominant-baseline': 'central', opacity: '0.95' })).textContent = symbol;
+        }
+        return group;
+    }
+
+    function renderStaff() {
+        staffGroup.innerHTML = '';
+        const x0 = 70, x1 = 690;
+        const lineSpacing = 20;
+        const trebleTop = 60, trebleBottom = 140;
+        const bassTop = 220, bassBottom = 300;
+
+        for (let i = 0; i < 5; i++) {
+            const ty = trebleBottom - i * lineSpacing;
+            const by = bassBottom - i * lineSpacing;
+            staffGroup.appendChild(makeSvg('line', { x1: x0, y1: ty, x2: x1, y2: ty, stroke: '#6a7a9f', 'stroke-width': '1.8', opacity: '0.6' }));
+            staffGroup.appendChild(makeSvg('line', { x1: x0, y1: by, x2: x1, y2: by, stroke: '#6a7a9f', 'stroke-width': '1.8', opacity: '0.6' }));
+        }
+        staffGroup.appendChild(makeSvg('line', { x1: x0 - 12, y1: trebleTop, x2: x0 - 12, y2: bassBottom, stroke: '#8a9abf', 'stroke-width': '2.5', opacity: '0.6' }));
+        staffGroup.appendChild(makeSvg('line', { x1: x1 + 12, y1: trebleTop, x2: x1 + 12, y2: bassBottom, stroke: '#8a9abf', 'stroke-width': '2.5', opacity: '0.6' }));
+        staffGroup.appendChild(makeSvg('text', { x: 42, y: 100, 'font-size': '70', 'font-family': '"Segoe UI Symbol", "Noto Music", "Arial Unicode MS", "Arial", sans-serif', fill: '#c8d4f0', opacity: '0.9', 'text-anchor': 'middle', 'dominant-baseline': 'central' })).textContent = '𝄞';
+        staffGroup.appendChild(makeSvg('text', { x: 42, y: 240, 'font-size': '60', 'font-family': '"Segoe UI Symbol", "Noto Music", "Arial Unicode MS", "Arial", sans-serif', fill: '#c8d4f0', opacity: '0.9', 'text-anchor': 'middle', 'dominant-baseline': 'central' })).textContent = '𝄢';
+
+        staffGroup.appendChild(drawStaffNote(rootMidi(), 300, '#f0f6ff'));
+        if (state.isAnswered) {
+            staffGroup.appendChild(drawStaffNote(targetMidi(state.answeredIndex), 430, state.answeredIndex === state.targetIndex ? '#9df0b6' : '#ffc08f'));
+            if (state.answeredIndex !== state.targetIndex) staffGroup.appendChild(drawStaffNote(targetMidi(state.targetIndex), 540, '#f69090'));
+        } else {
+            const q = makeSvg('text', { x: 430, y: 198, fill: '#f2c36b', 'font-size': '64', 'font-weight': '800' });
+            q.textContent = '?';
+            staffGroup.appendChild(q);
+        }
+    }
+
+    function renderKeyboard() {
+        const mode = MODES[state.mode];
+        degreeGrid.innerHTML = '';
+        mode.degrees.forEach((degree, index) => {
+            const button = document.createElement('button');
+            button.className = 'degree-key';
+            const isGuessed = state.isAnswered && index === state.answeredIndex;
+            const isActual = state.isAnswered && index === state.targetIndex;
+            if (isGuessed) button.classList.add('guessed');
+            if (isActual) button.classList.add('actual');
+            button.type = 'button';
+            button.dataset.index = String(index);
+            const marker = [
+                isGuessed ? 'guessed' : '',
+                isActual ? 'actual' : ''
+            ].filter(Boolean).join(' / ');
+            button.innerHTML = `<span class="degree-marker">${marker}</span><span>${degree}</span><span class="degree-note">${noteName(targetMidi(index))}</span>`;
+            button.addEventListener('click', () => handleDegreePress(index));
+            degreeGrid.appendChild(button);
+        });
+    }
+
+    function updateStats() {
+        scoreDisplay.textContent = state.score;
+        if (state.totalAttempts === 0) accuracyDisplay.textContent = '-';
+        else accuracyDisplay.textContent = Math.round((state.correctAttempts / state.totalAttempts) * 100) + '%';
+        timerDisplay.textContent = String(Math.floor(state.timerSeconds / 60)).padStart(2, '0') + ':' + String(state.timerSeconds % 60).padStart(2, '0');
+    }
+
+    function render() {
+        renderStaff();
+        renderKeyboard();
+        updateStats();
+        actionBtn.textContent = state.isAnswered ? 'Next' : 'Replay';
+    }
+
+    function newQuestion() {
+        state.targetIndex = 1 + Math.floor(Math.random() * 7);
+        state.answeredIndex = null;
+        state.isAnswered = false;
+        feedbackEl.innerHTML = '<span class="fb-empty">Select the interval you hear.</span>';
+        render();
+        playInterval();
+    }
+
+    function answer(index) {
+        ensureAudioContext();
+        if (state.isAnswered) return;
+        state.answeredIndex = index;
+        state.isAnswered = true;
+        state.totalAttempts++;
+        const correct = index === state.targetIndex;
+        if (correct) { state.score++; state.correctAttempts++; }
+        const mode = MODES[state.mode];
+        feedbackEl.innerHTML = correct
+            ? `<span class="fb-correct">Correct</span><span>You chose</span><span class="fb-guessed">${mode.degrees[index]} ${noteName(targetMidi(index))}</span>`
+            : `<span class="fb-wrong">Incorrect</span><span>You chose</span><span class="fb-guessed">${mode.degrees[index]} ${noteName(targetMidi(index))}</span><span>Correct:</span><span class="fb-actual">${mode.degrees[state.targetIndex]} ${noteName(targetMidi(state.targetIndex))}</span>`;
+        render();
+        playInterval(index);
+    }
+
+    function handleDegreePress(index) {
+        ensureAudioContext();
+        if (state.isAnswered) {
+            playInterval(index);
+            return;
+        }
+        answer(index);
+    }
+
+    function resetForScaleChange() {
+        localStorage.setItem(KEY_ROOT, state.root);
+        localStorage.setItem(KEY_MODE, state.mode);
+        newQuestion();
+    }
+
+    function initControls() {
+        ROOTS.forEach(root => {
+            const opt = document.createElement('option');
+            opt.value = root;
+            opt.textContent = root;
+            rootSelect.appendChild(opt);
+        });
+        Object.entries(MODES).forEach(([key, mode]) => {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = mode.label;
+            modeSelect.appendChild(opt);
+        });
+        rootSelect.value = state.root;
+        modeSelect.value = state.mode;
+        rootSelect.addEventListener('change', () => { ensureAudioContext(); state.root = rootSelect.value; resetForScaleChange(); });
+        modeSelect.addEventListener('change', () => { ensureAudioContext(); state.mode = modeSelect.value; resetForScaleChange(); });
+    }
+
+    actionBtn.addEventListener('click', () => {
+        ensureAudioContext();
+        if (state.isAnswered) newQuestion();
+        else playInterval();
+    });
+
+    window.addEventListener('keydown', event => {
+        if (event.repeat) return;
+        const index = Number(event.key) - 1;
+        if (index >= 0 && index < 8) {
+            event.preventDefault();
+            handleDegreePress(index);
+        }
+    });
+
+    function startTimer() {
+        if (state.timerInterval) return;
+        state.timerInterval = setInterval(() => { state.timerSeconds++; updateStats(); }, 1000);
+    }
+
+    initControls();
+    render();
+    startTimer();
+    newQuestion();
+    window.addEventListener('resize', render);
+})();
+</script>
+<script>
+    window.PWA_UPDATE_CONFIG = {
+        serviceWorkerUrl: 'sw.js?v=2',
+        updateUrl: './',
+        storageKey: 'ear-training-hash',
+        autoCheck: true
+    };
+</script>
+<script src="../pwa/update-pwa.js?v=4"></script>
+</body>
+</html>
