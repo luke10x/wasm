@@ -1,0 +1,17 @@
+{
+  "name": "Chord Helper",
+  "short_name": "Chords",
+  "description": "Build, hear, and identify common chords and their scale degrees.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#24141d",
+  "theme_color": "#542b39",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

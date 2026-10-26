@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Chord Helper</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#542b39" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --shell: #542b39;
+            --panel: #2a1822;
+            --panel-soft: #3a202c;
+            --ink: #fff7ea;
+            --muted: #d9bfb8;
+            --line: #805060;
+            --accent: #f0ae58;
+            --accent-soft: #784633;
+            --selected: #d96e55;
+            --key-white: #f5eadc;
+            --key-black: #171421;
+        }
+        html, body {
+            height: 100%;
+            background: #24141d;
+            color: var(--ink);
+            font-family: Georgia, 'Times New Roman', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body { display: flex; justify-content: center; padding: 10px; overflow: hidden; }
+        button, select { font: inherit; }
+        button { touch-action: manipulation; }
+        .app-container {
+            width: min(100%, 980px);
+            height: calc(100dvh - 20px);
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 82% 0%, rgba(240,174,88,.13), transparent 34%),
+                var(--shell);
+            box-shadow: 0 20px 54px rgba(0,0,0,.58);
+        }
+        .header { display: flex; align-items: center; gap: 10px; min-height: 36px; }
+        .home-menu {
+            width: 36px; height: 36px; display: inline-flex; flex-direction: column;
+            justify-content: center; gap: 4px; padding: 0 8px; border: 1px solid var(--line);
+            border-radius: 9px; background: transparent; flex-shrink: 0; text-decoration: none;
+        }
+        .home-menu span { display: block; height: 2px; border-radius: 99px; background: var(--muted); }
+        .home-menu:hover { background: var(--panel-soft); }
+        @media (display-mode: standalone), (display-mode: window-controls-overlay) { .home-menu { display: none; } }
+        html.pwa-standalone .home-menu { display: none; }
+        h1 { font-size: clamp(22px, 4vw, 34px); line-height: 1; letter-spacing: -.02em; }
+        .subtitle { color: var(--muted); font: 13px/1.3 system-ui, sans-serif; }
+        pwa-check-update {
+            display: inline-block; margin-left: auto; flex-shrink: 0;
+            --pwa-update-border: var(--line); --pwa-update-color: var(--muted);
+            --pwa-update-hover-bg: var(--panel-soft); --pwa-popover-bg: var(--panel);
+            --pwa-popover-border: var(--line); --pwa-popover-color: var(--ink);
+            --pwa-popover-muted: var(--muted);
+        }
+        .btn-check-update { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--muted); background: transparent; }
+        .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .mode-button {
+            min-height: 52px; border: 1px solid var(--line); border-radius: 13px;
+            background: var(--panel-soft); color: var(--muted); font-size: clamp(17px, 3vw, 23px);
+            cursor: pointer;
+        }
+        .mode-button.active { border-color: var(--accent); background: var(--accent); color: #2d1820; font-weight: 700; }
+        .workspace {
+            flex: 1 1 auto; min-height: 270px; overflow: auto; border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px; background: var(--panel); box-shadow: inset 0 2px 10px rgba(0,0,0,.32);
+        }
+        .workspace-head {
+            position: sticky; top: 0; z-index: 3; display: flex; align-items: end; gap: 10px;
+            padding: 12px; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(42,24,34,.97);
+        }
+        .workspace-head[hidden] { display: none; }
+        .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+        .field.grow { flex: 1; }
+        .field label { color: var(--muted); font: 700 10px/1 system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+        select {
+            width: 100%; min-height: 38px; border: 1px solid var(--line); border-radius: 9px;
+            padding: 0 30px 0 10px; background: #1d1420; color: var(--ink); font-family: system-ui, sans-serif;
+        }
+        .results { padding: 5px 12px 12px; }
+        .section-title {
+            margin: 13px 0 7px; color: var(--accent); font: 800 11px/1 system-ui, sans-serif;
+            letter-spacing: .12em; text-transform: uppercase;
+        }
+        .result-row {
+            display: grid; grid-template-columns: minmax(110px, 1.1fr) minmax(130px, 1.5fr) auto;
+            align-items: center; gap: 10px; min-height: 48px; padding: 7px 3px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+        .result-row:last-child { border-bottom: 0; }
+        .result-name { color: var(--ink); font-size: 17px; font-weight: 700; }
+        .result-notes { color: var(--muted); font: 13px/1.3 system-ui, sans-serif; }
+        .result-detail { color: #efcfa8; font: 12px/1.3 system-ui, sans-serif; }
+        .row-actions { display: flex; gap: 6px; justify-content: end; }
+        .row-play {
+            min-width: 66px; min-height: 34px; border: 1px solid var(--line); border-radius: 9px;
+            background: var(--panel-soft); color: var(--ink); cursor: pointer;
+        }
+        .row-identify { border-color: #b77467; color: #ffd8c8; }
+        .row-play:hover { border-color: var(--accent); }
+        .empty { display: grid; place-items: center; min-height: 190px; padding: 24px; color: var(--muted); text-align: center; line-height: 1.5; }
+        .controls { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+        .control-button {
+            min-height: 48px; border: 1px solid var(--line); border-radius: 12px;
+            background: var(--panel-soft); color: var(--ink); font-size: 17px; font-weight: 700; cursor: pointer;
+        }
+        .control-button.primary { border-color: var(--accent); background: var(--accent); color: #2d1820; }
+        .control-button:disabled { opacity: .42; cursor: default; }
+        .selection-summary { min-height: 20px; color: var(--muted); font: 12px/1.3 system-ui, sans-serif; text-align: center; }
+        .piano {
+            position: relative; width: 100%; height: clamp(126px, 23vh, 205px); overflow: hidden;
+            border: 8px solid var(--panel); border-radius: 16px; background: var(--panel);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,.4);
+        }
+        .white-keys { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; height: 100%; gap: 2px; }
+        .piano-key {
+            border: 1px solid #b7a99d; cursor: pointer; user-select: none; -webkit-user-select: none;
+            transition: background .08s ease, transform .08s ease, box-shadow .08s ease;
+        }
+        .white-key {
+            display: flex; align-items: end; justify-content: center; padding-bottom: 10px;
+            border-radius: 0 0 7px 7px; background: linear-gradient(#fffaf0, var(--key-white));
+            color: #553f45; font: 700 clamp(14px, 3vw, 23px)/1 system-ui, sans-serif;
+        }
+        .black-key {
+            position: absolute; top: 0; z-index: 2; width: 8.4%; height: 61%; display: flex;
+            align-items: end; justify-content: center; padding: 0 2px 8px; border-color: #352b41;
+            border-radius: 0 0 6px 6px; background: linear-gradient(#12101a, #29243a); color: #c8b9ca;
+            font: 600 clamp(9px, 1.6vw, 13px)/1 system-ui, sans-serif;
+            box-shadow: 0 5px 6px rgba(0,0,0,.45);
+        }
+        .piano-key.selected { background: linear-gradient(#ef8a61, var(--selected)); color: #24141d; box-shadow: inset 0 0 0 3px #ffc77e; }
+        .piano-key.sounding { transform: translateY(3px); filter: brightness(1.14); }
+        .limit-note { color: #f4b49a; }
+        @media (max-width: 620px) {
+            body { padding: 0; }
+            .app-container { height: 100dvh; padding: 10px 8px; gap: 8px; border-radius: 0; }
+            .subtitle { display: none; }
+            .workspace { min-height: 230px; }
+            .workspace-head { padding: 9px; }
+            .results { padding: 4px 9px 9px; }
+            .result-row { grid-template-columns: 1fr auto; gap: 5px 8px; }
+            .result-notes, .result-detail { grid-column: 1; }
+            .row-play { grid-column: 2; grid-row: 1 / span 2; }
+            .row-actions { grid-column: 2; grid-row: 1 / span 2; flex-direction: column; gap: 4px; }
+            .row-actions .row-play { min-height: 30px; grid-column: auto; grid-row: auto; }
+            .piano { border-width: 5px; border-radius: 12px; }
+            .white-keys { gap: 1px; }
+            .white-key { padding-bottom: 7px; }
+            .mode-button { min-height: 46px; }
+        }
+    </style>
+</head>
+<body>
+<main class="app-container">
+    <header class="header">
+        <a class="home-menu" href="../" aria-label="Open music tools index"><span></span><span></span><span></span></a>
+        <div><h1>Chord Helper</h1><p class="subtitle">Build it, hear it, name it.</p></div>
+        <pwa-check-update><button class="btn-check-update" type="button" onclick="location.reload()">Install</button></pwa-check-update>
+    </header>
+
+    <section class="workspace" aria-live="polite">
+        <div class="workspace-head" id="helpControls">
+            <div class="field"><label for="rootSelect">Root</label><select id="rootSelect"></select></div>
+            <div class="field grow"><label for="chordSelect">Chord</label><select id="chordSelect"></select></div>
+        </div>
+        <div class="results" id="results"></div>
+    </section>
+
+    <nav class="mode-switch" aria-label="Chord helper mode">
+        <button class="mode-button active" id="helpModeButton" type="button" aria-pressed="true">Help me build</button>
+        <button class="mode-button" id="identifyModeButton" type="button" aria-pressed="false">Identify</button>
+    </nav>
+
+    <div class="selection-summary" id="selectionSummary">Tap a key to choose a root, then load any chord.</div>
+    <div class="piano" id="piano" aria-label="One octave piano keyboard">
+        <div class="white-keys" id="whiteKeys"></div>
+    </div>
+    <div class="controls">
+        <button class="control-button primary" id="playButton" type="button">Play chord</button>
+        <button class="control-button" id="clearButton" type="button">Clear</button>
+    </div>
+</main>
+
+<script>
+(function () {
+    const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const DISPLAY_NOTES = ['C', 'C\u266f', 'D', 'E\u266d', 'E', 'F', 'F\u266f', 'G', 'A\u266d', 'A', 'B\u266d', 'B'];
+    const CHORDS = [
+        { id: 'major', label: 'Major triad', symbol: '', intervals: [0, 4, 7] },
+        { id: 'minor', label: 'Minor triad', symbol: 'm', intervals: [0, 3, 7] },
+        { id: 'diminished', label: 'Diminished triad', symbol: '\u00b0', intervals: [0, 3, 6] },
+        { id: 'augmented', label: 'Augmented triad', symbol: '+', intervals: [0, 4, 8] },
+        { id: 'sus2', label: 'Suspended 2nd', symbol: 'sus2', intervals: [0, 2, 7] },
+        { id: 'sus4', label: 'Suspended 4th', symbol: 'sus4', intervals: [0, 5, 7] },
+        { id: 'sixth', label: 'Major 6th', symbol: '6', intervals: [0, 4, 7, 9] },
+        { id: 'minor6', label: 'Minor 6th', symbol: 'm6', intervals: [0, 3, 7, 9] },
+        { id: 'dominant7', label: 'Dominant 7th', symbol: '7', intervals: [0, 4, 7, 10] },
+        { id: 'major7', label: 'Major 7th', symbol: 'maj7', intervals: [0, 4, 7, 11] },
+        { id: 'minor7', label: 'Minor 7th', symbol: 'm7', intervals: [0, 3, 7, 10] },
+        { id: 'halfDim7', label: 'Half-diminished 7th', symbol: '\u00f87', intervals: [0, 3, 6, 10] },
+        { id: 'dim7', label: 'Fully diminished 7th', symbol: '\u00b07', intervals: [0, 3, 6, 9] }
+    ];
+    const SCALES = [
+        { label: 'major', intervals: [0, 2, 4, 5, 7, 9, 11], triads: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii\u00b0'], sevenths: ['Imaj7', 'ii7', 'iii7', 'IVmaj7', 'V7', 'vi7', 'vii\u00f87'] },
+        { label: 'natural minor', intervals: [0, 2, 3, 5, 7, 8, 10], triads: ['i', 'ii\u00b0', 'III', 'iv', 'v', 'VI', 'VII'], sevenths: ['i7', 'ii\u00f87', 'IIImaj7', 'iv7', 'v7', 'VImaj7', 'VII7'] }
+    ];
+    const WHITE_KEYS = [
+        { note: 0, midi: 60, label: 'C' }, { note: 2, midi: 62, label: 'D' },
+        { note: 4, midi: 64, label: 'E' }, { note: 5, midi: 65, label: 'F' },
+        { note: 7, midi: 67, label: 'G' }, { note: 9, midi: 69, label: 'A' },
+        { note: 11, midi: 71, label: 'B' }, { note: 0, midi: 72, label: 'C' }
+    ];
+    const BLACK_KEYS = [
+        { note: 1, midi: 61, label: 'C\u266f', after: 0 }, { note: 3, midi: 63, label: 'E\u266d', after: 1 },
+        { note: 6, midi: 66, label: 'F\u266f', after: 3 }, { note: 8, midi: 68, label: 'A\u266d', after: 4 },
+        { note: 10, midi: 70, label: 'B\u266d', after: 5 }
+    ];
+
+    const state = { mode: 'help', root: 0, filter: 'all', selectedMidi: [], loadedMidi: [] };
+    let audioContext = null;
+    const helpModeButton = document.getElementById('helpModeButton');
+    const identifyModeButton = document.getElementById('identifyModeButton');
+    const rootSelect = document.getElementById('rootSelect');
+    const chordSelect = document.getElementById('chordSelect');
+    const helpControls = document.getElementById('helpControls');
+    const results = document.getElementById('results');
+    const piano = document.getElementById('piano');
+    const whiteKeys = document.getElementById('whiteKeys');
+    const playButton = document.getElementById('playButton');
+    const clearButton = document.getElementById('clearButton');
+    const selectionSummary = document.getElementById('selectionSummary');
+
+    function displayNote(note) { return DISPLAY_NOTES[(note + 12) % 12]; }
+    function signature(notes) { return [...new Set(notes.map(note => ((note % 12) + 12) % 12))].sort((a, b) => a - b).join(','); }
+    function chordName(root, chord) { return displayNote(root) + chord.symbol; }
+    function chordNotes(root, chord) { return chord.intervals.map(interval => (root + interval) % 12); }
+    function voicingMidi(root, chord) {
+        const rootMidi = 60 + root;
+        return chord.intervals.map(interval => rootMidi + interval);
+    }
+    function ensureAudio() {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextCtor) return null;
+        if (!audioContext) audioContext = new AudioContextCtor();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        return audioContext;
+    }
+    function midiToFrequency(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+    function playChord(midiNotes) {
+        if (!midiNotes.length) return;
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime + .018;
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(.0001, now);
+        master.gain.exponentialRampToValueAtTime(Math.min(.22, .72 / midiNotes.length), now + .025);
+        master.gain.exponentialRampToValueAtTime(.0001, now + 1.25);
+        master.connect(ctx.destination);
+        midiNotes.forEach((midi, index) => {
+            const osc = ctx.createOscillator();
+            const voice = ctx.createGain();
+            osc.type = index % 2 ? 'triangle' : 'sine';
+            osc.frequency.setValueAtTime(midiToFrequency(midi), now);
+            voice.gain.value = index % 2 ? .62 : .78;
+            osc.connect(voice).connect(master);
+            osc.start(now + index * .012);
+            osc.stop(now + 1.3);
+        });
+        flashSoundingKeys(midiNotes);
+    }
+    function flashSoundingKeys(midiNotes) {
+        const pitchClasses = new Set(midiNotes.map(midi => midi % 12));
+        piano.querySelectorAll('.piano-key').forEach(key => {
+            if (pitchClasses.has(Number(key.dataset.note))) key.classList.add('sounding');
+        });
+        window.setTimeout(() => piano.querySelectorAll('.sounding').forEach(key => key.classList.remove('sounding')), 210);
+    }
+    function createKey(key, className) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'piano-key ' + className;
+        button.dataset.note = key.note;
+        button.dataset.midi = key.midi;
+        button.setAttribute('aria-label', key.label + (key.midi >= 72 ? '5' : '4'));
+        button.textContent = key.label;
+        return button;
+    }
+    function buildPiano() {
+        WHITE_KEYS.forEach(key => whiteKeys.appendChild(createKey(key, 'white-key')));
+        BLACK_KEYS.forEach(key => {
+            const button = createKey(key, 'black-key');
+            button.style.left = `calc(${(key.after + 1) * 12.5}% - 4.2%)`;
+            piano.appendChild(button);
+        });
+    }
+    function populateSelectors() {
+        NOTES.forEach((note, index) => rootSelect.add(new Option(displayNote(index), String(index))));
+        chordSelect.add(new Option('All chord types', 'all'));
+        CHORDS.forEach(chord => chordSelect.add(new Option(chord.label, chord.id)));
+    }
+    function setMode(mode) {
+        state.mode = mode;
+        state.selectedMidi = [];
+        state.loadedMidi = [];
+        helpControls.hidden = mode !== 'help';
+        helpModeButton.classList.toggle('active', mode === 'help');
+        identifyModeButton.classList.toggle('active', mode === 'identify');
+        helpModeButton.setAttribute('aria-pressed', mode === 'help');
+        identifyModeButton.setAttribute('aria-pressed', mode === 'identify');
+        clearButton.textContent = mode === 'help' ? 'Clear preview' : 'Clear';
+        render();
+    }
+    function renderKeyboard() {
+        const activeMidi = state.mode === 'identify' ? state.selectedMidi : state.loadedMidi;
+        const activePitchClasses = new Set(activeMidi.map(midi => midi % 12));
+        piano.querySelectorAll('.piano-key').forEach(key => {
+            const midi = Number(key.dataset.midi);
+            const selected = activeMidi.includes(midi) ||
+                (state.mode === 'help' && midi < 72 && activePitchClasses.has(Number(key.dataset.note)));
+            key.classList.toggle('selected', selected);
+            key.setAttribute('aria-pressed', String(selected));
+        });
+    }
+    function renderHelp() {
+        const visible = state.filter === 'all' ? CHORDS : CHORDS.filter(chord => chord.id === state.filter);
+        results.innerHTML = '<h2 class="section-title">Chords from ' + displayNote(state.root) + '</h2>';
+        visible.forEach(chord => {
+            const row = document.createElement('div');
+            row.className = 'result-row';
+            const notes = chordNotes(state.root, chord).map(displayNote).join('  \u00b7  ');
+            row.innerHTML = `<div><div class="result-name">${chordName(state.root, chord)}</div><div class="result-detail">${chord.label}</div></div><div class="result-notes">${notes}</div><div class="row-actions"><button class="row-play row-identify" type="button">Identify</button><button class="row-play row-load" type="button">Load + hear</button></div>`;
+            const midi = voicingMidi(state.root, chord);
+            row.querySelector('.row-identify').addEventListener('click', () => {
+                setMode('identify');
+                state.selectedMidi = midi;
+                render();
+                playChord(state.selectedMidi);
+            });
+            row.querySelector('.row-load').addEventListener('click', () => {
+                state.loadedMidi = voicingMidi(state.root, chord);
+                selectionSummary.textContent = chordName(state.root, chord) + ': ' + notes;
+                render();
+                playChord(state.loadedMidi);
+            });
+            results.appendChild(row);
+        });
+        if (!state.loadedMidi.length) selectionSummary.textContent = 'Tap a key to choose a root, then load any chord.';
+    }
+    function identifyChord(notes) {
+        const wanted = signature(notes);
+        const bassPc = notes.length ? Math.min(...notes) % 12 : null;
+        const matches = [];
+        NOTES.forEach((_, root) => CHORDS.forEach(chord => {
+            if (signature(chordNotes(root, chord)) !== wanted) return;
+            const pcs = chordNotes(root, chord);
+            const bassIndex = pcs.indexOf(bassPc);
+            const inversion = bassIndex <= 0 ? 'root position' : bassIndex === 1 ? '1st inversion' : bassIndex === 2 ? '2nd inversion' : '3rd inversion';
+            matches.push({ root, chord, inversion, bass: displayNote(bassPc) });
+        }));
+        return matches;
+    }
+    function scaleContexts(notes) {
+        const wanted = signature(notes);
+        const uniqueCount = wanted ? wanted.split(',').length : 0;
+        if (uniqueCount !== 3 && uniqueCount !== 4) return [];
+        const contexts = [];
+        NOTES.forEach((_, tonic) => SCALES.forEach(scale => {
+            const scaleNotes = scale.intervals.map(interval => (tonic + interval) % 12);
+            scaleNotes.forEach((root, degree) => {
+                const chord = uniqueCount === 3
+                    ? [scaleNotes[degree], scaleNotes[(degree + 2) % 7], scaleNotes[(degree + 4) % 7]]
+                    : [scaleNotes[degree], scaleNotes[(degree + 2) % 7], scaleNotes[(degree + 4) % 7], scaleNotes[(degree + 6) % 7]];
+                if (signature(chord) === wanted) {
+                    contexts.push({ tonic, scale: scale.label, numeral: uniqueCount === 3 ? scale.triads[degree] : scale.sevenths[degree], chordRoot: root });
+                }
+            });
+        }));
+        return contexts;
+    }
+    function renderIdentify() {
+        const count = state.selectedMidi.length;
+        selectionSummary.classList.remove('limit-note');
+        if (!count) {
+            results.innerHTML = '<div class="empty">Toggle three notes for a triad or four for a seventh chord.<br>Every change is played so you can hear what you are building.</div>';
+            selectionSummary.textContent = 'No notes selected.';
+            return;
+        }
+        const names = state.selectedMidi.map(midi => displayNote(midi % 12));
+        selectionSummary.textContent = names.join('  \u00b7  ') + '  (' + count + '/4 notes)';
+        const uniquePcs = [...new Set(state.selectedMidi.map(midi => midi % 12))];
+        if (uniquePcs.length < 3) {
+            results.innerHTML = '<div class="empty">Add ' + (3 - uniquePcs.length) + ' more different note' + (uniquePcs.length === 2 ? '' : 's') + ' to identify a triad.</div>';
+            return;
+        }
+        const matches = identifyChord(state.selectedMidi);
+        const contexts = scaleContexts(state.selectedMidi);
+        results.innerHTML = '<h2 class="section-title">Chord name</h2>';
+        if (!matches.length) {
+            const row = document.createElement('div');
+            row.className = 'result-row';
+            row.innerHTML = '<div><div class="result-name">No common exact name</div><div class="result-detail">Try another voicing or note set</div></div><div class="result-notes">' + names.join('  \u00b7  ') + '</div>';
+            results.appendChild(row);
+        } else {
+            matches.forEach(match => {
+                const row = document.createElement('div');
+                row.className = 'result-row';
+                row.innerHTML = `<div><div class="result-name">${chordName(match.root, match.chord)}</div><div class="result-detail">${match.chord.label}</div></div><div class="result-notes">${match.inversion} \u00b7 ${match.bass} in bass</div><button class="row-play" type="button">Hear</button>`;
+                row.querySelector('button').addEventListener('click', () => playChord(state.selectedMidi));
+                results.appendChild(row);
+            });
+        }
+        const heading = document.createElement('h2');
+        heading.className = 'section-title';
+        heading.textContent = 'Where it belongs';
+        results.appendChild(heading);
+        if (!contexts.length) {
+            const message = document.createElement('div');
+            message.className = 'result-detail';
+            message.style.padding = '10px 3px';
+            message.textContent = 'No diatonic match in the major or natural-minor keys.';
+            results.appendChild(message);
+        } else {
+            contexts.forEach(context => {
+                const row = document.createElement('div');
+                row.className = 'result-row';
+                row.innerHTML = `<div class="result-name">${displayNote(context.tonic)} ${context.scale}</div><div><div class="result-name">${context.numeral}</div><div class="result-detail">built on ${displayNote(context.chordRoot)}</div></div><button class="row-play" type="button">Hear</button>`;
+                row.querySelector('button').addEventListener('click', () => playChord(state.selectedMidi));
+                results.appendChild(row);
+            });
+        }
+    }
+    function render() {
+        renderKeyboard();
+        if (state.mode === 'help') renderHelp(); else renderIdentify();
+        const playable = state.mode === 'help' ? state.loadedMidi.length : state.selectedMidi.length;
+        playButton.disabled = !playable;
+        clearButton.disabled = !playable;
+    }
+    function handlePianoPress(key) {
+        const note = Number(key.dataset.note);
+        const midi = Number(key.dataset.midi);
+        if (state.mode === 'help') {
+            state.root = note;
+            rootSelect.value = String(note);
+            state.loadedMidi = [];
+            playChord([midi]);
+            render();
+            return;
+        }
+        const existing = state.selectedMidi.indexOf(midi);
+        if (existing >= 0) state.selectedMidi.splice(existing, 1);
+        else if (state.selectedMidi.length < 4) state.selectedMidi.push(midi);
+        else {
+            selectionSummary.textContent = 'Four-note limit: clear a note before adding another.';
+            selectionSummary.classList.add('limit-note');
+            return;
+        }
+        state.selectedMidi.sort((a, b) => a - b);
+        render();
+        if (state.selectedMidi.length) playChord(state.selectedMidi);
+    }
+
+    piano.addEventListener('click', event => {
+        const key = event.target.closest('.piano-key');
+        if (key) handlePianoPress(key);
+    });
+    helpModeButton.addEventListener('click', () => setMode('help'));
+    identifyModeButton.addEventListener('click', () => setMode('identify'));
+    rootSelect.addEventListener('change', () => {
+        state.root = Number(rootSelect.value); state.loadedMidi = []; playChord([60 + state.root]); render();
+    });
+    chordSelect.addEventListener('change', () => { state.filter = chordSelect.value; state.loadedMidi = []; render(); });
+    playButton.addEventListener('click', () => playChord(state.mode === 'help' ? state.loadedMidi : state.selectedMidi));
+    clearButton.addEventListener('click', () => { state.selectedMidi = []; state.loadedMidi = []; render(); });
+
+    populateSelectors();
+    buildPiano();
+    render();
+})();
+</script>
+<script>
+    window.PWA_UPDATE_CONFIG = {
+        serviceWorkerUrl: 'sw.js?v=1',
+        updateUrl: './',
+        storageKey: 'chord-helper-hash',
+        autoCheck: true
+    };
+</script>
+<script src="../pwa/update-pwa.js?v=6"></script>
+</body>
+</html>
