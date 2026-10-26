@@ -1,0 +1,17 @@
+{
+  "name": "Circle of Fifths",
+  "short_name": "Fifths",
+  "description": "Explore keys, hear diatonic chords, and inspect their notes on a staff and tracker log.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#171109",
+  "theme_color": "#4a3615",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

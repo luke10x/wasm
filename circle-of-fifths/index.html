@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Circle of Fifths</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4a3615" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --sea: #4a3615;
+            --deep: #241b0f;
+            --panel: #3b2c16;
+            --line: #84662f;
+            --ink: #fff4d8;
+            --muted: #d1b77e;
+            --gold: #ffd45f;
+            --coral: #ed7d67;
+        }
+        html, body { min-height: 100%; background: #171109; color: var(--ink); }
+        body {
+            padding: 10px; font-family: 'Avenir Next', 'Trebuchet MS', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        button, input { font: inherit; }
+        button { touch-action: manipulation; }
+        .app {
+            width: min(100%, 920px); min-height: calc(100dvh - 20px); margin: 0 auto; padding: 14px;
+            border: 1px solid rgba(255,255,255,.07); border-radius: 28px;
+            background:
+                radial-gradient(circle at 50% 18%, rgba(255,205,92,.17), transparent 30%),
+                linear-gradient(165deg, #6a4b18 0%, var(--sea) 42%, #2a210f 100%);
+            box-shadow: 0 22px 58px rgba(0,0,0,.55);
+        }
+        .header { display: flex; align-items: center; gap: 10px; min-height: 38px; }
+        .home-menu {
+            width: 36px; height: 36px; display: inline-flex; flex-direction: column; justify-content: center;
+            gap: 4px; padding: 0 8px; border: 1px solid var(--line); border-radius: 9px;
+            background: transparent; flex-shrink: 0; text-decoration: none;
+        }
+        .home-menu span { display: block; height: 2px; border-radius: 99px; background: var(--muted); }
+        .home-menu:hover { background: rgba(255,255,255,.07); }
+        @media (display-mode: standalone), (display-mode: window-controls-overlay) { .home-menu { display: none; } }
+        html.pwa-standalone .home-menu { display: none; }
+        h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(23px, 4vw, 35px); line-height: 1; }
+        .subtitle { color: var(--muted); font-size: 12px; margin-top: 2px; }
+        pwa-check-update {
+            display: inline-block; margin-left: auto; flex-shrink: 0;
+            --pwa-update-border: var(--line); --pwa-update-color: var(--muted);
+            --pwa-update-hover-bg: rgba(255,255,255,.08); --pwa-popover-bg: var(--deep);
+            --pwa-popover-border: var(--line); --pwa-popover-color: var(--ink); --pwa-popover-muted: var(--muted);
+        }
+        .btn-check-update { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--muted); background: transparent; }
+        .lock-button {
+            width: 36px; height: 36px; flex: 0 0 36px; border: 1px solid var(--line); border-radius: 9px;
+            background: transparent; color: var(--muted); font-size: 20px; line-height: 1; cursor: pointer;
+        }
+        .lock-button[aria-pressed="true"] { color: var(--gold); border-color: rgba(243,201,93,.7); background: rgba(243,201,93,.1); }
+        .circle-wrap { width: min(100%, 630px); margin: 5px auto 8px; }
+        #circleSvg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 12px 22px rgba(0,0,0,.28)); }
+        .sector { cursor: pointer; }
+        .sector path { transition: fill .18s ease, opacity .18s ease, stroke .18s ease; }
+        .sector:hover path:first-child { filter: brightness(1.12); }
+        .sector:focus { outline: none; }
+        .sector:focus-visible path {
+            stroke: var(--gold); stroke-width: 3px;
+            filter: drop-shadow(0 0 3px rgba(255,212,95,.55));
+        }
+        .circle-label { fill: #d8e4dc; font-weight: 650; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+        .circle-label.outer { font-size: 22px; }
+        .circle-label.middle { font-size: 16px; }
+        .circle-label.inner { font-size: 12px; fill: #a8c0bd; }
+        .staff-line { stroke: #b69a61; stroke-width: 1.7; opacity: .76; }
+        #clefToggle { cursor: pointer; pointer-events: all; }
+        #clefToggle:hover { stroke: rgba(243,201,93,.5); stroke-width: 3; }
+        .degree-panel {
+            padding: 10px; border: 1px solid rgba(255,255,255,.08); border-radius: 18px;
+            background: rgba(36,25,12,.8); box-shadow: inset 0 1px 8px rgba(0,0,0,.25);
+        }
+        .degree-row { display: grid; grid-template-columns: 68px repeat(7, minmax(0, 1fr)); gap: 7px; align-items: center; }
+        .degree-row + .degree-row { margin-top: 8px; }
+        .row-title { color: var(--muted); font-family: Georgia, serif; font-size: 18px; text-align: center; }
+        .degree-button {
+            min-width: 0; min-height: 52px; padding: 3px 1px; border: 2px solid transparent; border-radius: 50%;
+            color: #2a2110; font-size: clamp(14px, 2.6vw, 21px); cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0,0,0,.2); transition: transform .1s ease, border-color .1s ease;
+        }
+        .degree-button:hover { transform: translateY(-2px); }
+        .degree-button.active { border-color: #fff8df; box-shadow: 0 0 0 2px rgba(255,248,223,.2), 0 5px 10px rgba(0,0,0,.28); }
+        .current-readout {
+            min-height: 25px; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 8px 5px 4px; color: #d5e5df; font-size: 13px; text-align: center;
+        }
+        .current-readout strong { color: var(--gold); font-size: 16px; }
+        .log-panel {
+            margin-top: 10px; border: 1px solid rgba(255,255,255,.08); border-radius: 16px;
+            background: rgba(29,20,10,.86); overflow: hidden;
+        }
+        .log-head {
+            display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 7px 10px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+        .log-head h2 { color: var(--ink); font-family: Georgia, serif; font-size: 17px; }
+        .format-toggle { display: flex; align-items: center; gap: 6px; margin-left: auto; color: var(--muted); font-size: 12px; cursor: pointer; }
+        .format-toggle input { width: 18px; height: 18px; accent-color: var(--gold); }
+        .clear-log {
+            min-height: 30px; padding: 0 9px; border: 1px solid var(--line); border-radius: 8px;
+            background: transparent; color: var(--muted); cursor: pointer;
+        }
+        .play-log { height: 145px; overflow: auto; padding: 5px 10px 9px; }
+        .log-empty { display: grid; place-items: center; height: 100%; color: #9c7c43; font-size: 13px; text-align: center; }
+        .log-entry {
+            display: grid; grid-template-columns: minmax(90px, .7fr) minmax(180px, 1.3fr); gap: 8px;
+            padding: 8px 2px; border-bottom: 1px solid rgba(255,255,255,.07); align-items: baseline;
+        }
+        .log-entry:last-child { border-bottom: 0; }
+        .log-chord { color: #f0b982; font-size: 13px; font-weight: 700; }
+        .log-notes { color: #f6efdf; font: 600 13px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: nowrap; overflow-x: auto; }
+        @media (max-width: 620px) {
+            body { padding: 0; }
+            .app { min-height: 100dvh; padding: 9px 7px 12px; border-radius: 0; }
+            .subtitle { display: none; }
+            .circle-wrap { margin-top: 0; margin-bottom: 3px; width: min(100%, 540px); }
+            .degree-panel { padding: 7px 4px; border-radius: 14px; }
+            .degree-row { grid-template-columns: 48px repeat(7, minmax(0, 1fr)); gap: 3px; }
+            .degree-row + .degree-row { margin-top: 5px; }
+            .row-title { font-size: 14px; }
+            .degree-button { min-height: 42px; font-size: clamp(12px, 4vw, 17px); }
+            .current-readout { font-size: 11px; padding-top: 6px; }
+            .current-readout strong { font-size: 14px; }
+            .log-head { gap: 6px; padding: 6px 7px; }
+            .format-toggle { font-size: 10px; }
+            .play-log { height: 126px; padding-inline: 7px; }
+            .log-entry { grid-template-columns: 88px minmax(165px, 1fr); gap: 4px; }
+        }
+    </style>
+</head>
+<body>
+<main class="app">
+    <header class="header">
+        <a class="home-menu" href="../" aria-label="Open music tools index"><span></span><span></span><span></span></a>
+        <div><h1>Circle of Fifths</h1><p class="subtitle">Navigate harmony by key and degree.</p></div>
+        <button class="lock-button" id="lockButton" type="button" aria-pressed="false" aria-label="Lock selected key" title="Lock selected key">🔓</button>
+        <pwa-check-update><button class="btn-check-update" type="button" onclick="location.reload()">Install</button></pwa-check-update>
+    </header>
+
+    <section class="circle-wrap" aria-label="Interactive circle of fifths">
+        <svg id="circleSvg" viewBox="0 0 600 600" role="img" aria-labelledby="circleTitle">
+            <title id="circleTitle">Circle of fifths key selector</title>
+            <g id="sectorLayer"></g>
+            <circle cx="300" cy="300" r="104" fill="#20180d" stroke="#84662f" stroke-width="2" />
+            <g id="staffLayer"></g>
+            <circle id="clefToggle" cx="300" cy="300" r="104" fill="#fff" opacity="0" role="button" tabindex="0" aria-label="Switch to bass clef">
+                <title>Switch clef</title>
+            </circle>
+        </svg>
+    </section>
+
+    <section class="degree-panel" aria-label="Diatonic chord player">
+        <div class="degree-row" id="majorRow"><div class="row-title">Major</div></div>
+        <div class="degree-row" id="minorRow"><div class="row-title">Minor</div></div>
+        <div class="current-readout" id="currentReadout"></div>
+    </section>
+
+    <section class="log-panel">
+        <div class="log-head">
+            <h2>Played chords</h2>
+            <label class="format-toggle"><input type="checkbox" id="trackerToggle" />Tracker sharps only</label>
+            <button class="clear-log" id="clearLog" type="button">Clear</button>
+        </div>
+        <div class="play-log" id="playLog"><div class="log-empty">Play a degree to begin the note log.</div></div>
+    </section>
+</main>
+
+<script>
+(function () {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const SHARP_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const KEY_DATA = [
+        { name: 'C', pc: 0, major: ['C','D','E','F','G','A','B'], minor: ['C','D','Eb','F','G','Ab','Bb'] },
+        { name: 'G', pc: 7, major: ['G','A','B','C','D','E','F#'], minor: ['G','A','Bb','C','D','Eb','F'] },
+        { name: 'D', pc: 2, major: ['D','E','F#','G','A','B','C#'], minor: ['D','E','F','G','A','Bb','C'] },
+        { name: 'A', pc: 9, major: ['A','B','C#','D','E','F#','G#'], minor: ['A','B','C','D','E','F','G'] },
+        { name: 'E', pc: 4, major: ['E','F#','G#','A','B','C#','D#'], minor: ['E','F#','G','A','B','C','D'] },
+        { name: 'B', pc: 11, major: ['B','C#','D#','E','F#','G#','A#'], minor: ['B','C#','D','E','F#','G','A'] },
+        { name: 'F#', alt: 'Gb', pc: 6, major: ['F#','G#','A#','B','C#','D#','E#'], minor: ['F#','G#','A','B','C#','D','E'] },
+        { name: 'Db', pc: 1, major: ['Db','Eb','F','Gb','Ab','Bb','C'], minor: ['Db','Eb','Fb','Gb','Ab','Bbb','Cb'] },
+        { name: 'Ab', pc: 8, major: ['Ab','Bb','C','Db','Eb','F','G'], minor: ['Ab','Bb','Cb','Db','Eb','Fb','Gb'] },
+        { name: 'Eb', pc: 3, major: ['Eb','F','G','Ab','Bb','C','D'], minor: ['Eb','F','Gb','Ab','Bb','Cb','Db'] },
+        { name: 'Bb', pc: 10, major: ['Bb','C','D','Eb','F','G','A'], minor: ['Bb','C','Db','Eb','F','Gb','Ab'] },
+        { name: 'F', pc: 5, major: ['F','G','A','Bb','C','D','E'], minor: ['F','G','Ab','Bb','C','Db','Eb'] }
+    ];
+    const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11];
+    const MINOR_INTERVALS = [0, 2, 3, 5, 7, 8, 10];
+    const MAJOR_ROMAN = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii\u00b0'];
+    const MINOR_ROMAN = ['i', 'ii\u00b0', 'III', 'iv', 'v', 'VI', 'VII'];
+    const MAJOR_QUALITIES = ['major', 'minor', 'minor', 'major', 'major', 'minor', 'diminished'];
+    const MINOR_QUALITIES = ['minor', 'diminished', 'major', 'minor', 'minor', 'major', 'major'];
+    const QUALITY_INTERVALS = { major: [0,4,7], minor: [0,3,7], diminished: [0,3,6] };
+    const QUALITY_SUFFIX = { major: '', minor: 'm', diminished: '\u00b0' };
+    const DEGREE_COLORS = ['#ed7d67', '#ef9ab1', '#f4dda0', '#e86f73', '#f3c95d', '#eeaa8d', '#eec6b8'];
+    const MINOR_COLOR_ORDER = [5, 6, 0, 1, 2, 3, 4];
+
+    const state = {
+        keyIndex: 1,
+        current: null,
+        log: [],
+        tracker: false,
+        clef: 'treble',
+        locked: false
+    };
+    let audioContext = null;
+    const sectorLayer = document.getElementById('sectorLayer');
+    const staffLayer = document.getElementById('staffLayer');
+    const clefToggle = document.getElementById('clefToggle');
+    const majorRow = document.getElementById('majorRow');
+    const minorRow = document.getElementById('minorRow');
+    const currentReadout = document.getElementById('currentReadout');
+    const trackerToggle = document.getElementById('trackerToggle');
+    const playLog = document.getElementById('playLog');
+    const clearLog = document.getElementById('clearLog');
+    const lockButton = document.getElementById('lockButton');
+
+    function svgEl(tag, attrs, text) {
+        const el = document.createElementNS(SVG_NS, tag);
+        Object.entries(attrs || {}).forEach(([key, value]) => el.setAttribute(key, value));
+        if (text !== undefined) el.textContent = text;
+        return el;
+    }
+    function polar(radius, degrees) {
+        const radians = degrees * Math.PI / 180;
+        return [300 + Math.cos(radians) * radius, 300 + Math.sin(radians) * radius];
+    }
+    function donutPath(inner, outer, start, end) {
+        const [x1, y1] = polar(outer, start);
+        const [x2, y2] = polar(outer, end);
+        const [x3, y3] = polar(inner, end);
+        const [x4, y4] = polar(inner, start);
+        return `M ${x1} ${y1} A ${outer} ${outer} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${inner} ${inner} 0 0 0 ${x4} ${y4} Z`;
+    }
+    function fancyName(name) { return name.replace(/bb/g, '\ud834\udd2b').replace(/#/g, '\u266f').replace(/b/g, '\u266d'); }
+    function notePc(name) {
+        const natural = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 }[name[0]];
+        let offset = 0;
+        for (const char of name.slice(1)) offset += char === '#' ? 1 : char === 'b' ? -1 : 0;
+        return (natural + offset + 24) % 12;
+    }
+    function relativeMinorName(key) { return key.major[5] + 'm'; }
+    function diminishedName(key) { return key.major[6] + '\u00b0'; }
+    function circleKeyLabel(key) { return key.alt ? fancyName(key.name) + '/' + fancyName(key.alt) : fancyName(key.name); }
+    function degreeColor(mode, degree) {
+        return DEGREE_COLORS[mode === 'minor' ? MINOR_COLOR_ORDER[degree] : degree];
+    }
+    function circleCell(sectorKey, ringIndex) {
+        return {
+            rootPc: [sectorKey.pc, (sectorKey.pc + 9) % 12, (sectorKey.pc + 11) % 12][ringIndex],
+            quality: ['major', 'minor', 'diminished'][ringIndex]
+        };
+    }
+    function roleForCell(sectorKey, ringIndex) {
+        const selectedKey = KEY_DATA[state.keyIndex];
+        const cell = circleCell(sectorKey, ringIndex);
+        return MAJOR_INTERVALS.findIndex((interval, degree) =>
+            (selectedKey.pc + interval) % 12 === cell.rootPc &&
+            MAJOR_QUALITIES[degree] === cell.quality
+        );
+    }
+    function buildCircle() {
+        sectorLayer.innerHTML = '';
+        KEY_DATA.forEach((key, index) => {
+            const centerAngle = -90 + index * 30;
+            const start = centerAngle - 15;
+            const end = centerAngle + 15;
+            const group = svgEl('g', { class: 'sector', role: 'button', tabindex: '0', 'aria-label': `Select ${circleKeyLabel(key)} major`, 'data-index': index });
+            const rings = [
+                { inner: 210, outer: 282, muted: '#5b4928', mutedOpacity: .58 },
+                { inner: 150, outer: 210, muted: '#514022', mutedOpacity: .5 },
+                { inner: 108, outer: 150, muted: '#46381f', mutedOpacity: .44 }
+            ];
+            rings.forEach((ring, ringIndex) => {
+                const role = roleForCell(key, ringIndex);
+                const cell = circleCell(key, ringIndex);
+                const isCurrent = state.current && state.current.rootPc === cell.rootPc && state.current.quality === cell.quality;
+                group.appendChild(svgEl('path', {
+                    d: donutPath(ring.inner, ring.outer, start, end),
+                    fill: role >= 0 ? degreeColor('major', role) : ring.muted,
+                    opacity: role >= 0 ? .96 : ring.mutedOpacity,
+                    stroke: isCurrent ? '#fff6d6' : '#3d2e17',
+                    'stroke-width': isCurrent ? 4 : 1.3,
+                    'data-role': role,
+                    'data-ring': ringIndex
+                }));
+            });
+            const labels = [
+                { radius: 246, className: 'circle-label outer', text: circleKeyLabel(key) },
+                { radius: 180, className: 'circle-label middle', text: fancyName(relativeMinorName(key)) },
+                { radius: 128, className: 'circle-label inner', text: fancyName(diminishedName(key)) }
+            ];
+            labels.forEach(label => {
+                const [x, y] = polar(label.radius, centerAngle);
+                group.appendChild(svgEl('text', { x, y, class: label.className }, label.text));
+            });
+            group.addEventListener('click', event => {
+                const ringIndex = Number(event.target.getAttribute('data-ring'));
+                if (state.locked && Number.isInteger(ringIndex)) playSectorChord(index, ringIndex);
+                else selectKey(index);
+            });
+            group.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    if (state.locked) playSectorChord(index, 0);
+                    else selectKey(index);
+                }
+            });
+            sectorLayer.appendChild(group);
+        });
+    }
+    function chooseMidi(rootPc, degreeInterval) {
+        return 60 + ((rootPc + degreeInterval) % 12);
+    }
+    function buildChord(mode, degree) {
+        const key = KEY_DATA[state.keyIndex];
+        const intervals = mode === 'major' ? MAJOR_INTERVALS : MINOR_INTERVALS;
+        const qualities = mode === 'major' ? MAJOR_QUALITIES : MINOR_QUALITIES;
+        const roman = mode === 'major' ? MAJOR_ROMAN : MINOR_ROMAN;
+        const minorScaleOrder = [5, 6, 0, 1, 2, 3, 4];
+        const scaleNames = mode === 'major' ? key.major : minorScaleOrder.map(index => key.major[index]);
+        const tonicPc = mode === 'major' ? key.pc : (key.pc + 9) % 12;
+        const rootPc = (tonicPc + intervals[degree]) % 12;
+        const rootMidi = chooseMidi(tonicPc, intervals[degree]);
+        const quality = qualities[degree];
+        const midi = QUALITY_INTERVALS[quality].map(interval => rootMidi + interval);
+        const names = [scaleNames[degree], scaleNames[(degree + 2) % 7], scaleNames[(degree + 4) % 7]];
+        return {
+            mode, degree, quality, rootPc, roman: roman[degree], midi, names,
+            keyLabel: fancyName(scaleNames[0]) + ' ' + mode,
+            chordLabel: fancyName(scaleNames[degree]) + QUALITY_SUFFIX[quality]
+        };
+    }
+    function buildSectorChord(index, ringIndex) {
+        const key = KEY_DATA[index];
+        const selectedKey = KEY_DATA[state.keyIndex];
+        const rootIndexes = [0, 5, 6];
+        const thirdIndexes = [2, 0, 1];
+        const fifthIndexes = [4, 2, 3];
+        const quality = ['major', 'minor', 'diminished'][ringIndex];
+        const rootName = key.major[rootIndexes[ringIndex]];
+        const rootPc = notePc(rootName);
+        const rootMidi = chooseMidi(rootPc, 0);
+        const names = [rootName, key.major[thirdIndexes[ringIndex]], key.major[fifthIndexes[ringIndex]]];
+        const role = roleForCell(key, ringIndex);
+        return {
+            mode: 'circle', degree: ringIndex, quality, rootPc,
+            roman: role >= 0 ? MAJOR_ROMAN[role] : '',
+            midi: QUALITY_INTERVALS[quality].map(interval => rootMidi + interval),
+            names,
+            keyLabel: `${fancyName(selectedKey.major[0])} major`,
+            chordLabel: fancyName(rootName) + QUALITY_SUFFIX[quality]
+        };
+    }
+    function selectKey(index) {
+        state.keyIndex = index;
+        playChord(buildChord('major', 0));
+    }
+    function ensureAudio() {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextCtor) return null;
+        if (!audioContext) audioContext = new AudioContextCtor();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        return audioContext;
+    }
+    function midiFrequency(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+    function voicedMidi(midiNotes) {
+        const clefOffset = state.clef === 'bass' ? -12 : 0;
+        return midiNotes.map(midi => midi + clefOffset);
+    }
+    function playMidiChord(midiNotes) {
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime + .02;
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(.0001, now);
+        master.gain.exponentialRampToValueAtTime(.19, now + .025);
+        master.gain.exponentialRampToValueAtTime(.0001, now + 1.35);
+        master.connect(ctx.destination);
+        midiNotes.forEach((midi, index) => {
+            const osc = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
+            const gain = ctx.createGain();
+            osc.type = index === 1 ? 'triangle' : 'sine';
+            osc.frequency.setValueAtTime(midiFrequency(midi), now);
+            filter.type = 'lowpass';
+            filter.frequency.value = 1900;
+            gain.gain.value = index === 0 ? .85 : .62;
+            osc.connect(filter).connect(gain).connect(master);
+            osc.start(now + index * .014);
+            osc.stop(now + 1.4);
+        });
+    }
+    function playDegree(mode, degree) {
+        playChord(buildChord(mode, degree));
+    }
+    function playSectorChord(index, ringIndex) {
+        playChord(buildSectorChord(index, ringIndex));
+    }
+    function playChord(chord) {
+        state.current = chord;
+        const playedMidi = voicedMidi(chord.midi);
+        playMidiChord(playedMidi);
+        state.log.unshift({ ...chord, midi: playedMidi, id: Date.now() + Math.random() });
+        if (state.log.length > 80) state.log.length = 80;
+        renderAll();
+    }
+    function buttonColor(mode, index) { return degreeColor(mode, index); }
+    function renderDegreeRows() {
+        majorRow.querySelectorAll('button').forEach(button => button.remove());
+        minorRow.querySelectorAll('button').forEach(button => button.remove());
+        MAJOR_ROMAN.forEach((roman, degree) => majorRow.appendChild(makeDegreeButton('major', degree, roman)));
+        MINOR_ROMAN.forEach((roman, degree) => minorRow.appendChild(makeDegreeButton('minor', degree, roman)));
+    }
+    function makeDegreeButton(mode, degree, roman) {
+        const button = document.createElement('button');
+        const chord = buildChord(mode, degree);
+        button.type = 'button';
+        button.className = 'degree-button';
+        if (state.current && state.current.mode === mode && state.current.degree === degree) button.classList.add('active');
+        button.style.background = buttonColor(mode, degree);
+        button.textContent = roman;
+        button.title = `${chord.chordLabel}: ${chord.names.map(fancyName).join(', ')}`;
+        button.setAttribute('aria-label', `Play ${roman}, ${chord.chordLabel}, in ${chord.keyLabel}`);
+        button.addEventListener('click', () => playDegree(mode, degree));
+        return button;
+    }
+    function noteOctaveForSpelling(midi, name) {
+        const naturalPcs = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+        let accidental = 0;
+        for (const char of name.slice(1)) accidental += char === '#' ? 1 : char === 'b' ? -1 : 0;
+        for (let octave = 1; octave <= 7; octave++) {
+            if ((octave + 1) * 12 + naturalPcs[name[0]] + accidental === midi) return octave;
+        }
+        return Math.floor(midi / 12) - 1;
+    }
+    function staffY(midi, name) {
+        const octave = noteOctaveForSpelling(midi, name);
+        const letterIndex = ['C','D','E','F','G','A','B'].indexOf(name[0]);
+        const bottomLineIndex = state.clef === 'treble' ? 30 : 18;
+        return 330 - (octave * 7 + letterIndex - bottomLineIndex) * 6;
+    }
+    function drawStaffNote(midi, name, x, showAccidental = true) {
+        const y = staffY(midi, name);
+        if (y > 330) {
+            for (let ledgerY = 342; ledgerY <= y + 2; ledgerY += 12) {
+                staffLayer.appendChild(svgEl('line', { x1: x - 13, y1: ledgerY, x2: x + 13, y2: ledgerY, class: 'staff-line' }));
+            }
+        }
+        if (y < 282) {
+            for (let ledgerY = 270; ledgerY >= y - 2; ledgerY -= 12) {
+                staffLayer.appendChild(svgEl('line', { x1: x - 13, y1: ledgerY, x2: x + 13, y2: ledgerY, class: 'staff-line' }));
+            }
+        }
+        const accidental = name.slice(1);
+        if (accidental && showAccidental) {
+            staffLayer.appendChild(svgEl('text', {
+                x: x - 16, y, fill: '#f3c95d', 'font-size': accidental.length > 1 ? 17 : 19,
+                'font-family': 'Arial', 'text-anchor': 'middle', 'dominant-baseline': 'central'
+            }, fancyName(accidental)));
+        }
+        staffLayer.appendChild(svgEl('ellipse', { cx: x, cy: y, rx: 9, ry: 6, fill: '#f7f1dc', transform: `rotate(-10 ${x} ${y})` }));
+    }
+    function keySignature() {
+        const index = state.keyIndex;
+        if (index === 0) return { symbol: '', notes: [] };
+        if (index <= 6) {
+            return {
+                symbol: '\u266f',
+                notes: (state.clef === 'treble' ? [
+                    { midi: 78, name: 'F#' }, { midi: 73, name: 'C#' }, { midi: 80, name: 'G#' },
+                    { midi: 75, name: 'D#' }, { midi: 70, name: 'A#' }, { midi: 77, name: 'E#' }
+                ] : [
+                    { midi: 54, name: 'F#' }, { midi: 49, name: 'C#' }, { midi: 56, name: 'G#' },
+                    { midi: 51, name: 'D#' }, { midi: 46, name: 'A#' }, { midi: 53, name: 'E#' }
+                ]).slice(0, index)
+            };
+        }
+        return {
+            symbol: '\u266d',
+            notes: (state.clef === 'treble' ? [
+                { midi: 70, name: 'Bb' }, { midi: 75, name: 'Eb' }, { midi: 68, name: 'Ab' },
+                { midi: 73, name: 'Db' }, { midi: 66, name: 'Gb' }
+            ] : [
+                { midi: 46, name: 'Bb' }, { midi: 51, name: 'Eb' }, { midi: 44, name: 'Ab' },
+                { midi: 49, name: 'Db' }, { midi: 42, name: 'Gb' }
+            ]).slice(0, 12 - index)
+        };
+    }
+    function drawKeySignature(signature) {
+        signature.notes.forEach((note, index) => {
+            staffLayer.appendChild(svgEl('text', {
+                x: 247 + index * 8, y: staffY(note.midi, note.name), fill: '#f3c95d',
+                'font-size': 20, 'font-family': 'Arial', 'font-weight': 700,
+                'text-anchor': 'middle', 'dominant-baseline': 'central'
+            }, signature.symbol));
+        });
+    }
+    function renderStaff() {
+        staffLayer.innerHTML = '';
+        const key = KEY_DATA[state.keyIndex];
+        const chord = state.current || buildChord('major', 0);
+        staffLayer.appendChild(svgEl('text', { x: 300, y: 226, fill: '#f3c95d', 'font-size': 22, 'font-weight': 800, 'text-anchor': 'middle' }, chord.keyLabel));
+        for (let line = 0; line < 5; line++) {
+            const y = 330 - line * 12;
+            staffLayer.appendChild(svgEl('line', { x1: 211, y1: y, x2: 389, y2: y, class: 'staff-line' }));
+        }
+        staffLayer.appendChild(svgEl('text', {
+            x: 226, y: state.clef === 'treble' ? 304 : 300, fill: '#dbc998', 'font-size': state.clef === 'treble' ? 66 : 55,
+            'font-family': '"Segoe UI Symbol", "Noto Music", serif', 'text-anchor': 'middle', 'dominant-baseline': 'central'
+        }, state.clef === 'treble' ? '\ud834\udd1e' : '\ud834\udd22'));
+        const signature = keySignature();
+        drawKeySignature(signature);
+        const chordX = signature.notes.length ? 326 : 314;
+        voicedMidi(chord.midi).forEach((midi, index) => drawStaffNote(midi, chord.names[index], chordX, false));
+        staffLayer.appendChild(svgEl('text', { x: 300, y: 375, fill: '#f7f1dc', 'font-size': 18, 'font-weight': 700, 'text-anchor': 'middle' }, chordTitle(chord)));
+        clefToggle.setAttribute('aria-label', state.clef === 'treble' ? 'Switch to bass clef' : 'Switch to treble clef');
+    }
+    function trackerNote(midi) {
+        const name = SHARP_NAMES[midi % 12];
+        const octave = Math.floor(midi / 12) - 1;
+        return (name.length === 1 ? name + '-' : name) + octave;
+    }
+    function spelledNote(midi, name) { return fancyName(name) + noteOctaveForSpelling(midi, name); }
+    function chordTitle(chord) { return [chord.roman, chord.chordLabel].filter(Boolean).join(' '); }
+    function formattedNotes(entry) {
+        return entry.midi.map((midi, index) => state.tracker ? trackerNote(midi) : spelledNote(midi, entry.names[index])).join('   ');
+    }
+    function renderLog() {
+        if (!state.log.length) {
+            playLog.innerHTML = '<div class="log-empty">Play a degree to begin the note log.</div>';
+            return;
+        }
+        playLog.innerHTML = '';
+        state.log.forEach(entry => {
+            const row = document.createElement('div');
+            row.className = 'log-entry';
+            row.innerHTML = `<div class="log-chord">${entry.keyLabel} \u00b7 ${chordTitle(entry)}</div><div class="log-notes">${formattedNotes(entry)}</div>`;
+            playLog.appendChild(row);
+        });
+        playLog.scrollTop = 0;
+    }
+    function renderReadout() {
+        const chord = state.current || buildChord('major', 0);
+        const notes = chord.names.map(fancyName).join(' \u00b7 ');
+        currentReadout.innerHTML = `<strong>${chordTitle(chord)}</strong><span>${notes}</span>`;
+    }
+    function renderAll() {
+        buildCircle();
+        renderDegreeRows();
+        renderStaff();
+        renderReadout();
+        renderLog();
+        lockButton.textContent = state.locked ? '🔒' : '🔓';
+        lockButton.setAttribute('aria-pressed', String(state.locked));
+        lockButton.setAttribute('aria-label', state.locked ? 'Unlock key selection' : 'Lock selected key');
+        lockButton.title = state.locked ? 'Unlock key selection' : 'Lock selected key';
+    }
+
+    trackerToggle.addEventListener('change', () => { state.tracker = trackerToggle.checked; renderLog(); });
+    clearLog.addEventListener('click', () => { state.log = []; renderLog(); });
+    lockButton.addEventListener('click', () => { state.locked = !state.locked; renderAll(); });
+    function toggleClef() {
+        state.clef = state.clef === 'treble' ? 'bass' : 'treble';
+        renderStaff();
+    }
+    clefToggle.addEventListener('click', toggleClef);
+    clefToggle.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleClef(); }
+    });
+    state.current = buildChord('major', 0);
+    renderAll();
+})();
+</script>
+<script>
+    window.PWA_UPDATE_CONFIG = {
+        serviceWorkerUrl: 'sw.js?v=10',
+        updateUrl: './',
+        storageKey: 'circle-of-fifths-hash',
+        autoCheck: true
+    };
+</script>
+<script src="../pwa/update-pwa.js?v=6"></script>
+</body>
+</html>
