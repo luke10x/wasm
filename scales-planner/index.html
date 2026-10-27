@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Scales Planner</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#dfe8d3" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --paper: #f7f2df;
+            --sage: #dfe8d3;
+            --sage-deep: #c5d4b7;
+            --forest: #294a36;
+            --forest-soft: #42644c;
+            --ink: #263128;
+            --muted: #687568;
+            --line: #a9b99b;
+            --sun: #e8a749;
+            --coral: #c85f4c;
+            --cream: #fffdf3;
+        }
+        html, body { min-height: 100%; background: #b9c9aa; color: var(--ink); }
+        body {
+            padding: 12px; font-family: 'Avenir Next', 'Trebuchet MS', system-ui, sans-serif;
+            background:
+                radial-gradient(circle at 12% 0%, rgba(255,253,243,.9), transparent 30%),
+                linear-gradient(145deg, #dce6ce, #aebf9f);
+            -webkit-tap-highlight-color: transparent;
+        }
+        button, input, select { font: inherit; }
+        button { touch-action: manipulation; }
+        .app {
+            width: min(100%, 1040px); min-height: calc(100dvh - 24px); margin: 0 auto; padding: 16px;
+            border: 1px solid rgba(41,74,54,.25); border-radius: 28px; background: rgba(247,242,223,.95);
+            box-shadow: 0 24px 70px rgba(35,55,38,.28);
+        }
+        .header { display: flex; align-items: center; gap: 10px; }
+        .home-menu {
+            width: 38px; height: 38px; display: inline-flex; flex-direction: column; justify-content: center;
+            gap: 4px; padding: 0 8px; border: 1px solid var(--line); border-radius: 11px;
+            background: rgba(255,255,255,.42); flex: 0 0 auto; text-decoration: none;
+        }
+        .home-menu span { display: block; height: 2px; border-radius: 99px; background: var(--forest); }
+        @media (display-mode: standalone), (display-mode: window-controls-overlay) { .home-menu { display: none; } }
+        html.pwa-standalone .home-menu { display: none; }
+        h1 { color: var(--forest); font: 800 clamp(25px, 4vw, 38px)/1 Georgia, serif; letter-spacing: -.02em; }
+        .subtitle { margin-top: 3px; color: var(--muted); font-size: 12px; }
+        pwa-check-update {
+            display: inline-block; margin-left: auto; flex-shrink: 0;
+            --pwa-update-border: var(--line); --pwa-update-color: var(--forest);
+            --pwa-update-hover-bg: var(--sage); --pwa-popover-bg: var(--cream);
+            --pwa-popover-border: var(--line); --pwa-popover-color: var(--ink); --pwa-popover-muted: var(--muted);
+        }
+        .btn-check-update { border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; color: var(--forest); background: rgba(255,255,255,.45); }
+        .plan-bar {
+            display: grid; grid-template-columns: minmax(0, 1fr) 82px auto; gap: 10px; align-items: end;
+            margin: 16px 0 12px; padding: 13px; border: 1px solid var(--line); border-radius: 16px;
+            background: rgba(255,255,255,.5);
+        }
+        .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+        .field label, .eyebrow { color: var(--forest-soft); font-size: 10px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+        .song-title {
+            width: 100%; min-height: 40px; padding: 0 10px; border: 0; border-bottom: 2px solid var(--forest);
+            background: transparent; color: var(--ink); font: 700 21px/1 Georgia, serif; outline: none;
+        }
+        .tempo-input {
+            width: 100%; min-height: 40px; padding: 0 8px; border: 1px solid var(--line); border-radius: 9px;
+            background: var(--cream); color: var(--ink); font-weight: 800; text-align: center;
+        }
+        .save-state { padding-bottom: 9px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+        .playback-status {
+            grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 7px 10px;
+            border: 1px solid #c4d0b8; border-radius: 11px; background: rgba(238,243,229,.72);
+            color: var(--muted); font-size: 12px; overflow: hidden;
+        }
+        .playback-status strong { color: var(--forest); white-space: nowrap; }
+        .playback-status .played-notes { margin-left: auto; font: 750 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
+        .status-dot { width: 8px; height: 8px; flex: 0 0 auto; border-radius: 50%; background: #9aa794; }
+        .playback-status.active { border-color: #d6a14c; background: #fff2bf; color: #6b4a17; }
+        .playback-status.active .status-dot { background: var(--coral); box-shadow: 0 0 0 4px rgba(200,95,76,.14); animation: status-pulse .7s ease-in-out infinite alternate; }
+        @keyframes status-pulse { to { transform: scale(1.35); } }
+        .cadences { display: grid; gap: 13px; }
+        .cadence {
+            overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--cream);
+            box-shadow: 0 9px 24px rgba(42,64,44,.1);
+        }
+        .cadence-head {
+            display: grid; grid-template-columns: minmax(150px, .7fr) minmax(210px, 1fr) auto auto auto; gap: 10px;
+            align-items: end; padding: 13px; background: linear-gradient(110deg, var(--sage), #eef2df);
+            border-bottom: 1px solid var(--line);
+        }
+        .cadence-title, .scale-select {
+            width: 100%; min-height: 40px; border: 1px solid var(--line); border-radius: 10px;
+            padding: 0 10px; background: rgba(255,255,255,.72); color: var(--ink);
+        }
+        .cadence-title { font-weight: 800; }
+        .play-cadence, .delete-cadence {
+            min-height: 40px; border-radius: 10px; cursor: pointer;
+        }
+        .play-cadence {
+            padding: 0 12px; border: 1px solid #77966e; background: var(--forest); color: white;
+            font-size: 12px; font-weight: 850; white-space: nowrap;
+        }
+        .play-cadence.playing { border-color: #a45342; background: var(--coral); }
+        .play-cadence:disabled { opacity: .4; cursor: default; }
+        .cadence-order { display: flex; gap: 5px; }
+        .cadence-move {
+            width: 34px; min-height: 40px; border: 1px solid #a8bec9; border-radius: 10px;
+            background: #f3f8fa; color: #315669; font-weight: 900; cursor: pointer;
+        }
+        .cadence-move:disabled { opacity: .28; cursor: default; }
+        .delete-cadence {
+            width: 40px; border: 1px solid #d8a393; background: #fff4ed; color: #984735;
+        }
+        .cadence-meta {
+            grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px;
+            color: var(--muted); font-size: 11px; line-height: 1.35;
+        }
+        .section-length { color: var(--forest); font-weight: 850; white-space: nowrap; }
+        .progression-area { padding: 11px 13px 5px; }
+        .progression-list { display: flex; gap: 7px; margin-top: 7px; overflow-x: auto; padding-bottom: 5px; }
+        .progression-chip {
+            flex: 0 0 auto; min-height: 36px; padding: 0 11px; border: 1px solid #d3a45e; border-radius: 999px;
+            background: #fff5d9; color: #694b1d; font-size: 12px; font-weight: 800; cursor: pointer;
+        }
+        .palette-area { padding: 7px 13px 13px; }
+        .chord-palette {
+            display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin-top: 7px;
+        }
+        .chord-choice {
+            position: relative; min-height: 62px; padding: 7px 5px; border: 1px solid var(--line); border-radius: 12px;
+            background: #eef3e5; color: var(--forest); cursor: pointer; text-align: center;
+        }
+        .chord-choice strong { display: block; font: 800 16px/1.1 Georgia, serif; }
+        .chord-choice span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chord-choice.recommended { border-color: var(--sun); background: #fff5d9; box-shadow: inset 0 0 0 1px rgba(232,167,73,.35); }
+        .chord-choice.gateway { border-color: #bc8e83; background: #fae9e2; color: #743e34; }
+        .modulation-tools { display: grid; gap: 9px; padding: 0 13px 13px; }
+        .modulation-panel {
+            overflow: hidden; border: 1px solid #c7b9a0; border-radius: 13px; background: #fbf5e8;
+        }
+        .modulation-panel.parallel { border-color: #9eb4a4; background: #f0f5ea; }
+        .modulation-panel.custom { border-color: #b79cbf; background: #f5edf5; }
+        .modulation-panel summary {
+            min-height: 42px; padding: 11px 12px; color: var(--forest); font-size: 12px; font-weight: 850;
+            cursor: pointer; list-style-position: inside;
+        }
+        .modulation-panel .chord-palette { padding: 0 9px 9px; margin-top: 0; }
+        .custom-builder {
+            display: grid; grid-template-columns: 130px 170px minmax(0, 1fr) auto; gap: 8px;
+            align-items: end; padding: 0 9px 9px;
+        }
+        .custom-builder label { display: grid; gap: 5px; min-width: 0; }
+        .custom-select {
+            width: 100%; min-height: 40px; padding: 0 9px; border: 1px solid #b79cbf; border-radius: 9px;
+            background: white; color: var(--ink); font-weight: 800;
+        }
+        .custom-preview {
+            min-height: 40px; display: flex; align-items: center; padding: 0 10px; border-radius: 9px;
+            background: rgba(255,255,255,.65); color: var(--forest); font: 750 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .add-custom {
+            min-height: 40px; padding: 0 13px; border: 1px solid #76527e; border-radius: 9px;
+            background: #76527e; color: white; font-size: 12px; font-weight: 850; cursor: pointer; white-space: nowrap;
+        }
+        .next-badge {
+            position: absolute; top: -6px; right: 5px; padding: 2px 5px; border-radius: 99px;
+            background: var(--sun); color: #49300e; font-size: 8px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase;
+        }
+        .chord-list { border-top: 1px solid #dce3d2; }
+        .empty-cadence { padding: 18px 13px; color: var(--muted); font-size: 13px; text-align: center; }
+        .chord-row {
+            display: grid; grid-template-columns: 38px minmax(80px, .5fr) minmax(120px, .75fr) minmax(110px, .65fr) minmax(170px, 1fr) 76px auto;
+            gap: 10px; align-items: center; min-height: 72px; padding: 9px 13px; border-top: 1px solid #e1e6d9;
+        }
+        .chord-row:first-child { border-top: 0; }
+        .cadence.is-playing { border-color: var(--sun); box-shadow: 0 0 0 2px rgba(232,167,73,.28), 0 9px 24px rgba(42,64,44,.1); }
+        .chord-row.is-playing {
+            background: #fff1bd; box-shadow: inset 5px 0 0 var(--sun);
+            animation: playing-pulse .65s ease-in-out infinite alternate;
+        }
+        @keyframes playing-pulse { to { background: #ffe494; } }
+        .sequence { color: #8a9787; font: 800 12px/1 ui-monospace, monospace; }
+        .chord-name { color: var(--forest); font: 800 20px/1 Georgia, serif; }
+        .notes { margin-top: 5px; color: var(--ink); font: 650 12px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
+        .context { display: flex; flex-wrap: wrap; gap: 5px; }
+        .tag { padding: 4px 7px; border-radius: 99px; background: var(--sage); color: var(--forest); font-size: 10px; font-weight: 800; }
+        .tag.mode { background: #f5e2b7; color: #6b4a17; }
+        .tag.degree { background: #efd7d0; color: #763e33; }
+        .tag.transition { background: #dce8ef; color: #315669; }
+        .tag.transition.gateway { background: #eadcf0; color: #633d73; }
+        .function { color: var(--muted); font-size: 11px; }
+        .chord-scale-field { display: grid; gap: 5px; min-width: 0; }
+        .chord-scale-select {
+            width: 100%; min-height: 36px; padding: 0 30px 0 9px; border: 1px solid #93aa84;
+            border-radius: 9px; background: #f5f8ed; color: var(--forest); font-size: 12px; font-weight: 750;
+        }
+        .fit-message { color: var(--muted); font-size: 10px; line-height: 1.25; }
+        .fit-message strong { color: var(--forest-soft); }
+        .duration-field { display: grid; gap: 5px; min-width: 0; }
+        .duration-select {
+            width: 100%; min-height: 36px; padding: 0 5px; border: 1px solid #c6a66e; border-radius: 9px;
+            background: #fff8e4; color: #694b1d; font-size: 12px; font-weight: 850;
+        }
+        .chord-info-line, .chord-edit-line { display: contents; }
+        .row-actions { display: flex; flex-wrap: nowrap; gap: 5px; }
+        .icon-button {
+            min-width: 42px; min-height: 38px; border: 1px solid var(--line); border-radius: 9px;
+            background: white; color: var(--forest); cursor: pointer;
+        }
+        .icon-button.move { min-width: 34px; color: #315669; border-color: #a8bec9; background: #f3f8fa; }
+        .icon-button:disabled { opacity: .28; cursor: default; }
+        .icon-button.remove { color: #a14c3d; border-color: #d9a69b; }
+        .add-cadence {
+            width: 100%; min-height: 54px; margin-top: 13px; border: 2px dashed #76906c; border-radius: 16px;
+            background: rgba(247,242,223,.55); color: var(--forest); font-size: 17px; font-weight: 850; cursor: pointer;
+        }
+        @media (max-width: 920px) {
+            .chord-row { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 7px; }
+            .chord-main { grid-column: 2; }
+            .chord-info-line {
+                grid-column: 2 / -1; grid-row: 2; display: grid;
+                grid-template-columns: minmax(110px, .55fr) minmax(0, 1fr); gap: 10px; align-items: start;
+            }
+            .chord-edit-line {
+                grid-column: 2 / -1; grid-row: 3; display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(86px, .22fr); gap: 10px; align-items: start;
+            }
+            .row-actions { grid-column: 3; grid-row: 1; }
+        }
+        @media (max-width: 720px) {
+            body { padding: 0; }
+            .app { min-height: 100dvh; padding: 10px 8px 16px; border-radius: 0; }
+            .subtitle { display: none; }
+            .plan-bar { grid-template-columns: minmax(0, 1fr) 76px; }
+            .save-state { grid-column: 1 / -1; padding: 0; }
+            .playback-status { align-items: flex-start; flex-wrap: wrap; }
+            .playback-status .played-notes { width: 100%; margin-left: 16px; }
+            .cadence-head { grid-template-columns: minmax(0, 1fr) auto auto 42px; }
+            .cadence-head .scale-field { grid-column: 1 / -1; grid-row: 2; }
+            .cadence-order { grid-column: 2; grid-row: 1; }
+            .play-cadence { grid-column: 3; grid-row: 1; padding-inline: 10px; }
+            .delete-cadence { grid-column: 4; grid-row: 1; }
+            .chord-palette { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .custom-builder { grid-template-columns: 1fr 1fr; }
+            .custom-preview { grid-column: 1; }
+            .add-custom { grid-column: 2; }
+            .cadence-meta { align-items: flex-start; flex-direction: column; gap: 3px; }
+        }
+    </style>
+</head>
+<body>
+<main class="app">
+    <header class="header">
+        <a class="home-menu" href="../" aria-label="Open music tools index"><span></span><span></span><span></span></a>
+        <div><h1>Scales Planner</h1><p class="subtitle">Plan cadences one chord at a time.</p></div>
+        <pwa-check-update><button class="btn-check-update" type="button" onclick="location.reload()">Install</button></pwa-check-update>
+    </header>
+
+    <section class="plan-bar" aria-label="Song plan">
+        <div class="field">
+            <label for="songTitle">Song plan</label>
+            <input class="song-title" id="songTitle" value="Untitled progression" autocomplete="off" />
+        </div>
+        <div class="field">
+            <label for="bpm">BPM</label>
+            <input class="tempo-input" id="bpm" type="number" min="40" max="240" step="1" value="100" inputmode="numeric" />
+        </div>
+        <div class="save-state" id="saveState">Saved locally</div>
+        <div class="playback-status" id="playbackStatus" aria-live="polite"><span class="status-dot"></span><strong>Ready</strong><span>Play from any cadence or audition one chord.</span></div>
+    </section>
+
+    <section class="cadences" id="cadences" aria-label="Cadences"></section>
+    <button class="add-cadence" id="addCadence" type="button">+ Add cadence</button>
+</main>
+
+<script>
+(function () {
+    const STORAGE_KEY = 'scales-planner-song-v3';
+    const SHARP_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    const FLAT_NAMES = ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+    const KEY_LABELS = ['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
+    const SCALE_INTERVALS = {
+        major: [0,2,4,5,7,9,11],
+        minor: [0,2,3,5,7,8,11]
+    };
+    const DEGREE_SYMBOLS = {
+        major: ['Imaj7','ii7','iii7','IVmaj7','V7','vi7','viiø7'],
+        minor: ['i(mMaj7)','iiø7','III+maj7','iv7','V7','VImaj7','vii°7']
+    };
+    const FUNCTIONS = {
+        major: ['Tonic','Predominant','Tonic color','Predominant','Dominant','Tonic substitute','Leading tone'],
+        minor: ['Tonic','Predominant','Color','Predominant','Dominant','Color','Leading tone']
+    };
+    const NEXT = {
+        major: [[4,3,5,1],[4,6,0],[5,3],[4,0,1],[0,5],[3,1,4],[0,2]],
+        minor: [[3,4,5,1],[4,6,0],[5,3],[4,0,1],[0,5],[3,1,4],[0,2]]
+    };
+    const PROGRESSIONS = {
+        major: [
+            { name: 'Pop', label: 'I–V–vi–IV', degrees: [0,4,5,3] },
+            { name: 'Jazz cadence', label: 'ii–V–I', degrees: [1,4,0] },
+            { name: 'Classic', label: 'I–IV–V–I', degrees: [0,3,4,0] },
+            { name: 'Sad', label: 'vi–IV–I–V', degrees: [5,3,0,4] },
+            { name: 'Dramatic', label: 'I–vi–IV–V', degrees: [0,5,3,4] }
+        ],
+        minor: [
+            { name: 'Minor cadence', label: 'i–iv–V–i', degrees: [0,3,4,0] },
+            { name: 'Minor jazz', label: 'iiø–V–i', degrees: [1,4,0] },
+            { name: 'Sad', label: 'i–iv–VI–V', degrees: [0,3,5,4] },
+            { name: 'Dramatic', label: 'i–VI–iv–V', degrees: [0,5,3,4] },
+            { name: 'Leading tone', label: 'i–iv–vii°–i', degrees: [0,3,6,0] }
+        ]
+    };
+    const DURATIONS = [
+        { id: '1/1.', label: '1/1.', ticks: 144 },
+        { id: '1/1', label: '1/1', ticks: 96 },
+        { id: '1/2.', label: '1/2.', ticks: 72 },
+        { id: '1/2', label: '1/2', ticks: 48 },
+        { id: '1/4.', label: '1/4.', ticks: 36 },
+        { id: '1/2T', label: '1/2T', ticks: 32 },
+        { id: '1/4', label: '1/4', ticks: 24 },
+        { id: '1/8.', label: '1/8.', ticks: 18 },
+        { id: '1/4T', label: '1/4T', ticks: 16 },
+        { id: '1/8', label: '1/8', ticks: 12 },
+        { id: '1/16.', label: '1/16.', ticks: 9 },
+        { id: '1/8T', label: '1/8T', ticks: 8 },
+        { id: '1/16', label: '1/16', ticks: 6 },
+        { id: '1/16T', label: '1/16T', ticks: 4 }
+    ];
+    const CUSTOM_QUALITIES = [
+        { id: 'maj7', label: 'Major seventh', suffix: 'maj7', intervals: [0,4,7,11] },
+        { id: '7', label: 'Dominant seventh', suffix: '7', intervals: [0,4,7,10] },
+        { id: 'm7', label: 'Minor seventh', suffix: 'm7', intervals: [0,3,7,10] },
+        { id: 'mMaj7', label: 'Minor-major seventh', suffix: 'mMaj7', intervals: [0,3,7,11] },
+        { id: 'half-dim', label: 'Half-diminished', suffix: 'ø7', intervals: [0,3,6,10] },
+        { id: 'dim', label: 'Fully diminished', suffix: '°7', intervals: [0,3,6,9] },
+        { id: 'aug-maj7', label: 'Augmented major seventh', suffix: '+maj7', intervals: [0,4,8,11] }
+    ];
+
+    let audioContext = null;
+    let saveTimer = null;
+    let playbackTimer = null;
+    let playingCadenceId = null;
+    const cadencesEl = document.getElementById('cadences');
+    const addCadenceButton = document.getElementById('addCadence');
+    const songTitle = document.getElementById('songTitle');
+    const bpmInput = document.getElementById('bpm');
+    const saveState = document.getElementById('saveState');
+    const playbackStatus = document.getElementById('playbackStatus');
+    const state = loadState();
+    if (!Number.isFinite(state.bpm)) state.bpm = 100;
+
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+    function mod(value, base = 12) { return ((value % base) + base) % base; }
+    function scaleId(scale) { return `${scale.tonic}:${scale.mode}`; }
+    function parseScale(value) {
+        const [tonic, mode] = value.split(':');
+        return { tonic: Number(tonic), mode };
+    }
+    function scaleLabel(scale) { return `${KEY_LABELS[scale.tonic]} ${scale.mode}`; }
+    function usesFlats(scale) { return [1,3,5,8,10].includes(scale.tonic); }
+    function noteName(pc, scale) { return (usesFlats(scale) ? FLAT_NAMES : SHARP_NAMES)[mod(pc)]; }
+    function midiName(midi, scale) {
+        return noteName(midi, scale) + (Math.floor(midi / 12) - 1);
+    }
+    function durationInfo(chord) {
+        return DURATIONS.find(duration => duration.id === chord.duration) || DURATIONS.find(duration => duration.id === '1/4');
+    }
+    function durationMs(chord) {
+        return (durationInfo(chord).ticks / 24) * (60000 / state.bpm);
+    }
+    function formatBeats(beats) {
+        return Number.isInteger(beats) ? String(beats) : beats.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+    }
+    function sectionLength(cadence) {
+        const ticks = cadence.chords.reduce((total, chord) => total + durationInfo(chord).ticks, 0);
+        const beats = ticks / 24;
+        const bars = Math.floor(ticks / 96);
+        const remainingBeats = (ticks % 96) / 24;
+        if (!ticks) return '0 beats';
+        const barParts = [];
+        if (bars) barParts.push(`${bars} ${bars === 1 ? 'bar' : 'bars'}`);
+        if (remainingBeats) barParts.push(`${formatBeats(remainingBeats)} ${remainingBeats === 1 ? 'beat' : 'beats'}`);
+        return `${formatBeats(beats)} beats · ${barParts.join(' + ')}`;
+    }
+    function defaultCadence(index, scale = { tonic: 0, mode: 'major' }) {
+        return { id: uid(), title: `Cadence ${index + 1}`, scale: { ...scale }, chords: [] };
+    }
+    function loadState() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (saved && Array.isArray(saved.cadences) && saved.cadences.length) return saved;
+        } catch (error) {
+            console.warn('Could not load saved scale plan', error);
+        }
+        return { title: 'Untitled progression', cadences: [defaultCadence(0)] };
+    }
+    function scheduleSave() {
+        saveState.textContent = 'Saving…';
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            saveState.textContent = 'Saved locally';
+        }, 180);
+    }
+    function relativeScale(scale) {
+        return scale.mode === 'major'
+            ? { tonic: mod(scale.tonic + 9), mode: 'minor' }
+            : { tonic: mod(scale.tonic + 3), mode: 'major' };
+    }
+    function parallelScale(scale) {
+        return { tonic: scale.tonic, mode: scale.mode === 'major' ? 'minor' : 'major' };
+    }
+    function gatewayScales(scale) {
+        const leadingTone = mod(scale.tonic - 1);
+        const destinations = [0,3,6,9].map(offset => mod(leadingTone + offset + 1));
+        const options = [];
+        destinations.forEach(tonic => {
+            options.push({ tonic, mode: 'major' }, { tonic, mode: 'minor' });
+        });
+        return options.filter((candidate, index, all) =>
+            all.findIndex(item => scaleId(item) === scaleId(candidate)) === index
+        );
+    }
+    function scaleRelationship(from, to) {
+        if (!from || scaleId(from) === scaleId(to)) return { key: 'inherited', label: 'Inherited scale' };
+        if (scaleId(relativeScale(from)) === scaleId(to)) return { key: 'relative', label: `Relative to ${scaleLabel(from)}` };
+        if (scaleId(parallelScale(from)) === scaleId(to)) return { key: 'parallel', label: `Parallel key of ${scaleLabel(from)}` };
+        if (gatewayScales(from).some(scale => scaleId(scale) === scaleId(to))) {
+            return { key: 'gateway', label: `Jumped via vii°7 from ${scaleLabel(from)}` };
+        }
+        return { key: 'modulation', label: `Changed from ${scaleLabel(from)}` };
+    }
+    function allScales() {
+        const result = [];
+        ['major','minor'].forEach(mode => KEY_LABELS.forEach((_, tonic) => result.push({ tonic, mode })));
+        return result;
+    }
+    function appendScaleOptions(select, current) {
+        const relative = relativeScale(current);
+        const used = new Set();
+        function group(label, scales) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = label;
+            scales.forEach(scale => {
+                const id = scaleId(scale);
+                if (used.has(id)) return;
+                used.add(id);
+                optgroup.appendChild(new Option(scaleLabel(scale), id));
+            });
+            if (optgroup.children.length) select.appendChild(optgroup);
+        }
+        group('Current', [current]);
+        group('Relative major / minor', [relative]);
+        group('Parallel major / minor', [parallelScale(current)]);
+        group('vii°7 gateways', gatewayScales(current));
+        group('All scales', allScales());
+        select.value = scaleId(current);
+    }
+    function pitchClassKey(notes) {
+        return [...new Set(notes.map(note => mod(note)))].sort((a, b) => a - b).join(',');
+    }
+    function analyzeChordInScale(chord, scale) {
+        const chordKey = pitchClassKey(chord.midi);
+        for (let degree = 0; degree < 7; degree++) {
+            const candidate = buildDegreeChord(scale, degree);
+            if (pitchClassKey(candidate.midi) === chordKey) {
+                return {
+                    fits: true,
+                    degree,
+                    degreeSymbol: candidate.degreeSymbol,
+                    function: candidate.function,
+                    gateway: false
+                };
+            }
+        }
+        const gateway = buildGatewayChord(scale);
+        if (pitchClassKey(gateway.midi) === chordKey) {
+            return { fits: true, degree: 7, degreeSymbol: 'vii°7', function: 'Modulation gateway', gateway: true };
+        }
+        return { fits: false, degree: null, degreeSymbol: 'chromatic', function: 'Outside this scale', gateway: false };
+    }
+    function suitableScales(chord) {
+        return allScales().filter(scale => analyzeChordInScale(chord, scale).fits);
+    }
+    function appendChordScaleOptions(select, cadence, chord, chordIndex) {
+        const previousChord = chordIndex > 0 ? cadence.chords[chordIndex - 1] : null;
+        const previousScale = previousChord ? previousChord.scale : (chord.inheritedScale || chord.scale);
+        const relative = relativeScale(previousScale);
+        const fitting = suitableScales(chord);
+        const used = new Set();
+        function group(label, scales) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = label;
+            scales.forEach(scale => {
+                const id = scaleId(scale);
+                if (used.has(id)) return;
+                used.add(id);
+                const analysis = analyzeChordInScale(chord, scale);
+                const relationship = scaleRelationship(previousScale, scale);
+                const fitLabel = analysis.fits ? analysis.degreeSymbol : 'chromatic chord (outside scale)';
+                optgroup.appendChild(new Option(`${scaleLabel(scale)} · ${fitLabel} · ${relationship.label}`, id));
+            });
+            if (optgroup.children.length) select.appendChild(optgroup);
+        }
+        group('Selected', [chord.scale]);
+        group('Inherited from previous chord', [previousScale]);
+        group('Relative major / minor', [relative]);
+        group('Parallel major / minor', [parallelScale(previousScale)]);
+        if (previousChord && previousChord.gateway) group('Reached through previous vii°7', gatewayScales(previousScale));
+        group('Suitable scales for this chord', fitting);
+        group('Other scales', allScales());
+        select.value = scaleId(chord.scale);
+    }
+    function chordQuality(intervals) {
+        const key = intervals.join(',');
+        return {
+            '0,4,7,11': 'maj7', '0,4,7,10': '7', '0,3,7,10': 'm7',
+            '0,3,6,10': 'ø7', '0,3,6,9': '°7', '0,3,7,11': 'mMaj7',
+            '0,4,8,11': '+maj7'
+        }[key] || '7th';
+    }
+    function buildDegreeChord(scale, degree) {
+        const intervals = SCALE_INTERVALS[scale.mode];
+        const midi = [];
+        for (let stack = 0; stack < 4; stack++) {
+            const scaleIndex = degree + stack * 2;
+            midi.push(60 + scale.tonic + intervals[scaleIndex % 7] + Math.floor(scaleIndex / 7) * 12);
+        }
+        const rootMidi = midi[0];
+        const normalized = midi.map(note => mod(note - rootMidi));
+        const degreeSymbol = DEGREE_SYMBOLS[scale.mode][degree];
+        return {
+            id: uid(), degree, degreeSymbol, scale: { ...scale }, midi,
+            name: noteName(rootMidi, scale) + chordQuality(normalized),
+            function: FUNCTIONS[scale.mode][degree], gateway: false, duration: '1/4'
+        };
+    }
+    function buildGatewayChord(scale) {
+        const rootPc = mod(scale.tonic - 1);
+        const rootMidi = 60 + rootPc;
+        return {
+            id: uid(), degree: 7, degreeSymbol: 'vii°7', scale: { ...scale },
+            midi: [0,3,6,9].map(interval => rootMidi + interval),
+            name: noteName(rootPc, scale) + '°7', function: 'Modulation gateway', gateway: true, duration: '1/4'
+        };
+    }
+    function buildCustomChord(scale, rootPc, qualityId) {
+        const quality = CUSTOM_QUALITIES.find(item => item.id === qualityId) || CUSTOM_QUALITIES[0];
+        const rootMidi = 60 + Number(rootPc);
+        return {
+            id: uid(), degree: null, degreeSymbol: 'chromatic', scale: { ...scale },
+            midi: quality.intervals.map(interval => rootMidi + interval),
+            name: noteName(rootPc, scale) + quality.suffix,
+            function: 'Custom chord', gateway: false, custom: true, duration: '1/4'
+        };
+    }
+    function ensureAudio() {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextCtor) return null;
+        if (!audioContext) audioContext = new AudioContextCtor();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        return audioContext;
+    }
+    function playChord(chord, requestedDuration = durationMs(chord)) {
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const now = ctx.currentTime + .018;
+        const soundingSeconds = Math.max(.09, requestedDuration / 1000 * .92);
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(.0001, now);
+        master.gain.exponentialRampToValueAtTime(.16, now + Math.min(.025, soundingSeconds / 3));
+        master.gain.exponentialRampToValueAtTime(.0001, now + soundingSeconds);
+        master.connect(ctx.destination);
+        chord.midi.forEach((midi, index) => {
+            const oscillator = ctx.createOscillator();
+            const voice = ctx.createGain();
+            oscillator.type = index % 2 ? 'triangle' : 'sine';
+            oscillator.frequency.value = 440 * Math.pow(2, (midi - 69) / 12);
+            voice.gain.value = index === 0 ? .85 : .58;
+            oscillator.connect(voice).connect(master);
+            oscillator.start(now + index * .012);
+            oscillator.stop(now + soundingSeconds + .04);
+        });
+    }
+    function showPlayedChord(cadenceTitle, chord, position = '') {
+        const notes = chord.midi.map(midi => midiName(midi, chord.scale)).join(' ');
+        playbackStatus.classList.add('active');
+        playbackStatus.innerHTML = `<span class="status-dot"></span><strong>Now playing: ${escapeHtml(chord.name)}</strong><span>${escapeHtml(cadenceTitle)}${position ? ` · ${position}` : ''} · ${escapeHtml(chord.degreeSymbol)} · ${durationInfo(chord).label}</span><span class="played-notes">${notes}</span>`;
+    }
+    function stopPlayback() {
+        clearTimeout(playbackTimer);
+        playbackTimer = null;
+        playingCadenceId = null;
+        document.querySelectorAll('.cadence.is-playing, .chord-row.is-playing').forEach(element => element.classList.remove('is-playing'));
+        document.querySelectorAll('.play-cadence').forEach(button => {
+            button.classList.remove('playing');
+            button.textContent = '▶ Play';
+            button.setAttribute('aria-label', `Play from ${button.dataset.cadenceTitle}`);
+        });
+        playbackStatus.classList.remove('active');
+        playbackStatus.innerHTML = '<span class="status-dot"></span><strong>Ready</strong><span>Play from any cadence or audition one chord.</span>';
+    }
+    function playFromCadence(cadenceIndex) {
+        const cadence = state.cadences[cadenceIndex];
+        if (!cadence) return;
+        if (playingCadenceId === cadence.id) {
+            stopPlayback();
+            return;
+        }
+        stopPlayback();
+        const sequence = state.cadences.slice(cadenceIndex).flatMap(item =>
+            item.chords.map(chord => ({ cadenceId: item.id, chord }))
+        );
+        if (!sequence.length) return;
+        playingCadenceId = cadence.id;
+        const startButton = document.querySelector(`.play-cadence[data-cadence-id="${cadence.id}"]`);
+        if (startButton) {
+            startButton.classList.add('playing');
+            startButton.textContent = '■ Stop';
+            startButton.setAttribute('aria-label', 'Stop progression playback');
+        }
+        let index = 0;
+        function advance() {
+            document.querySelectorAll('.cadence.is-playing, .chord-row.is-playing').forEach(element => element.classList.remove('is-playing'));
+            const step = sequence[index];
+            const cadenceElement = document.querySelector(`.cadence[data-id="${step.cadenceId}"]`);
+            const chordElement = document.querySelector(`.chord-row[data-chord-id="${step.chord.id}"]`);
+            if (cadenceElement) cadenceElement.classList.add('is-playing');
+            if (chordElement) {
+                chordElement.classList.add('is-playing');
+                chordElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            const activeCadence = state.cadences.find(item => item.id === step.cadenceId);
+            showPlayedChord(activeCadence ? activeCadence.title : 'Cadence', step.chord, `${index + 1} of ${sequence.length}`);
+            const stepDuration = durationMs(step.chord);
+            playChord(step.chord, stepDuration);
+            index += 1;
+            playbackTimer = setTimeout(index < sequence.length ? advance : stopPlayback, stepDuration);
+        }
+        advance();
+    }
+    function addChord(cadenceId, degree, play = true) {
+        const cadence = state.cadences.find(item => item.id === cadenceId);
+        if (!cadence) return;
+        const chord = degree === 7 ? buildGatewayChord(cadence.scale) : buildDegreeChord(cadence.scale, degree);
+        chord.inheritedScale = { ...cadence.scale };
+        cadence.chords.push(chord);
+        cadence.scale = { ...chord.scale };
+        scheduleSave();
+        render();
+        if (play) playChord(chord);
+    }
+    function addScaleChord(cadenceId, scale, degree, play = true) {
+        const cadence = state.cadences.find(item => item.id === cadenceId);
+        if (!cadence) return;
+        const chord = buildDegreeChord(scale, degree);
+        chord.inheritedScale = { ...cadence.scale };
+        cadence.chords.push(chord);
+        cadence.scale = { ...scale };
+        scheduleSave();
+        render();
+        if (play) playChord(chord);
+    }
+    function addCustomChord(cadenceId, rootPc, qualityId) {
+        const cadence = state.cadences.find(item => item.id === cadenceId);
+        if (!cadence) return;
+        const chord = buildCustomChord(cadence.scale, rootPc, qualityId);
+        chord.inheritedScale = { ...cadence.scale };
+        cadence.chords.push(chord);
+        scheduleSave();
+        render();
+        playChord(chord);
+    }
+    function addProgression(cadenceId, degrees) {
+        const cadence = state.cadences.find(item => item.id === cadenceId);
+        if (!cadence) return;
+        degrees.forEach(degree => {
+            const chord = buildDegreeChord(cadence.scale, degree);
+            chord.inheritedScale = { ...cadence.scale };
+            cadence.chords.push(chord);
+        });
+        cadence.scale = { ...cadence.chords[cadence.chords.length - 1].scale };
+        scheduleSave();
+        render();
+        playChord(cadence.chords[cadence.chords.length - 1]);
+    }
+    function swapChord(cadence, chordIndex, direction) {
+        const targetIndex = chordIndex + direction;
+        if (targetIndex < 0 || targetIndex >= cadence.chords.length) return;
+        [cadence.chords[chordIndex], cadence.chords[targetIndex]] = [cadence.chords[targetIndex], cadence.chords[chordIndex]];
+        cadence.scale = { ...cadence.chords[cadence.chords.length - 1].scale };
+        scheduleSave();
+        render();
+        requestAnimationFrame(() => {
+            const movedRow = document.querySelector(`.chord-row[data-chord-id="${cadence.chords[targetIndex].id}"]`);
+            if (movedRow) movedRow.focus({ preventScroll: true });
+        });
+    }
+    function swapCadence(cadenceIndex, direction) {
+        const targetIndex = cadenceIndex + direction;
+        if (targetIndex < 0 || targetIndex >= state.cadences.length) return;
+        [state.cadences[cadenceIndex], state.cadences[targetIndex]] = [state.cadences[targetIndex], state.cadences[cadenceIndex]];
+        const movedCadenceId = state.cadences[targetIndex].id;
+        scheduleSave();
+        render();
+        requestAnimationFrame(() => {
+            const movedCadence = document.querySelector(`.cadence[data-id="${movedCadenceId}"]`);
+            if (movedCadence) movedCadence.focus({ preventScroll: true });
+        });
+    }
+    function scalePriorityText(scale) {
+        const relative = relativeScale(scale);
+        return `Priority: relative ${scaleLabel(relative)}, parallel ${scaleLabel(parallelScale(scale))}; vii°7 opens 8 major/minor destinations.`;
+    }
+    function renderCadence(cadence, cadenceIndex) {
+        const article = document.createElement('article');
+        article.className = 'cadence';
+        article.tabIndex = -1;
+        article.dataset.id = cadence.id;
+
+        const head = document.createElement('div');
+        head.className = 'cadence-head';
+        head.innerHTML = `
+            <div class="field">
+                <label for="title-${cadence.id}">Section</label>
+                <input class="cadence-title" id="title-${cadence.id}" value="${escapeHtml(cadence.title)}" />
+            </div>
+            <div class="field scale-field">
+                <label for="scale-${cadence.id}">Inherited scale for next chord</label>
+                <select class="scale-select" id="scale-${cadence.id}"></select>
+            </div>
+            <div class="cadence-order" aria-label="Reorder ${escapeHtml(cadence.title)}"><button class="cadence-move cadence-earlier" type="button" aria-label="Move ${escapeHtml(cadence.title)} earlier" title="Swap with previous cadence"${cadenceIndex === 0 ? ' disabled' : ''}>↑</button><button class="cadence-move cadence-later" type="button" aria-label="Move ${escapeHtml(cadence.title)} later" title="Swap with next cadence"${cadenceIndex === state.cadences.length - 1 ? ' disabled' : ''}>↓</button></div>
+            <button class="play-cadence" type="button" data-cadence-id="${cadence.id}" data-cadence-title="${escapeHtml(cadence.title)}" aria-label="Play from ${escapeHtml(cadence.title)}">▶ Play</button>
+            <button class="delete-cadence" type="button" aria-label="Delete ${escapeHtml(cadence.title)}">×</button>
+            <div class="cadence-meta"><span>${scalePriorityText(cadence.scale)}</span><strong class="section-length">Length: ${sectionLength(cadence)}</strong></div>`;
+        const select = head.querySelector('.scale-select');
+        appendScaleOptions(select, cadence.scale);
+        head.querySelector('.cadence-title').addEventListener('input', event => {
+            cadence.title = event.target.value;
+            scheduleSave();
+        });
+        const playCadenceButton = head.querySelector('.play-cadence');
+        playCadenceButton.disabled = !state.cadences.slice(cadenceIndex).some(item => item.chords.length);
+        playCadenceButton.addEventListener('click', () => playFromCadence(cadenceIndex));
+        head.querySelector('.cadence-earlier').addEventListener('click', () => swapCadence(cadenceIndex, -1));
+        head.querySelector('.cadence-later').addEventListener('click', () => swapCadence(cadenceIndex, 1));
+        select.addEventListener('change', event => {
+            cadence.scale = parseScale(event.target.value);
+            scheduleSave();
+            render();
+        });
+        head.querySelector('.delete-cadence').addEventListener('click', () => {
+            if (state.cadences.length === 1) {
+                cadence.chords = [];
+            } else {
+                state.cadences.splice(cadenceIndex, 1);
+            }
+            scheduleSave();
+            render();
+        });
+        article.appendChild(head);
+
+        const progressionArea = document.createElement('div');
+        progressionArea.className = 'progression-area';
+        progressionArea.innerHTML = '<div class="eyebrow">Common progressions</div><div class="progression-list"></div>';
+        PROGRESSIONS[cadence.scale.mode].forEach(progression => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'progression-chip';
+            button.textContent = `${progression.name}  ${progression.label}`;
+            button.addEventListener('click', () => addProgression(cadence.id, progression.degrees));
+            progressionArea.querySelector('.progression-list').appendChild(button);
+        });
+        article.appendChild(progressionArea);
+
+        const paletteArea = document.createElement('div');
+        paletteArea.className = 'palette-area';
+        paletteArea.innerHTML = '<div class="eyebrow">Choose the next chord</div><div class="chord-palette"></div>';
+        const lastChord = cadence.chords[cadence.chords.length - 1];
+        const recommendations = lastChord && scaleId(lastChord.scale) === scaleId(cadence.scale) && Number.isInteger(lastChord.degree) && lastChord.degree >= 0 && lastChord.degree < 7
+            ? NEXT[cadence.scale.mode][lastChord.degree]
+            : [0,4,3];
+        const degreeOrder = [...recommendations, ...[0,1,2,3,4,5,6].filter(degree => !recommendations.includes(degree))];
+        degreeOrder.forEach(degree => {
+            const chord = buildDegreeChord(cadence.scale, degree);
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'chord-choice' + (recommendations.includes(degree) ? ' recommended' : '');
+            button.innerHTML = `${recommendations.includes(degree) ? '<b class="next-badge">Next</b>' : ''}<strong>${chord.degreeSymbol} ${chord.name}</strong><span>${chord.midi.map(midi => midiName(midi, cadence.scale)).join(' ')}</span>`;
+            button.addEventListener('click', () => addChord(cadence.id, degree));
+            paletteArea.querySelector('.chord-palette').appendChild(button);
+        });
+        const gateway = buildGatewayChord(cadence.scale);
+        const gatewayButton = document.createElement('button');
+        gatewayButton.type = 'button';
+        gatewayButton.className = 'chord-choice gateway';
+        gatewayButton.innerHTML = `<strong>${gateway.degreeSymbol} ${gateway.name}</strong><span>open modulation choices</span>`;
+        gatewayButton.addEventListener('click', () => addChord(cadence.id, 7));
+        paletteArea.querySelector('.chord-palette').appendChild(gatewayButton);
+        article.appendChild(paletteArea);
+
+        const modulationTools = document.createElement('div');
+        modulationTools.className = 'modulation-tools';
+
+        const customPanel = document.createElement('details');
+        customPanel.className = 'modulation-panel custom';
+        customPanel.innerHTML = `
+            <summary>Custom / chromatic chord · choose its actual notes</summary>
+            <div class="custom-builder">
+                <label><span class="eyebrow">Root</span><select class="custom-select custom-root">${SHARP_NAMES.map((name, pitchClass) => `<option value="${pitchClass}">${usesFlats(cadence.scale) ? FLAT_NAMES[pitchClass] : name}</option>`).join('')}</select></label>
+                <label><span class="eyebrow">Quality</span><select class="custom-select custom-quality">${CUSTOM_QUALITIES.map(quality => `<option value="${quality.id}">${quality.label}</option>`).join('')}</select></label>
+                <div class="custom-preview" aria-live="polite"></div>
+                <button class="add-custom" type="button">+ Add chord</button>
+            </div>`;
+        const customRoot = customPanel.querySelector('.custom-root');
+        const customQuality = customPanel.querySelector('.custom-quality');
+        const customPreview = customPanel.querySelector('.custom-preview');
+        function updateCustomPreview() {
+            const chord = buildCustomChord(cadence.scale, Number(customRoot.value), customQuality.value);
+            customPreview.textContent = `${chord.name} · ${chord.midi.map(midi => midiName(midi, cadence.scale)).join(' ')}`;
+        }
+        customRoot.addEventListener('change', updateCustomPreview);
+        customQuality.addEventListener('change', updateCustomPreview);
+        customPanel.querySelector('.add-custom').addEventListener('click', () => addCustomChord(cadence.id, Number(customRoot.value), customQuality.value));
+        updateCustomPreview();
+        modulationTools.appendChild(customPanel);
+
+        const parallel = parallelScale(cadence.scale);
+        const parallelPanel = document.createElement('details');
+        parallelPanel.className = 'modulation-panel parallel';
+        parallelPanel.innerHTML = `<summary>Parallel key chords · borrow from ${scaleLabel(parallel)}</summary><div class="chord-palette"></div>`;
+        for (let degree = 0; degree < 7; degree++) {
+            const chord = buildDegreeChord(parallel, degree);
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'chord-choice';
+            button.innerHTML = `<strong>${chord.degreeSymbol} ${chord.name}</strong><span>${scaleLabel(parallel)} · ${chord.midi.map(midi => midiName(midi, parallel)).join(' ')}</span>`;
+            button.addEventListener('click', () => addScaleChord(cadence.id, parallel, degree));
+            parallelPanel.querySelector('.chord-palette').appendChild(button);
+        }
+        modulationTools.appendChild(parallelPanel);
+
+        article.appendChild(modulationTools);
+
+        const list = document.createElement('div');
+        list.className = 'chord-list';
+        if (!cadence.chords.length) {
+            list.innerHTML = '<div class="empty-cadence">Choose a chord. Its scale will be inherited by the next chord unless you change it.</div>';
+        } else {
+            cadence.chords.forEach((chord, chordIndex) => list.appendChild(renderChordRow(cadence, chord, chordIndex)));
+        }
+        article.appendChild(list);
+        return article;
+    }
+    function renderChordRow(cadence, chord, chordIndex) {
+        if (!DURATIONS.some(duration => duration.id === chord.duration)) chord.duration = '1/4';
+        const previousChord = chordIndex > 0 ? cadence.chords[chordIndex - 1] : null;
+        const inheritedScale = previousChord ? previousChord.scale : (chord.inheritedScale || chord.scale);
+        const relationship = scaleRelationship(inheritedScale, chord.scale);
+        const analysis = analyzeChordInScale(chord, chord.scale);
+        chord.degree = analysis.degree;
+        chord.degreeSymbol = analysis.degreeSymbol;
+        chord.function = analysis.function;
+        chord.gateway = analysis.gateway;
+        const rootName = noteName(chord.midi[0], chord.scale);
+        const quality = chordQuality(chord.midi.map(note => mod(note - chord.midi[0])));
+        chord.name = rootName + quality;
+        const row = document.createElement('div');
+        row.className = 'chord-row';
+        row.tabIndex = -1;
+        row.dataset.chordId = chord.id;
+        row.innerHTML = `
+            <div class="sequence">${String(chordIndex + 1).padStart(2, '0')}</div>
+            <div class="chord-main"><div class="chord-name">${chord.name}</div><div class="function">Root ${rootName} · ${quality}</div></div>
+            <div class="chord-info-line">
+                <div class="notes-block"><div class="eyebrow">Notes</div><div class="notes">${chord.midi.map(midi => midiName(midi, chord.scale)).join('  ')}</div></div>
+                <div class="context-block"><div class="context"><span class="tag">${scaleLabel(chord.scale)} scale</span><span class="tag degree">${analysis.fits ? chord.degreeSymbol : 'chromatic chord'}</span>${relationship.key === 'inherited' ? '' : `<span class="tag transition ${relationship.key === 'gateway' ? 'gateway' : ''}">${relationship.label}</span>`}</div><div class="function">${chord.function}</div></div>
+            </div>
+            <div class="chord-edit-line">
+                <label class="chord-scale-field"><span class="eyebrow">Scale for this chord</span><select class="chord-scale-select" aria-label="Scale for ${chord.name}"></select><span class="fit-message">${analysis.fits ? `<strong>Fits:</strong> ${chord.degreeSymbol} in ${scaleLabel(chord.scale)}` : `<strong>Outside scale:</strong> this is a chromatic chord in ${scaleLabel(chord.scale)}`}</span></label>
+                <label class="duration-field"><span class="eyebrow">Length</span><select class="duration-select" aria-label="Length of ${chord.name}">${DURATIONS.map(duration => `<option value="${duration.id}"${duration.id === chord.duration ? ' selected' : ''}>${duration.label}</option>`).join('')}</select></label>
+            </div>
+            <div class="row-actions"><button class="icon-button move move-earlier" type="button" aria-label="Move ${chord.name} earlier" title="Swap with previous chord"${chordIndex === 0 ? ' disabled' : ''}>↑</button><button class="icon-button move move-later" type="button" aria-label="Move ${chord.name} later" title="Swap with next chord"${chordIndex === cadence.chords.length - 1 ? ' disabled' : ''}>↓</button><button class="icon-button play" type="button" aria-label="Play ${chord.name}">▶</button><button class="icon-button remove" type="button" aria-label="Remove ${chord.name}">×</button></div>`;
+        const scaleSelect = row.querySelector('.chord-scale-select');
+        appendChordScaleOptions(scaleSelect, cadence, chord, chordIndex);
+        scaleSelect.addEventListener('change', event => {
+            chord.scale = parseScale(event.target.value);
+            if (chordIndex === cadence.chords.length - 1) cadence.scale = { ...chord.scale };
+            scheduleSave();
+            render();
+        });
+        row.querySelector('.duration-select').addEventListener('change', event => {
+            chord.duration = event.target.value;
+            scheduleSave();
+            render();
+        });
+        row.querySelector('.move-earlier').addEventListener('click', () => swapChord(cadence, chordIndex, -1));
+        row.querySelector('.move-later').addEventListener('click', () => swapChord(cadence, chordIndex, 1));
+        row.querySelector('.play').addEventListener('click', () => {
+            stopPlayback();
+            showPlayedChord(cadence.title, chord);
+            row.classList.add('is-playing');
+            const auditionDuration = durationMs(chord);
+            playChord(chord, auditionDuration);
+            playbackTimer = setTimeout(stopPlayback, auditionDuration);
+        });
+        row.querySelector('.remove').addEventListener('click', () => {
+            cadence.chords.splice(chordIndex, 1);
+            if (cadence.chords.length) cadence.scale = { ...cadence.chords[cadence.chords.length - 1].scale };
+            scheduleSave();
+            render();
+        });
+        return row;
+    }
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' })[character]);
+    }
+    function render() {
+        stopPlayback();
+        songTitle.value = state.title;
+        bpmInput.value = state.bpm;
+        cadencesEl.innerHTML = '';
+        state.cadences.forEach((cadence, index) => cadencesEl.appendChild(renderCadence(cadence, index)));
+    }
+
+    songTitle.addEventListener('input', event => { state.title = event.target.value; scheduleSave(); });
+    bpmInput.addEventListener('input', event => {
+        const value = Number(event.target.value);
+        if (value >= 40 && value <= 240) {
+            state.bpm = value;
+            scheduleSave();
+        }
+    });
+    bpmInput.addEventListener('change', event => {
+        state.bpm = Math.max(40, Math.min(240, Number(event.target.value) || 100));
+        bpmInput.value = state.bpm;
+        scheduleSave();
+    });
+    addCadenceButton.addEventListener('click', () => {
+        const previous = state.cadences[state.cadences.length - 1];
+        const previousChord = previous && previous.chords[previous.chords.length - 1];
+        const scale = previousChord ? previousChord.scale : (previous ? previous.scale : { tonic: 0, mode: 'major' });
+        state.cadences.push(defaultCadence(state.cadences.length, scale));
+        scheduleSave();
+        render();
+        cadencesEl.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    render();
+})();
+</script>
+<script>
+    window.PWA_UPDATE_CONFIG = {
+        serviceWorkerUrl: 'sw.js?v=19',
+        updateUrl: './',
+        storageKey: 'scales-planner-hash',
+        autoCheck: true
+    };
+</script>
+<script src="../pwa/update-pwa.js?v=6"></script>
+</body>
+</html>

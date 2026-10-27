@@ -1,0 +1,17 @@
+{
+  "name": "Scales Planner",
+  "short_name": "Scales",
+  "description": "Plan songs as scale-aware chord cadences.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f2df",
+  "theme_color": "#dfe8d3",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

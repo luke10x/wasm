@@ -1,0 +1,17 @@
+{
+  "name": "Scales Infographic",
+  "short_name": "Scale Atlas",
+  "description": "Explore scale notation, seventh chords, harmonic functions, related scales, and common progressions.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4edda",
+  "theme_color": "#183f4c",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

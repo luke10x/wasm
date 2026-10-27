@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#183f4c" />
+    <meta name="description" content="A visual atlas of major and harmonic minor scales, seventh chords, harmonic functions, and common progressions." />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <title>Scales Infographic</title>
+    <style>
+        :root {
+            --ink: #17323a;
+            --ocean: #183f4c;
+            --ocean-soft: #2d6270;
+            --paper: #f4edda;
+            --paper-light: #fffaf0;
+            --line: #b9aa88;
+            --muted: #6e756f;
+            --sun: #e6a53e;
+            --coral: #d76b4b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { min-height: 100%; background: var(--ocean); }
+        body {
+            min-height: 100dvh; padding: 18px; color: var(--ink);
+            font-family: ui-sans-serif, "Avenir Next", "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 12% 8%, rgba(230,165,62,.28), transparent 27rem),
+                repeating-linear-gradient(118deg, transparent 0 34px, rgba(255,255,255,.025) 35px 36px),
+                linear-gradient(150deg, #123743, #255664 55%, #153945);
+        }
+        button, input { font: inherit; }
+        .app {
+            width: min(100%, 1180px); min-height: calc(100dvh - 36px); margin: 0 auto; padding: 18px;
+            border: 1px solid rgba(255,255,255,.18); border-radius: 28px;
+            background: rgba(244,237,218,.97); box-shadow: 0 28px 80px rgba(3,24,31,.34);
+        }
+        .header { display: flex; align-items: center; gap: 12px; }
+        .home-menu {
+            width: 40px; height: 40px; display: inline-flex; flex-direction: column; justify-content: center;
+            gap: 4px; padding: 0 9px; border: 1px solid #8ea0a1; border-radius: 11px;
+            background: rgba(255,255,255,.5); flex: 0 0 auto;
+        }
+        .home-menu span { height: 2px; border-radius: 99px; background: var(--ocean); }
+        @media (display-mode: standalone), (display-mode: window-controls-overlay) { .home-menu { display: none; } }
+        html.pwa-standalone .home-menu { display: none; }
+        h1 { color: var(--ocean); font: 800 clamp(27px, 5vw, 44px)/.95 Georgia, serif; letter-spacing: -.025em; }
+        .subtitle { margin-top: 5px; color: var(--muted); font-size: 12px; }
+        pwa-check-update {
+            display: inline-block; margin-left: auto; flex-shrink: 0;
+            --pwa-update-border: #82999c; --pwa-update-color: var(--ocean);
+            --pwa-update-hover-bg: #d8e4df; --pwa-popover-bg: var(--paper-light);
+            --pwa-popover-border: var(--line); --pwa-popover-color: var(--ink); --pwa-popover-muted: var(--muted);
+        }
+        .btn-check-update { padding: 8px 11px; border: 1px solid #82999c; border-radius: 10px; background: #f7f5e9; color: var(--ocean); }
+        .intro {
+            display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: end;
+            margin: 18px 0 12px; padding: 16px; border: 1px solid #9d987f; border-radius: 18px;
+            background: linear-gradient(115deg, #fff8e6, #dce9e1);
+        }
+        .intro h2 { color: var(--ocean); font: 800 22px/1.1 Georgia, serif; }
+        .intro p { max-width: 720px; margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+        .scale-count { color: var(--coral); font: 900 34px/1 Georgia, serif; white-space: nowrap; }
+        .scale-count small { display: block; margin-top: 4px; color: var(--muted); font: 800 9px/1 sans-serif; letter-spacing: .13em; text-align: right; text-transform: uppercase; }
+        .toolbar {
+            display: grid; grid-template-columns: minmax(180px, 1fr) auto auto; gap: 9px; margin-bottom: 13px;
+        }
+        .search {
+            min-height: 44px; width: 100%; padding: 0 13px; border: 1px solid #8fa09b; border-radius: 12px;
+            background: #fffdf5; color: var(--ink); outline: none;
+        }
+        .search:focus { border-color: var(--ocean-soft); box-shadow: 0 0 0 3px rgba(45,98,112,.14); }
+        .mode-filter { display: flex; padding: 3px; border: 1px solid #8fa09b; border-radius: 12px; background: #e4ebe2; }
+        .mode-filter button, .expand-all {
+            min-height: 36px; padding: 0 11px; border: 0; border-radius: 9px; background: transparent;
+            color: var(--ocean); font-size: 11px; font-weight: 850; cursor: pointer; white-space: nowrap;
+        }
+        .mode-filter button.active { background: var(--ocean); color: white; }
+        .expand-all { min-height: 44px; border: 1px solid #b38b4b; background: #fff3cf; color: #6b4a15; }
+        .scale-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+        .scale-card {
+            --accent: hsl(var(--hue) 52% 42%);
+            --wash: hsl(var(--hue) 48% 93%);
+            overflow: hidden; border: 1px solid color-mix(in srgb, var(--accent) 55%, #9e957d); border-radius: 18px;
+            background: var(--paper-light); box-shadow: 0 8px 20px rgba(34,52,49,.09);
+        }
+        .scale-card[open] { grid-column: 1 / -1; }
+        .scale-card summary {
+            min-height: 90px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 13px; align-items: center;
+            padding: 13px 15px; background: linear-gradient(105deg, var(--wash), #fffdf5); cursor: pointer; list-style: none;
+        }
+        .scale-card summary::-webkit-details-marker { display: none; }
+        .scale-card summary::before {
+            content: counter(scale-card, decimal-leading-zero); counter-increment: scale-card;
+            width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%;
+            background: var(--accent); color: white; font: 800 11px/1 ui-monospace, monospace;
+        }
+        .scale-grid { counter-reset: scale-card; }
+        .scale-title { color: var(--ocean); font: 800 24px/1 Georgia, serif; }
+        .scale-notes { margin-top: 6px; color: var(--muted); font: 700 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+        .mode-badge { padding: 7px 9px; border-radius: 99px; background: var(--accent); color: white; font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+        .scale-card[open] summary { border-bottom: 1px solid color-mix(in srgb, var(--accent) 30%, #c5baa0); }
+        .scale-body { padding: 15px; }
+        .scale-overview { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(250px, .85fr); gap: 14px; }
+        .staff-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+        .staff-card { border: 1px solid color-mix(in srgb, var(--accent) 30%, #c3b99f); border-radius: 14px; background: #173d49; overflow: hidden; }
+        .staff-label { padding: 7px 10px 0; color: #f1d08a; font-size: 9px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+        .staff-card svg { display: block; width: 100%; height: auto; }
+        .description {
+            min-height: 100%; padding: 15px; border-radius: 14px; background: var(--wash);
+            border-left: 5px solid var(--accent); color: #44534f; font-size: 13px; line-height: 1.55;
+        }
+        .description strong { display: block; margin-bottom: 6px; color: var(--ocean); font: 800 18px/1.1 Georgia, serif; }
+        .section-title { margin: 18px 0 8px; color: var(--ocean); font: 800 18px/1 Georgia, serif; }
+        .section-title span { color: var(--accent); }
+        .table-wrap { overflow-x: auto; border: 1px solid #c7bea8; border-radius: 13px; background: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { padding: 9px 10px; background: var(--wash); color: var(--ocean); font-size: 9px; letter-spacing: .09em; text-align: left; text-transform: uppercase; white-space: nowrap; }
+        td { padding: 9px 10px; border-top: 1px solid #e8e1d2; vertical-align: top; line-height: 1.35; }
+        tbody tr:hover { background: #fffaf0; }
+        .roman { color: var(--accent); font-weight: 900; white-space: nowrap; }
+        .chord-name { color: var(--ocean); font: 800 15px/1 Georgia, serif; white-space: nowrap; }
+        .tracker { font: 750 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
+        .function-tag { display: inline-block; padding: 4px 7px; border-radius: 99px; background: var(--wash); color: var(--ocean); font-weight: 850; white-space: nowrap; }
+        .other-scales { min-width: 250px; color: #58635f; }
+        .other-scales b { color: var(--ocean); }
+        .progression-chords { color: var(--ocean); font-weight: 750; }
+        .empty { grid-column: 1 / -1; padding: 40px 15px; border: 1px dashed #9e977f; border-radius: 16px; color: var(--muted); text-align: center; }
+        @media (max-width: 820px) {
+            .scale-grid { grid-template-columns: 1fr; }
+            .scale-card[open] { grid-column: auto; }
+            .scale-overview { grid-template-columns: 1fr; }
+            .toolbar { grid-template-columns: 1fr auto; }
+            .search { grid-column: 1 / -1; }
+        }
+        @media (max-width: 590px) {
+            body { padding: 0; }
+            .app { min-height: 100dvh; padding: 11px 8px 18px; border-radius: 0; }
+            .subtitle { display: none; }
+            .intro { grid-template-columns: 1fr; }
+            .scale-count { display: none; }
+            .toolbar { grid-template-columns: 1fr; }
+            .search, .mode-filter, .expand-all { grid-column: 1; width: 100%; }
+            .mode-filter button { flex: 1; padding-inline: 5px; }
+            .staff-pair { grid-template-columns: 1fr; }
+            .scale-card summary { grid-template-columns: auto minmax(0, 1fr); }
+            .mode-badge { grid-column: 2; justify-self: start; }
+            .scale-title { font-size: 21px; }
+            .scale-body { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+<main class="app">
+    <header class="header">
+        <a class="home-menu" href="../" aria-label="Open music tools index"><span></span><span></span><span></span></a>
+        <div><h1>Scales Infographic</h1><p class="subtitle">Notation, seventh chords, harmonic functions, and progression maps.</p></div>
+        <pwa-check-update><button class="btn-check-update" type="button" onclick="location.reload()">Install</button></pwa-check-update>
+    </header>
+
+    <section class="intro">
+        <div><h2>A visual atlas for harmony</h2><p>Open any scale to compare treble and bass notation, inspect every diatonic seventh chord, find the same chord in other scales, and translate common cadence formulas into actual chord names.</p></div>
+        <div class="scale-count"><span id="visibleCount">24</span><small>scales shown</small></div>
+    </section>
+
+    <section class="toolbar" aria-label="Scale filters">
+        <input class="search" id="search" type="search" placeholder="Find a scale, chord, or function..." autocomplete="off" />
+        <div class="mode-filter" role="group" aria-label="Filter by scale family">
+            <button class="active" type="button" data-mode="all">All</button>
+            <button type="button" data-mode="major">Major</button>
+            <button type="button" data-mode="minor">Harmonic minor</button>
+        </div>
+        <button class="expand-all" id="expandAll" type="button">Expand all</button>
+    </section>
+
+    <section class="scale-grid" id="scaleGrid" aria-live="polite"></section>
+</main>
+
+<script>
+(() => {
+    'use strict';
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const SHARP_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    const MODE_TONICS = {
+        major: ['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'],
+        minor: ['C','C#','D','Eb','E','F','F#','G','G#','A','Bb','B']
+    };
+    const SCALE_INTERVALS = {
+        major: [0,2,4,5,7,9,11],
+        minor: [0,2,3,5,7,8,11]
+    };
+    const DEGREE_SYMBOLS = {
+        major: ['Imaj7','ii7','iii7','IVmaj7','V7','vi7','viiø7'],
+        minor: ['i(mMaj7)','iiø7','III+maj7','iv7','V7','VImaj7','vii°7']
+    };
+    const FUNCTIONS = {
+        major: ['Tonic','Predominant','Tonic color','Predominant','Dominant','Tonic substitute','Leading tone'],
+        minor: ['Tonic','Predominant','Color','Predominant','Dominant','Color','Leading tone']
+    };
+    const PROGRESSIONS = {
+        major: [
+            { name: 'Pop', label: 'I–V–vi–IV', degrees: [0,4,5,3] },
+            { name: 'Jazz cadence', label: 'ii–V–I', degrees: [1,4,0] },
+            { name: 'Classic', label: 'I–IV–V–I', degrees: [0,3,4,0] },
+            { name: 'Sad', label: 'vi–IV–I–V', degrees: [5,3,0,4] },
+            { name: 'Dramatic', label: 'I–vi–IV–V', degrees: [0,5,3,4] }
+        ],
+        minor: [
+            { name: 'Minor cadence', label: 'i–iv–V–i', degrees: [0,3,4,0] },
+            { name: 'Minor jazz', label: 'iiø–V–i', degrees: [1,4,0] },
+            { name: 'Sad', label: 'i–iv–VI–V', degrees: [0,3,5,4] },
+            { name: 'Dramatic', label: 'i–VI–iv–V', degrees: [0,5,3,4] },
+            { name: 'Leading tone', label: 'i–iv–vii°–i', degrees: [0,3,6,0] }
+        ]
+    };
+    const SIGNATURES = {
+        major: [0,-5,2,-3,4,-1,6,1,-4,3,-2,5],
+        minor: [-3,4,-1,-6,1,-4,3,-2,5,0,-5,2]
+    };
+    const NATURAL_PC = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+    const LETTERS = ['C','D','E','F','G','A','B'];
+    const scaleGrid = document.getElementById('scaleGrid');
+    const searchInput = document.getElementById('search');
+    const visibleCount = document.getElementById('visibleCount');
+    const expandAll = document.getElementById('expandAll');
+    let activeMode = 'all';
+    let allExpanded = false;
+
+    function mod(value, base = 12) { return ((value % base) + base) % base; }
+    function modeLabel(mode) { return mode === 'major' ? 'Major' : 'Harmonic minor'; }
+    function scaleLabel(scale) { return `${MODE_TONICS[scale.mode][scale.tonic]} ${modeLabel(scale.mode).toLowerCase()}`; }
+    function fancy(text) { return text.replaceAll('bb', '♭♭').replaceAll('##', '♯♯').replaceAll('b', '♭').replaceAll('#', '♯'); }
+    function scaleId(scale) { return `${scale.tonic}:${scale.mode}`; }
+    function accidentalValue(name) {
+        let value = 0;
+        for (const char of name.slice(1)) value += char === '#' ? 1 : char === 'b' ? -1 : 0;
+        return value;
+    }
+    function spellScale(scale) {
+        const tonicName = MODE_TONICS[scale.mode][scale.tonic];
+        const tonicLetter = LETTERS.indexOf(tonicName[0]);
+        return SCALE_INTERVALS[scale.mode].map((interval, degree) => {
+            const letter = LETTERS[(tonicLetter + degree) % 7];
+            const targetPc = mod(scale.tonic + interval);
+            let accidental = mod(targetPc - NATURAL_PC[letter]);
+            if (accidental > 6) accidental -= 12;
+            const suffix = accidental > 0 ? '#'.repeat(accidental) : 'b'.repeat(-accidental);
+            return letter + suffix;
+        });
+    }
+    function noteOctaveForSpelling(midi, name) {
+        const accidental = accidentalValue(name);
+        for (let octave = 0; octave <= 8; octave++) {
+            if ((octave + 1) * 12 + NATURAL_PC[name[0]] + accidental === midi) return octave;
+        }
+        return Math.floor(midi / 12) - 1;
+    }
+    function midiName(midi) {
+        const name = SHARP_NAMES[mod(midi)];
+        const octave = Math.floor(midi / 12) - 1;
+        return `${name}${octave}`;
+    }
+    function quality(intervals) {
+        return {
+            '0,4,7,11': 'maj7', '0,4,7,10': '7', '0,3,7,10': 'm7',
+            '0,3,6,10': 'ø7', '0,3,6,9': '°7', '0,3,7,11': 'mMaj7',
+            '0,4,8,11': '+maj7'
+        }[intervals.join(',')] || '7th';
+    }
+    function buildChord(scale, degree) {
+        const intervals = SCALE_INTERVALS[scale.mode];
+        const names = spellScale(scale);
+        const midi = [];
+        const chordNames = [];
+        for (let stack = 0; stack < 4; stack++) {
+            const scaleIndex = degree + stack * 2;
+            midi.push(60 + scale.tonic + intervals[scaleIndex % 7] + Math.floor(scaleIndex / 7) * 12);
+            chordNames.push(names[scaleIndex % 7]);
+        }
+        const normalized = midi.map(note => mod(note - midi[0]));
+        return {
+            scale, degree, midi, names: chordNames,
+            name: fancy(chordNames[0]) + quality(normalized),
+            roman: DEGREE_SYMBOLS[scale.mode][degree],
+            function: FUNCTIONS[scale.mode][degree],
+            pitchKey: [...new Set(midi.map(note => mod(note)))].sort((a, b) => a - b).join(',')
+        };
+    }
+    const ALL_SCALES = ['major','minor'].flatMap(mode => MODE_TONICS[mode].map((_, tonic) => ({ tonic, mode })));
+    const ALL_CHORDS = ALL_SCALES.flatMap(scale => Array.from({ length: 7 }, (_, degree) => buildChord(scale, degree)));
+
+    function crossScaleMatches(chord) {
+        return ALL_CHORDS.filter(candidate => candidate.pitchKey === chord.pitchKey && scaleId(candidate.scale) !== scaleId(chord.scale));
+    }
+    function relativeLabel(scale) {
+        const relative = scale.mode === 'major'
+            ? { tonic: mod(scale.tonic + 9), mode: 'minor' }
+            : { tonic: mod(scale.tonic + 3), mode: 'major' };
+        return scaleLabel(relative);
+    }
+    function signatureText(scale) {
+        const count = SIGNATURES[scale.mode][scale.tonic];
+        if (!count) return 'no sharps or flats';
+        return `${Math.abs(count)} ${count > 0 ? (count === 1 ? 'sharp' : 'sharps') : (count === -1 ? 'flat' : 'flats')}`;
+    }
+    function description(scale) {
+        if (scale.mode === 'major') {
+            return `<strong>${fancy(scaleLabel(scale))}</strong>A stable major collection with a clear tonic, predominant, and dominant path. Its relative harmonic-minor reference is ${fancy(relativeLabel(scale))}; its key signature has ${signatureText(scale)}.`;
+        }
+        return `<strong>${fancy(scaleLabel(scale))}</strong>A minor collection with a raised seventh degree, creating a major V7 and a strong leading-tone pull into the tonic. Its relative major is ${fancy(relativeLabel(scale))}; its underlying key signature has ${signatureText(scale)}.`;
+    }
+    function signatureMap(scale) {
+        const count = SIGNATURES[scale.mode][scale.tonic];
+        const order = count > 0 ? ['F','C','G','D','A','E','B'] : ['B','E','A','D','G','C','F'];
+        const symbol = count > 0 ? '#' : 'b';
+        return new Map(order.slice(0, Math.abs(count)).map(letter => [letter, symbol]));
+    }
+    function svgEl(tag, attrs = {}, text = '') {
+        const element = document.createElementNS(SVG_NS, tag);
+        Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+        if (text) element.textContent = text;
+        return element;
+    }
+    function staffY(midi, name, clef) {
+        const octave = noteOctaveForSpelling(midi, name);
+        const letterIndex = LETTERS.indexOf(name[0]);
+        const bottomLineIndex = clef === 'treble' ? 30 : 18;
+        return 102 - (octave * 7 + letterIndex - bottomLineIndex) * 6;
+    }
+    function drawLedger(svg, x, y) {
+        if (y > 102) for (let lineY = 114; lineY <= y + 2; lineY += 12) svg.appendChild(svgEl('line', { x1:x-10, y1:lineY, x2:x+10, y2:lineY, stroke:'#e0d5b2', 'stroke-width':'1.2' }));
+        if (y < 54) for (let lineY = 42; lineY >= y - 2; lineY -= 12) svg.appendChild(svgEl('line', { x1:x-10, y1:lineY, x2:x+10, y2:lineY, stroke:'#e0d5b2', 'stroke-width':'1.2' }));
+    }
+    function drawSignature(svg, scale, clef) {
+        const count = SIGNATURES[scale.mode][scale.tonic];
+        if (!count) return 0;
+        const sharpTreble = [{m:78,n:'F#'},{m:73,n:'C#'},{m:80,n:'G#'},{m:75,n:'D#'},{m:70,n:'A#'},{m:77,n:'E#'}];
+        const sharpBass = [{m:54,n:'F#'},{m:49,n:'C#'},{m:56,n:'G#'},{m:51,n:'D#'},{m:46,n:'A#'},{m:53,n:'E#'}];
+        const flatTreble = [{m:70,n:'Bb'},{m:75,n:'Eb'},{m:68,n:'Ab'},{m:73,n:'Db'},{m:66,n:'Gb'},{m:71,n:'Cb'}];
+        const flatBass = [{m:46,n:'Bb'},{m:51,n:'Eb'},{m:44,n:'Ab'},{m:49,n:'Db'},{m:42,n:'Gb'},{m:47,n:'Cb'}];
+        const source = count > 0 ? (clef === 'treble' ? sharpTreble : sharpBass) : (clef === 'treble' ? flatTreble : flatBass);
+        source.slice(0, Math.min(6, Math.abs(count))).forEach((note, index) => {
+            svg.appendChild(svgEl('text', { x:55+index*9, y:staffY(note.m, note.n, clef), fill:'#f1d08a', 'font-size':'18', 'font-family':'Arial', 'font-weight':'700', 'text-anchor':'middle', 'dominant-baseline':'central' }, count > 0 ? '♯' : '♭'));
+        });
+        return Math.min(6, Math.abs(count));
+    }
+    function noteAccidental(name, sigMap) {
+        const desired = name.slice(1);
+        const signature = sigMap.get(name[0]) || '';
+        if (desired === signature) return '';
+        if (!desired && signature) return '♮';
+        return fancy(desired);
+    }
+    function createStaff(scale, clef) {
+        const svg = svgEl('svg', { viewBox:'0 0 460 145', role:'img', 'aria-label':`${fancy(scaleLabel(scale))} in ${clef} clef` });
+        for (let line = 0; line < 5; line++) svg.appendChild(svgEl('line', { x1:'18', y1:102-line*12, x2:'442', y2:102-line*12, stroke:'#bfae79', 'stroke-width':'1.2', opacity:'.85' }));
+        svg.appendChild(svgEl('text', { x:'28', y:clef === 'treble' ? '78' : '77', fill:'#f2e4bb', 'font-size':clef === 'treble' ? '55' : '45', 'font-family':'"Segoe UI Symbol", "Noto Music", serif', 'text-anchor':'middle', 'dominant-baseline':'central' }, clef === 'treble' ? '𝄞' : '𝄢'));
+        const signatureCount = drawSignature(svg, scale, clef);
+        const startX = 116 + signatureCount * 4;
+        const names = spellScale(scale);
+        const intervals = SCALE_INTERVALS[scale.mode];
+        const base = (clef === 'treble' ? 60 : 48) + scale.tonic;
+        const sigMap = signatureMap(scale);
+        names.forEach((name, index) => {
+            const midi = base + intervals[index];
+            const x = startX + index * 43;
+            const y = staffY(midi, name, clef);
+            drawLedger(svg, x, y);
+            const accidental = noteAccidental(name, sigMap);
+            if (accidental) svg.appendChild(svgEl('text', { x:x-13, y, fill:'#f1d08a', 'font-size':'15', 'font-family':'Arial', 'text-anchor':'middle', 'dominant-baseline':'central' }, accidental));
+            svg.appendChild(svgEl('ellipse', { cx:x, cy:y, rx:'8', ry:'5.5', fill:'#fff7dc', transform:`rotate(-12 ${x} ${y})` }));
+            svg.appendChild(svgEl('text', { x, y:'132', fill:'#a9c5c8', 'font-size':'9', 'font-family':'ui-monospace, monospace', 'text-anchor':'middle' }, fancy(name)));
+        });
+        return svg;
+    }
+    function staffCard(scale, clef) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'staff-card';
+        wrapper.innerHTML = `<div class="staff-label">${clef} clef</div>`;
+        wrapper.appendChild(createStaff(scale, clef));
+        return wrapper;
+    }
+    function chordRows(scale) {
+        return Array.from({ length: 7 }, (_, degree) => {
+            const chord = buildChord(scale, degree);
+            const matches = crossScaleMatches(chord);
+            const matchText = matches.length
+                ? matches.map(match => `<b>${fancy(scaleLabel(match.scale))}</b> ${match.roman}`).join(' · ')
+                : 'Unique in this atlas';
+            return `<tr><td class="roman">${chord.roman}</td><td><span class="chord-name">${chord.name}</span></td><td class="tracker">${chord.midi.map(midiName).join(' ')}</td><td><span class="function-tag">${chord.function}</span></td><td class="other-scales">${matchText}</td></tr>`;
+        }).join('');
+    }
+    function progressionRows(scale) {
+        return PROGRESSIONS[scale.mode].map(progression => {
+            const chords = progression.degrees.map(degree => buildChord(scale, degree).name).join(' → ');
+            return `<tr><td><strong>${progression.name}</strong></td><td class="roman">${progression.label}</td><td class="progression-chords">${chords}</td></tr>`;
+        }).join('');
+    }
+    function createScaleCard(scale, index) {
+        const names = spellScale(scale);
+        const details = document.createElement('details');
+        details.className = 'scale-card';
+        details.dataset.mode = scale.mode;
+        details.dataset.search = `${scaleLabel(scale)} ${names.join(' ')} ${Array.from({length:7},(_,degree)=>buildChord(scale,degree).name).join(' ')} ${FUNCTIONS[scale.mode].join(' ')}`.toLowerCase();
+        details.style.setProperty('--hue', String((scale.tonic * 29 + (scale.mode === 'minor' ? 15 : 185)) % 360));
+        if (index === 0) details.open = true;
+        details.innerHTML = `<summary><div><div class="scale-title">${fancy(scaleLabel(scale))}</div><div class="scale-notes">${names.map(fancy).join('  ')}</div></div><span class="mode-badge">${modeLabel(scale.mode)}</span></summary>`;
+        const body = document.createElement('div');
+        body.className = 'scale-body';
+        body.innerHTML = `
+            <div class="scale-overview"><div class="staff-pair"></div><div class="description">${description(scale)}</div></div>
+            <h3 class="section-title"><span>01</span> Diatonic seventh chords</h3>
+            <div class="table-wrap"><table><thead><tr><th>Degree</th><th>Chord</th><th>Tracker notes</th><th>Harmonic function</th><th>Other scales containing this chord</th></tr></thead><tbody>${chordRows(scale)}</tbody></table></div>
+            <h3 class="section-title"><span>02</span> Common progressions</h3>
+            <div class="table-wrap"><table><thead><tr><th>Character</th><th>Formula</th><th>Chords in ${fancy(scaleLabel(scale))}</th></tr></thead><tbody>${progressionRows(scale)}</tbody></table></div>`;
+        const pair = body.querySelector('.staff-pair');
+        pair.appendChild(staffCard(scale, 'treble'));
+        pair.appendChild(staffCard(scale, 'bass'));
+        details.appendChild(body);
+        return details;
+    }
+    function renderScales() {
+        scaleGrid.innerHTML = '';
+        const query = searchInput.value.trim().toLowerCase();
+        const matching = ALL_SCALES.filter(scale => {
+            const cardSearch = `${scaleLabel(scale)} ${spellScale(scale).join(' ')} ${Array.from({length:7},(_,degree)=>buildChord(scale,degree).name).join(' ')} ${FUNCTIONS[scale.mode].join(' ')}`.toLowerCase();
+            return (activeMode === 'all' || scale.mode === activeMode) && (!query || cardSearch.includes(query));
+        });
+        matching.forEach((scale, index) => {
+            const originalIndex = ALL_SCALES.findIndex(candidate => scaleId(candidate) === scaleId(scale));
+            const card = createScaleCard(scale, originalIndex);
+            if (allExpanded) card.open = true;
+            scaleGrid.appendChild(card);
+        });
+        if (!matching.length) scaleGrid.innerHTML = '<div class="empty">No scale matches that search.</div>';
+        visibleCount.textContent = String(matching.length);
+    }
+    searchInput.addEventListener('input', renderScales);
+    document.querySelectorAll('.mode-filter button').forEach(button => button.addEventListener('click', () => {
+        document.querySelectorAll('.mode-filter button').forEach(item => item.classList.toggle('active', item === button));
+        activeMode = button.dataset.mode;
+        renderScales();
+    }));
+    expandAll.addEventListener('click', () => {
+        allExpanded = !allExpanded;
+        document.querySelectorAll('.scale-card').forEach(card => { card.open = allExpanded; });
+        expandAll.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+    });
+    renderScales();
+})();
+</script>
+<script>
+    window.PWA_UPDATE_CONFIG = {
+        serviceWorkerUrl: 'sw.js?v=2',
+        updateUrl: './',
+        storageKey: 'scales-infographic-hash',
+        autoCheck: true
+    };
+</script>
+<script src="../pwa/update-pwa.js?v=6"></script>
+</body>
+</html>
