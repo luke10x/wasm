@@ -55,7 +55,7 @@
         }
         .btn-check-update { border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; color: var(--forest); background: rgba(255,255,255,.45); }
         .plan-bar {
-            display: grid; grid-template-columns: minmax(0, 1fr) 82px auto; gap: 10px; align-items: end;
+            display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: end;
             margin: 16px 0 12px; padding: 13px; border: 1px solid var(--line); border-radius: 16px;
             background: rgba(255,255,255,.5);
         }
@@ -64,10 +64,6 @@
         .song-title {
             width: 100%; min-height: 40px; padding: 0 10px; border: 0; border-bottom: 2px solid var(--forest);
             background: transparent; color: var(--ink); font: 700 21px/1 Georgia, serif; outline: none;
-        }
-        .tempo-input {
-            width: 100%; min-height: 40px; padding: 0 8px; border: 1px solid var(--line); border-radius: 9px;
-            background: var(--cream); color: var(--ink); font-weight: 800; text-align: center;
         }
         .save-state { padding-bottom: 9px; color: var(--muted); font-size: 11px; white-space: nowrap; }
         .playback-status {
@@ -84,10 +80,10 @@
         .cadences { display: grid; gap: 13px; }
         .cadence {
             overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--cream);
-            box-shadow: 0 9px 24px rgba(42,64,44,.1);
+            box-shadow: 0 9px 24px rgba(42,64,44,.1); transition: height .22s cubic-bezier(.2,.8,.2,1), opacity .15s ease;
         }
         .cadence-head {
-            display: grid; grid-template-columns: minmax(150px, .7fr) minmax(210px, 1fr) auto auto auto; gap: 10px;
+            display: grid; grid-template-columns: auto minmax(150px, .7fr) minmax(210px, 1fr) auto auto; gap: 10px;
             align-items: end; padding: 13px; background: linear-gradient(110deg, var(--sage), #eef2df);
             border-bottom: 1px solid var(--line);
         }
@@ -107,7 +103,7 @@
         .play-cadence:disabled { opacity: .4; cursor: default; }
         .cadence-order { display: flex; gap: 5px; }
         .cadence-move {
-            width: 34px; min-height: 40px; border: 1px solid #a8bec9; border-radius: 10px;
+            width: 38px; min-height: 40px; border: 1px solid #a8bec9; border-radius: 10px;
             background: #f3f8fa; color: #315669; font-weight: 900; cursor: pointer;
         }
         .cadence-move:disabled { opacity: .28; cursor: default; }
@@ -118,7 +114,6 @@
             grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px;
             color: var(--muted); font-size: 11px; line-height: 1.35;
         }
-        .section-length { color: var(--forest); font-weight: 850; white-space: nowrap; }
         .progression-area { padding: 11px 13px 5px; }
         .progression-list { display: flex; gap: 7px; margin-top: 7px; overflow-x: auto; padding-bottom: 5px; }
         .progression-split { display: grid; grid-template-columns: max-content 36px; flex: 0 0 auto; }
@@ -198,8 +193,9 @@
         .chord-list { border-top: 1px solid #dce3d2; }
         .empty-cadence { padding: 18px 13px; color: var(--muted); font-size: 13px; text-align: center; }
         .chord-row {
-            display: grid; grid-template-columns: 38px minmax(80px, .5fr) minmax(120px, .75fr) minmax(110px, .65fr) minmax(170px, 1fr) 76px auto;
+            display: grid; grid-template-columns: 38px minmax(80px, .5fr) minmax(120px, .75fr) minmax(110px, .65fr) minmax(170px, 1fr) auto;
             gap: 10px; align-items: center; min-height: 72px; padding: 9px 13px; border-top: 1px solid #e1e6d9;
+            transition: height .22s cubic-bezier(.2,.8,.2,1), opacity .15s ease;
         }
         .chord-row:first-child { border-top: 0; }
         .cadence.is-playing { border-color: var(--sun); box-shadow: 0 0 0 2px rgba(232,167,73,.28), 0 9px 24px rgba(42,64,44,.1); }
@@ -208,7 +204,12 @@
             animation: playing-pulse .65s ease-in-out infinite alternate;
         }
         @keyframes playing-pulse { to { background: #ffe494; } }
-        .sequence { color: #8a9787; font: 800 12px/1 ui-monospace, monospace; }
+        .sequence { display: grid; justify-items: center; gap: 4px; color: #8a9787; font: 800 12px/1 ui-monospace, monospace; }
+        .sequence-move {
+            width: 34px; height: 38px; border: 1px solid #a8bec9; border-radius: 9px;
+            background: #f3f8fa; color: #315669; font-size: 14px; font-weight: 900; line-height: 1; cursor: pointer;
+        }
+        .sequence-move:disabled { opacity: .25; cursor: default; }
         .chord-name { color: var(--forest); font: 800 20px/1 Georgia, serif; }
         .notes { margin-top: 5px; color: var(--ink); font: 650 12px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
         .context { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -225,11 +226,6 @@
         }
         .fit-message { color: var(--muted); font-size: 10px; line-height: 1.25; }
         .fit-message strong { color: var(--forest-soft); }
-        .duration-field { display: grid; gap: 5px; min-width: 0; }
-        .duration-select {
-            width: 100%; min-height: 36px; padding: 0 5px; border: 1px solid #c6a66e; border-radius: 9px;
-            background: #fff8e4; color: #694b1d; font-size: 12px; font-weight: 850;
-        }
         .chord-info-line, .chord-edit-line { display: contents; }
         .row-actions { display: flex; flex-wrap: nowrap; gap: 5px; }
         .icon-button {
@@ -244,7 +240,8 @@
             background: rgba(247,242,223,.55); color: var(--forest); font-size: 17px; font-weight: 850; cursor: pointer;
         }
         @media (max-width: 920px) {
-            .chord-row { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 7px; }
+            .chord-row { grid-template-columns: 38px minmax(0, 1fr) auto; gap: 7px; }
+            .sequence { grid-column: 1; grid-row: 1 / 4; align-self: center; }
             .chord-main { grid-column: 2; }
             .chord-info-line {
                 grid-column: 2 / -1; grid-row: 2; display: grid;
@@ -252,7 +249,7 @@
             }
             .chord-edit-line {
                 grid-column: 2 / -1; grid-row: 3; display: grid;
-                grid-template-columns: minmax(0, 1fr) minmax(86px, .22fr); gap: 10px; align-items: start;
+                grid-template-columns: minmax(0, 1fr); gap: 10px; align-items: start;
             }
             .row-actions { grid-column: 3; grid-row: 1; }
         }
@@ -260,13 +257,13 @@
             body { padding: 0; }
             .app { min-height: 100dvh; padding: 10px 8px 16px; border-radius: 0; }
             .subtitle { display: none; }
-            .plan-bar { grid-template-columns: minmax(0, 1fr) 76px; }
+            .plan-bar { grid-template-columns: minmax(0, 1fr) auto; }
             .save-state { grid-column: 1 / -1; padding: 0; }
             .playback-status { align-items: flex-start; flex-wrap: wrap; }
             .playback-status .played-notes { width: 100%; margin-left: 16px; }
-            .cadence-head { grid-template-columns: minmax(0, 1fr) auto auto 42px; }
+            .cadence-head { grid-template-columns: auto minmax(0, 1fr) auto 42px; }
             .cadence-head .scale-field { grid-column: 1 / -1; grid-row: 2; }
-            .cadence-order { grid-column: 2; grid-row: 1; }
+            .cadence-order { grid-column: 1; grid-row: 1; }
             .play-cadence { grid-column: 3; grid-row: 1; padding-inline: 10px; }
             .delete-cadence { grid-column: 4; grid-row: 1; }
             .chord-palette { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -289,10 +286,6 @@
         <div class="field">
             <label for="songTitle">Song plan</label>
             <input class="song-title" id="songTitle" value="Untitled progression" autocomplete="off" />
-        </div>
-        <div class="field">
-            <label for="bpm">BPM</label>
-            <input class="tempo-input" id="bpm" type="number" min="40" max="240" step="1" value="100" inputmode="numeric" />
         </div>
         <div class="save-state" id="saveState">Saved locally</div>
         <div class="playback-status" id="playbackStatus" aria-live="polite"><span class="status-dot"></span><strong>Ready</strong><span>Play from any cadence or audition one chord.</span></div>
@@ -343,22 +336,6 @@
             { name: 'Aeolian loop', label: 'i–III–VII–iv', degrees: [0,2,6,3] }
         ]
     };
-    const DURATIONS = [
-        { id: '1/1.', label: '1/1.', ticks: 144 },
-        { id: '1/1', label: '1/1', ticks: 96 },
-        { id: '1/2.', label: '1/2.', ticks: 72 },
-        { id: '1/2', label: '1/2', ticks: 48 },
-        { id: '1/4.', label: '1/4.', ticks: 36 },
-        { id: '1/2T', label: '1/2T', ticks: 32 },
-        { id: '1/4', label: '1/4', ticks: 24 },
-        { id: '1/8.', label: '1/8.', ticks: 18 },
-        { id: '1/4T', label: '1/4T', ticks: 16 },
-        { id: '1/8', label: '1/8', ticks: 12 },
-        { id: '1/16.', label: '1/16.', ticks: 9 },
-        { id: '1/8T', label: '1/8T', ticks: 8 },
-        { id: '1/16', label: '1/16', ticks: 6 },
-        { id: '1/16T', label: '1/16T', ticks: 4 }
-    ];
     const CUSTOM_QUALITIES = [
         { id: 'maj7', label: 'Major seventh', suffix: 'maj7', intervals: [0,4,7,11] },
         { id: '7', label: 'Dominant seventh', suffix: '7', intervals: [0,4,7,10] },
@@ -376,11 +353,9 @@
     const cadencesEl = document.getElementById('cadences');
     const addCadenceButton = document.getElementById('addCadence');
     const songTitle = document.getElementById('songTitle');
-    const bpmInput = document.getElementById('bpm');
     const saveState = document.getElementById('saveState');
     const playbackStatus = document.getElementById('playbackStatus');
     const state = loadState();
-    if (!Number.isFinite(state.bpm)) state.bpm = 100;
 
     function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
     function mod(value, base = 12) { return ((value % base) + base) % base; }
@@ -400,26 +375,7 @@
     function midiName(midi, scale) {
         return noteName(midi, scale) + (Math.floor(midi / 12) - 1);
     }
-    function durationInfo(chord) {
-        return DURATIONS.find(duration => duration.id === chord.duration) || DURATIONS.find(duration => duration.id === '1/4');
-    }
-    function durationMs(chord) {
-        return (durationInfo(chord).ticks / 24) * (60000 / state.bpm);
-    }
-    function formatBeats(beats) {
-        return Number.isInteger(beats) ? String(beats) : beats.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
-    }
-    function sectionLength(cadence) {
-        const ticks = cadence.chords.reduce((total, chord) => total + durationInfo(chord).ticks, 0);
-        const beats = ticks / 24;
-        const bars = Math.floor(ticks / 96);
-        const remainingBeats = (ticks % 96) / 24;
-        if (!ticks) return '0 beats';
-        const barParts = [];
-        if (bars) barParts.push(`${bars} ${bars === 1 ? 'bar' : 'bars'}`);
-        if (remainingBeats) barParts.push(`${formatBeats(remainingBeats)} ${remainingBeats === 1 ? 'beat' : 'beats'}`);
-        return `${formatBeats(beats)} beats · ${barParts.join(' + ')}`;
-    }
+    function chordIntervalMs() { return 900; }
     function defaultCadence(index, scale = { tonic: 0, mode: 'major' }) {
         return { id: uid(), title: `Cadence ${index + 1}`, scale: { ...scale }, chords: [] };
     }
@@ -609,14 +565,17 @@
         if (audioContext.state === 'suspended') audioContext.resume();
         return audioContext;
     }
-    function playChord(chord, requestedDuration = durationMs(chord)) {
+    function playChord(chord, requestedDuration = chordIntervalMs()) {
         const ctx = ensureAudio();
         if (!ctx) return;
         const now = ctx.currentTime + .018;
-        const soundingSeconds = Math.max(.09, requestedDuration / 1000 * .92);
+        const noteSeconds = Math.max(.09, requestedDuration / 1000);
+        const releaseSeconds = Math.min(.2, Math.max(.08, noteSeconds * .14));
+        const soundingSeconds = noteSeconds * .96 + releaseSeconds;
         const master = ctx.createGain();
         master.gain.setValueAtTime(.0001, now);
         master.gain.exponentialRampToValueAtTime(.16, now + Math.min(.025, soundingSeconds / 3));
+        master.gain.exponentialRampToValueAtTime(.11, now + Math.max(.06, noteSeconds * .72));
         master.gain.exponentialRampToValueAtTime(.0001, now + soundingSeconds);
         master.connect(ctx.destination);
         chord.midi.forEach((midi, index) => {
@@ -632,7 +591,7 @@
     }
     function previewChord(cadence, chord) {
         stopPlayback();
-        const auditionDuration = durationMs(chord);
+        const auditionDuration = chordIntervalMs();
         showPlayedChord(cadence.title, chord, 'Preview only');
         playChord(chord, auditionDuration);
         playbackTimer = setTimeout(stopPlayback, auditionDuration);
@@ -643,7 +602,7 @@
         let index = 0;
         function advance() {
             const chord = sequence[index];
-            const stepDuration = durationMs(chord);
+            const stepDuration = chordIntervalMs();
             showPlayedChord(cadence.title, chord, `${progression.name} preview · ${index + 1} of ${sequence.length}`);
             playChord(chord, stepDuration);
             index += 1;
@@ -654,7 +613,7 @@
     function showPlayedChord(cadenceTitle, chord, position = '') {
         const notes = chord.midi.map(midi => midiName(midi, chord.scale)).join(' ');
         playbackStatus.classList.add('active');
-        playbackStatus.innerHTML = `<span class="status-dot"></span><strong>Now playing: ${escapeHtml(chord.name)}</strong><span>${escapeHtml(cadenceTitle)}${position ? ` · ${position}` : ''} · ${escapeHtml(chord.degreeSymbol)} · ${durationInfo(chord).label}</span><span class="played-notes">${notes}</span>`;
+        playbackStatus.innerHTML = `<span class="status-dot"></span><strong>Now playing: ${escapeHtml(chord.name)}</strong><span>${escapeHtml(cadenceTitle)}${position ? ` · ${position}` : ''} · ${escapeHtml(chord.degreeSymbol)}</span><span class="played-notes">${notes}</span>`;
     }
     function stopPlayback() {
         clearTimeout(playbackTimer);
@@ -701,7 +660,7 @@
             }
             const activeCadence = state.cadences.find(item => item.id === step.cadenceId);
             showPlayedChord(activeCadence ? activeCadence.title : 'Cadence', step.chord, `${index + 1} of ${sequence.length}`);
-            const stepDuration = durationMs(step.chord);
+            const stepDuration = chordIntervalMs();
             playChord(step.chord, stepDuration);
             index += 1;
             playbackTimer = setTimeout(index < sequence.length ? advance : stopPlayback, stepDuration);
@@ -753,29 +712,31 @@
         render();
         playChord(cadence.chords[cadence.chords.length - 1]);
     }
-    function swapChord(cadence, chordIndex, direction) {
-        const targetIndex = chordIndex + direction;
-        if (targetIndex < 0 || targetIndex >= cadence.chords.length) return;
-        [cadence.chords[chordIndex], cadence.chords[targetIndex]] = [cadence.chords[targetIndex], cadence.chords[chordIndex]];
-        cadence.scale = { ...cadence.chords[cadence.chords.length - 1].scale };
-        scheduleSave();
+    function renderKeepingPosition(itemSelector, itemId, anchorY) {
         render();
         requestAnimationFrame(() => {
-            const movedRow = document.querySelector(`.chord-row[data-chord-id="${cadence.chords[targetIndex].id}"]`);
-            if (movedRow) movedRow.focus({ preventScroll: true });
+            const movedElement = document.querySelector(`${itemSelector}[data-reorder-id="${itemId}"]`);
+            if (movedElement) window.scrollBy(0, movedElement.getBoundingClientRect().top - anchorY);
         });
     }
-    function swapCadence(cadenceIndex, direction) {
+    function swapChord(cadence, chordIndex, direction, row) {
+        const targetIndex = chordIndex + direction;
+        if (targetIndex < 0 || targetIndex >= cadence.chords.length) return;
+        const movedChord = cadence.chords[chordIndex];
+        const anchorY = row.getBoundingClientRect().top;
+        [cadence.chords[chordIndex], cadence.chords[targetIndex]] = [cadence.chords[targetIndex], movedChord];
+        cadence.scale = { ...cadence.chords[cadence.chords.length - 1].scale };
+        scheduleSave();
+        renderKeepingPosition('.chord-row', movedChord.id, anchorY);
+    }
+    function swapCadence(cadenceIndex, direction, article) {
         const targetIndex = cadenceIndex + direction;
         if (targetIndex < 0 || targetIndex >= state.cadences.length) return;
-        [state.cadences[cadenceIndex], state.cadences[targetIndex]] = [state.cadences[targetIndex], state.cadences[cadenceIndex]];
-        const movedCadenceId = state.cadences[targetIndex].id;
+        const movedCadence = state.cadences[cadenceIndex];
+        const anchorY = article.getBoundingClientRect().top;
+        [state.cadences[cadenceIndex], state.cadences[targetIndex]] = [state.cadences[targetIndex], movedCadence];
         scheduleSave();
-        render();
-        requestAnimationFrame(() => {
-            const movedCadence = document.querySelector(`.cadence[data-id="${movedCadenceId}"]`);
-            if (movedCadence) movedCadence.focus({ preventScroll: true });
-        });
+        renderKeepingPosition('.cadence', movedCadence.id, anchorY);
     }
     function scalePriorityText(scale) {
         const relative = relativeScale(scale);
@@ -790,6 +751,7 @@
         const head = document.createElement('div');
         head.className = 'cadence-head';
         head.innerHTML = `
+            <div class="cadence-order" aria-label="Reorder ${escapeHtml(cadence.title)}"><button class="cadence-move cadence-earlier" type="button" aria-label="Move ${escapeHtml(cadence.title)} earlier"${cadenceIndex === 0 ? ' disabled' : ''}>↑</button><button class="cadence-move cadence-later" type="button" aria-label="Move ${escapeHtml(cadence.title)} later"${cadenceIndex === state.cadences.length - 1 ? ' disabled' : ''}>↓</button></div>
             <div class="field">
                 <label for="title-${cadence.id}">Section</label>
                 <input class="cadence-title" id="title-${cadence.id}" value="${escapeHtml(cadence.title)}" />
@@ -798,10 +760,9 @@
                 <label for="scale-${cadence.id}">Inherited scale for next chord</label>
                 <select class="scale-select" id="scale-${cadence.id}"></select>
             </div>
-            <div class="cadence-order" aria-label="Reorder ${escapeHtml(cadence.title)}"><button class="cadence-move cadence-earlier" type="button" aria-label="Move ${escapeHtml(cadence.title)} earlier" title="Swap with previous cadence"${cadenceIndex === 0 ? ' disabled' : ''}>↑</button><button class="cadence-move cadence-later" type="button" aria-label="Move ${escapeHtml(cadence.title)} later" title="Swap with next cadence"${cadenceIndex === state.cadences.length - 1 ? ' disabled' : ''}>↓</button></div>
             <button class="play-cadence" type="button" data-cadence-id="${cadence.id}" data-cadence-title="${escapeHtml(cadence.title)}" aria-label="Play from ${escapeHtml(cadence.title)}">▶ Play</button>
             <button class="delete-cadence" type="button" aria-label="Delete ${escapeHtml(cadence.title)}">×</button>
-            <div class="cadence-meta"><span>${scalePriorityText(cadence.scale)}</span><strong class="section-length">Length: ${sectionLength(cadence)}</strong></div>`;
+            <div class="cadence-meta"><span>${scalePriorityText(cadence.scale)}</span></div>`;
         const select = head.querySelector('.scale-select');
         appendScaleOptions(select, cadence.scale);
         head.querySelector('.cadence-title').addEventListener('input', event => {
@@ -811,8 +772,9 @@
         const playCadenceButton = head.querySelector('.play-cadence');
         playCadenceButton.disabled = !state.cadences.slice(cadenceIndex).some(item => item.chords.length);
         playCadenceButton.addEventListener('click', () => playFromCadence(cadenceIndex));
-        head.querySelector('.cadence-earlier').addEventListener('click', () => swapCadence(cadenceIndex, -1));
-        head.querySelector('.cadence-later').addEventListener('click', () => swapCadence(cadenceIndex, 1));
+        article.dataset.reorderId = cadence.id;
+        head.querySelector('.cadence-earlier').addEventListener('click', () => swapCadence(cadenceIndex, -1, article));
+        head.querySelector('.cadence-later').addEventListener('click', () => swapCadence(cadenceIndex, 1, article));
         select.addEventListener('change', event => {
             cadence.scale = parseScale(event.target.value);
             scheduleSave();
@@ -851,7 +813,6 @@
             split.append(button, previewButton);
             progressionArea.querySelector('.progression-list').appendChild(split);
         });
-        article.appendChild(progressionArea);
 
         const paletteArea = document.createElement('div');
         paletteArea.className = 'palette-area';
@@ -900,7 +861,6 @@
         gatewayPreview.addEventListener('click', () => previewChord(cadence, gateway));
         gatewaySplit.append(gatewayButton, gatewayPreview);
         paletteArea.querySelector('.chord-palette').appendChild(gatewaySplit);
-        article.appendChild(paletteArea);
 
         const modulationTools = document.createElement('div');
         modulationTools.className = 'modulation-tools';
@@ -930,7 +890,6 @@
             previewChord(cadence, chord);
         });
         updateCustomPreview();
-        modulationTools.appendChild(customPanel);
 
         const stabPanel = document.createElement('details');
         stabPanel.className = 'modulation-panel stab';
@@ -962,21 +921,19 @@
             }
         }
         modulationTools.appendChild(stabPanel);
-
-        article.appendChild(modulationTools);
+        modulationTools.appendChild(customPanel);
 
         const list = document.createElement('div');
         list.className = 'chord-list';
         if (!cadence.chords.length) {
             list.innerHTML = '<div class="empty-cadence">Choose a chord. Its scale will be inherited by the next chord unless you change it.</div>';
         } else {
-            cadence.chords.forEach((chord, chordIndex) => list.appendChild(renderChordRow(cadence, chord, chordIndex)));
+            cadence.chords.forEach((chord, chordIndex) => list.appendChild(renderChordRow(cadence, chord, chordIndex, list)));
         }
-        article.appendChild(list);
+        article.append(list, paletteArea, modulationTools, progressionArea);
         return article;
     }
-    function renderChordRow(cadence, chord, chordIndex) {
-        if (!DURATIONS.some(duration => duration.id === chord.duration)) chord.duration = '1/4';
+    function renderChordRow(cadence, chord, chordIndex, list) {
         const previousChord = chordIndex > 0 ? cadence.chords[chordIndex - 1] : null;
         const inheritedScale = previousChord ? previousChord.scale : (chord.inheritedScale || chord.scale);
         const relationship = scaleRelationship(inheritedScale, chord.scale);
@@ -993,7 +950,7 @@
         row.tabIndex = -1;
         row.dataset.chordId = chord.id;
         row.innerHTML = `
-            <div class="sequence">${String(chordIndex + 1).padStart(2, '0')}</div>
+            <div class="sequence"><button class="sequence-move move-earlier" type="button" aria-label="Move ${chord.name} earlier"${chordIndex === 0 ? ' disabled' : ''}>↑</button><span>${String(chordIndex + 1).padStart(2, '0')}</span><button class="sequence-move move-later" type="button" aria-label="Move ${chord.name} later"${chordIndex === cadence.chords.length - 1 ? ' disabled' : ''}>↓</button></div>
             <div class="chord-main"><div class="chord-name">${chord.name}</div><div class="function">Root ${rootName} · ${quality}</div></div>
             <div class="chord-info-line">
                 <div class="notes-block"><div class="eyebrow">Notes</div><div class="notes">${chord.midi.map(midi => midiName(midi, chord.scale)).join('  ')}</div></div>
@@ -1001,9 +958,8 @@
             </div>
             <div class="chord-edit-line">
                 <label class="chord-scale-field"><span class="eyebrow">Scale for this chord</span><select class="chord-scale-select" aria-label="Scale for ${chord.name}"></select><span class="fit-message">${analysis.fits ? `<strong>Fits:</strong> ${chord.degreeSymbol} in ${scaleLabel(chord.scale)}` : `<strong>Outside scale:</strong> this is a chromatic chord in ${scaleLabel(chord.scale)}`}</span></label>
-                <label class="duration-field"><span class="eyebrow">Length</span><select class="duration-select" aria-label="Length of ${chord.name}">${DURATIONS.map(duration => `<option value="${duration.id}"${duration.id === chord.duration ? ' selected' : ''}>${duration.label}</option>`).join('')}</select></label>
             </div>
-            <div class="row-actions"><button class="icon-button move move-earlier" type="button" aria-label="Move ${chord.name} earlier" title="Swap with previous chord"${chordIndex === 0 ? ' disabled' : ''}>↑</button><button class="icon-button move move-later" type="button" aria-label="Move ${chord.name} later" title="Swap with next chord"${chordIndex === cadence.chords.length - 1 ? ' disabled' : ''}>↓</button><button class="icon-button play" type="button" aria-label="Play ${chord.name}">▶</button><button class="icon-button remove" type="button" aria-label="Remove ${chord.name}">×</button></div>`;
+            <div class="row-actions"><button class="icon-button play" type="button" aria-label="Play ${chord.name}">▶</button><button class="icon-button remove" type="button" aria-label="Remove ${chord.name}">×</button></div>`;
         const scaleSelect = row.querySelector('.chord-scale-select');
         appendChordScaleOptions(scaleSelect, cadence, chord, chordIndex);
         scaleSelect.addEventListener('change', event => {
@@ -1012,18 +968,14 @@
             scheduleSave();
             render();
         });
-        row.querySelector('.duration-select').addEventListener('change', event => {
-            chord.duration = event.target.value;
-            scheduleSave();
-            render();
-        });
-        row.querySelector('.move-earlier').addEventListener('click', () => swapChord(cadence, chordIndex, -1));
-        row.querySelector('.move-later').addEventListener('click', () => swapChord(cadence, chordIndex, 1));
+        row.dataset.reorderId = chord.id;
+        row.querySelector('.move-earlier').addEventListener('click', () => swapChord(cadence, chordIndex, -1, row));
+        row.querySelector('.move-later').addEventListener('click', () => swapChord(cadence, chordIndex, 1, row));
         row.querySelector('.play').addEventListener('click', () => {
             stopPlayback();
             showPlayedChord(cadence.title, chord);
             row.classList.add('is-playing');
-            const auditionDuration = durationMs(chord);
+            const auditionDuration = chordIntervalMs();
             playChord(chord, auditionDuration);
             playbackTimer = setTimeout(stopPlayback, auditionDuration);
         });
@@ -1041,24 +993,11 @@
     function render() {
         stopPlayback();
         songTitle.value = state.title;
-        bpmInput.value = state.bpm;
         cadencesEl.innerHTML = '';
         state.cadences.forEach((cadence, index) => cadencesEl.appendChild(renderCadence(cadence, index)));
     }
 
     songTitle.addEventListener('input', event => { state.title = event.target.value; scheduleSave(); });
-    bpmInput.addEventListener('input', event => {
-        const value = Number(event.target.value);
-        if (value >= 40 && value <= 240) {
-            state.bpm = value;
-            scheduleSave();
-        }
-    });
-    bpmInput.addEventListener('change', event => {
-        state.bpm = Math.max(40, Math.min(240, Number(event.target.value) || 100));
-        bpmInput.value = state.bpm;
-        scheduleSave();
-    });
     addCadenceButton.addEventListener('click', () => {
         const previous = state.cadences[state.cadences.length - 1];
         const previousChord = previous && previous.chords[previous.chords.length - 1];
@@ -1073,7 +1012,7 @@
 </script>
 <script>
     window.PWA_UPDATE_CONFIG = {
-        serviceWorkerUrl: 'sw.js?v=24',
+        serviceWorkerUrl: 'sw.js?v=36',
         updateUrl: './',
         storageKey: 'scales-planner-hash',
         autoCheck: true
