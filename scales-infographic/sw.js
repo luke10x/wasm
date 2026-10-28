@@ -1,4 +1,4 @@
-self.PWA_CACHE_NAME = 'scales-infographic-v2';
+self.PWA_CACHE_NAME = 'scales-infographic-v14';
 self.PWA_URLS_TO_CACHE = [
   './',
   './index.html',

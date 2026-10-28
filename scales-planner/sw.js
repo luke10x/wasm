@@ -1,4 +1,4 @@
-self.PWA_CACHE_NAME = 'scales-planner-v19';
+self.PWA_CACHE_NAME = 'scales-planner-v23';
 self.PWA_URLS_TO_CACHE = [
   './',
   './index.html',

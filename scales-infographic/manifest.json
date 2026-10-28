@@ -1,7 +1,7 @@
 {
   "name": "Scales Infographic",
   "short_name": "Scale Atlas",
-  "description": "Explore scale notation, seventh chords, harmonic functions, related scales, and common progressions.",
+  "description": "Explore all diatonic modes, natural minor, harmonic minor, melodic minor, seventh chords, and progressions.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f4edda",
