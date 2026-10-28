@@ -1,0 +1,9914 @@
+[
+  {
+    "id": "book-afro-cuban-1",
+    "title": "Afro-Cuban 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "rimshot": [
+        3,
+        6,
+        12
+      ],
+      "kick": [
+        0,
+        8,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-2",
+    "title": "Afro-Cuban 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "highTom": [
+        6
+      ],
+      "midTom": [
+        10
+      ],
+      "rimshot": [
+        3,
+        12
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-3",
+    "title": "Afro-Cuban 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "midTom": [
+        10
+      ],
+      "rimshot": [
+        6
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-4",
+    "title": "Afro-Cuban 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "rimshot": [
+        3,
+        6,
+        10,
+        14
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-5",
+    "title": "Afro-Cuban 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        8,
+        10,
+        12,
+        13,
+        14,
+        15
+      ],
+      "hat": [
+        0,
+        2,
+        6,
+        10,
+        14
+      ],
+      "midTom": [
+        0,
+        8,
+        10
+      ],
+      "snare": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "lowTom": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-6",
+    "title": "Afro-Cuban 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "rimshot": [
+        0,
+        2,
+        3,
+        5,
+        7,
+        8,
+        10,
+        12,
+        13,
+        15
+      ],
+      "cowbell": [
+        0,
+        2,
+        3,
+        5,
+        7,
+        8,
+        10,
+        12,
+        13,
+        15
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-7",
+    "title": "Afro-Cuban 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        11,
+        12,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "midTom": [
+        8,
+        10
+      ],
+      "rimshot": [
+        4
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        8,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-8",
+    "title": "Afro-Cuban 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        10,
+        14
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        6,
+        10,
+        14
+      ],
+      "openHat": [
+        0
+      ],
+      "highTom": [
+        8,
+        9,
+        10
+      ],
+      "midTom": [
+        0,
+        12,
+        13,
+        14
+      ],
+      "snare": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-9",
+    "title": "Afro-Cuban 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        3,
+        7,
+        11,
+        15
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "highTom": [
+        7
+      ],
+      "midTom": [
+        3,
+        11
+      ],
+      "snare": [
+        1,
+        2,
+        5,
+        6,
+        9,
+        10,
+        13,
+        14
+      ],
+      "lowTom": [
+        15
+      ],
+      "cowbell": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-break-1",
+    "title": "Afro-Cuban Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        12
+      ],
+      "midTom": [
+        10
+      ],
+      "snare": [
+        3,
+        6,
+        8
+      ],
+      "lowTom": [
+        14
+      ],
+      "cowbell": [
+        0,
+        2,
+        3,
+        4,
+        6
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-break-2",
+    "title": "Afro-Cuban Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        8,
+        12
+      ],
+      "cymbal": [
+        0
+      ],
+      "midTom": [
+        3,
+        11
+      ],
+      "snare": [
+        2,
+        4,
+        7,
+        10,
+        12,
+        15
+      ],
+      "lowTom": [
+        6,
+        8,
+        14
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-break-3",
+    "title": "Afro-Cuban Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        3,
+        4,
+        6,
+        10,
+        12
+      ],
+      "highTom": [
+        9,
+        10
+      ],
+      "midTom": [
+        6,
+        7
+      ],
+      "snare": [
+        0,
+        1,
+        3,
+        4
+      ],
+      "lowTom": [
+        12,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-break-4",
+    "title": "Afro-Cuban Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        12,
+        14,
+        15
+      ],
+      "midTom": [
+        4,
+        5,
+        7
+      ],
+      "lowTom": [
+        8
+      ],
+      "cowbell": [
+        0,
+        2,
+        3,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-break-5",
+    "title": "Afro-Cuban Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "midTom": [
+        4,
+        6,
+        7
+      ],
+      "snare": [
+        0,
+        2,
+        3
+      ],
+      "cowbell": [
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-afro-cuban-break-6",
+    "title": "Afro-Cuban Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Afro-Cuban",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        4,
+        6
+      ],
+      "midTom": [
+        0,
+        1,
+        3
+      ],
+      "snare": [
+        8,
+        9,
+        11
+      ],
+      "lowTom": [
+        12,
+        14,
+        15
+      ]
+    },
+    "description": "A programmable afro-cuban rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-1",
+    "title": "Blues 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11
+      ],
+      "snare": [
+        3,
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        6,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-2",
+    "title": "Blues 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "snare": [
+        3,
+        5,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-3",
+    "title": "Blues 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11
+      ],
+      "openHat": [
+        10
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        6,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-4",
+    "title": "Blues 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "hat": [
+        0,
+        3,
+        6,
+        9,
+        11
+      ],
+      "openHat": [
+        10
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        6,
+        8,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-5",
+    "title": "Blues 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "hat": [
+        3,
+        9
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-6",
+    "title": "Blues 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11
+      ],
+      "hat": [
+        3,
+        9
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        10,
+        11
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-break-1",
+    "title": "Blues Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "cymbal": [
+        0
+      ],
+      "midTom": [
+        5
+      ],
+      "snare": [
+        2,
+        3,
+        8,
+        9
+      ],
+      "lowTom": [
+        6,
+        7
+      ],
+      "kick": [
+        0,
+        4,
+        6,
+        8,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-break-2",
+    "title": "Blues Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        11
+      ],
+      "hat": [
+        0,
+        6,
+        8
+      ],
+      "snare": [
+        1,
+        2,
+        3,
+        7,
+        8,
+        9
+      ],
+      "kick": [
+        0,
+        4,
+        5,
+        6,
+        8,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-blues-break-3",
+    "title": "Blues Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Blues",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        6,
+        9
+      ],
+      "cymbal": [
+        0
+      ],
+      "hat": [
+        3,
+        6
+      ],
+      "midTom": [
+        8
+      ],
+      "snare": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "kick": [
+        0,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-boogie-1",
+    "title": "Boogie 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Boogie",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        7,
+        8,
+        11,
+        15
+      ]
+    },
+    "description": "A programmable boogie rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-boogie-2",
+    "title": "Boogie 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Boogie",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable boogie rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-boogie-3",
+    "title": "Boogie 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Boogie",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ],
+      "snare": [
+        4,
+        7,
+        12,
+        15
+      ],
+      "kick": [
+        0,
+        3,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable boogie rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-boogie-break-1",
+    "title": "Boogie Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Boogie",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "midTom": [
+        4,
+        5
+      ],
+      "snare": [
+        1,
+        2,
+        7,
+        8
+      ],
+      "lowTom": [
+        10,
+        11
+      ],
+      "kick": [
+        0,
+        3,
+        6,
+        9
+      ]
+    },
+    "description": "A programmable boogie rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-boogie-break-2",
+    "title": "Boogie Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Boogie",
+    "steps": 12,
+    "lanes": {
+      "midTom": [
+        3,
+        4,
+        5
+      ],
+      "snare": [
+        0,
+        1,
+        2,
+        6,
+        7,
+        8
+      ],
+      "lowTom": [
+        9,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable boogie rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-boogie-break-3",
+    "title": "Boogie Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Boogie",
+    "steps": 12,
+    "lanes": {
+      "midTom": [
+        3,
+        9
+      ],
+      "snare": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        10,
+        11
+      ],
+      "lowTom": [
+        0,
+        6
+      ]
+    },
+    "description": "A programmable boogie rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-1",
+    "title": "Bossa Nova 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "cymbal": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "midTom": [
+        2,
+        8,
+        14
+      ],
+      "rimshot": [
+        0,
+        6,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-2",
+    "title": "Bossa Nova 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "rimshot": [
+        2,
+        4,
+        8,
+        10,
+        14
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-3",
+    "title": "Bossa Nova 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "hat": [
+        4,
+        12
+      ],
+      "rimshot": [
+        0,
+        2,
+        6,
+        10,
+        14
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-4",
+    "title": "Bossa Nova 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "hat": [
+        4,
+        12
+      ],
+      "rimshot": [
+        3,
+        6,
+        10,
+        11,
+        14
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-5",
+    "title": "Bossa Nova 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        4,
+        12
+      ],
+      "rimshot": [
+        0,
+        2,
+        6,
+        8
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-6",
+    "title": "Bossa Nova 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "cymbal": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "midTom": [
+        6
+      ],
+      "rimshot": [
+        4,
+        10
+      ],
+      "lowTom": [
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-break-1",
+    "title": "Bossa Nova Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        11
+      ],
+      "hat": [
+        11
+      ],
+      "midTom": [
+        0
+      ],
+      "snare": [
+        0,
+        2,
+        6,
+        8,
+        11
+      ],
+      "lowTom": [
+        2,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-break-2",
+    "title": "Bossa Nova Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "highTom": [
+        6
+      ],
+      "midTom": [
+        2,
+        14
+      ],
+      "snare": [
+        0,
+        4,
+        12
+      ],
+      "lowTom": [
+        8
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-bossa-nova-break-3",
+    "title": "Bossa Nova Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Bossa Nova",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12
+      ],
+      "hat": [
+        12
+      ],
+      "highTom": [
+        2
+      ],
+      "midTom": [
+        10
+      ],
+      "snare": [
+        0,
+        12
+      ],
+      "lowTom": [
+        6
+      ]
+    },
+    "description": "A programmable bossa nova rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-cha-cha-1",
+    "title": "Cha-Cha 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Cha-Cha",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        4,
+        12
+      ],
+      "midTom": [
+        12,
+        14
+      ],
+      "snare": [
+        6
+      ],
+      "rimshot": [
+        2,
+        10
+      ],
+      "cowbell": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable cha-cha rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-cha-cha-2",
+    "title": "Cha-Cha 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Cha-Cha",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        4,
+        6,
+        12,
+        14
+      ],
+      "openHat": [
+        0,
+        8
+      ],
+      "midTom": [
+        12
+      ],
+      "snare": [
+        6
+      ],
+      "lowTom": [
+        14
+      ],
+      "cowbell": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable cha-cha rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-cha-cha-3",
+    "title": "Cha-Cha 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Cha-Cha",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        6
+      ],
+      "lowTom": [
+        12,
+        14
+      ],
+      "cowbell": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        14
+      ]
+    },
+    "description": "A programmable cha-cha rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-cha-cha-break-1",
+    "title": "Cha-Cha Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Cha-Cha",
+    "steps": 16,
+    "lanes": {
+      "midTom": [
+        5,
+        6,
+        14
+      ],
+      "snare": [
+        0,
+        12
+      ],
+      "lowTom": [
+        2,
+        8
+      ],
+      "cowbell": [
+        14
+      ],
+      "kick": [
+        14
+      ]
+    },
+    "description": "A programmable cha-cha rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-cha-cha-break-2",
+    "title": "Cha-Cha Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Cha-Cha",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        7,
+        10,
+        13
+      ],
+      "midTom": [
+        4,
+        5,
+        10,
+        11
+      ],
+      "lowTom": [
+        7,
+        8,
+        13,
+        14
+      ],
+      "cowbell": [
+        0
+      ]
+    },
+    "description": "A programmable cha-cha rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-cha-cha-break-3",
+    "title": "Cha-Cha Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Cha-Cha",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        12
+      ],
+      "midTom": [
+        2,
+        6,
+        7
+      ],
+      "snare": [
+        4
+      ],
+      "lowTom": [
+        10,
+        12,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable cha-cha rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-1",
+    "title": "Disco 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        6,
+        8,
+        10,
+        14
+      ],
+      "openHat": [
+        4,
+        12
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-2",
+    "title": "Disco 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        14,
+        15
+      ],
+      "openHat": [
+        4,
+        12
+      ],
+      "clap": [
+        2,
+        6,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-3",
+    "title": "Disco 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13,
+        14,
+        15
+      ],
+      "openHat": [
+        2,
+        10
+      ],
+      "clap": [
+        2,
+        4,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        7,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-4",
+    "title": "Disco 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        9,
+        11,
+        13,
+        14,
+        15
+      ],
+      "snare": [
+        0,
+        4,
+        8,
+        10,
+        12
+      ],
+      "clap": [
+        4,
+        12
+      ],
+      "cowbell": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-5",
+    "title": "Disco 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        12
+      ],
+      "openHat": [
+        10,
+        14
+      ],
+      "snare": [
+        4
+      ],
+      "clap": [
+        4,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-6",
+    "title": "Disco 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        10,
+        14
+      ],
+      "snare": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "cowbell": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        6,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-7",
+    "title": "Disco 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        11,
+        13,
+        14,
+        15
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "clap": [
+        4,
+        8,
+        12,
+        13
+      ],
+      "cowbell": [
+        0,
+        4,
+        8,
+        9,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-8",
+    "title": "Disco 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        8,
+        9,
+        10,
+        13,
+        14
+      ],
+      "openHat": [
+        3,
+        7,
+        15
+      ],
+      "snare": [
+        4,
+        11,
+        12
+      ],
+      "clap": [
+        0,
+        2,
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-9",
+    "title": "Disco 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        2,
+        3,
+        6,
+        10,
+        11,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "clap": [
+        2,
+        4,
+        8,
+        10,
+        12,
+        14
+      ],
+      "cowbell": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-10",
+    "title": "Disco 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        8,
+        10
+      ],
+      "openHat": [
+        12
+      ],
+      "snare": [
+        4
+      ],
+      "clap": [
+        2,
+        4,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-11",
+    "title": "Disco 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        8,
+        10
+      ],
+      "openHat": [
+        1,
+        9
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "clap": [
+        2,
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        7,
+        8,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-12",
+    "title": "Disco 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        10,
+        12,
+        15
+      ],
+      "clap": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        2,
+        4,
+        8,
+        12,
+        13
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-1",
+    "title": "Disco Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        8,
+        12
+      ],
+      "openHat": [
+        6,
+        10
+      ],
+      "snare": [
+        6
+      ],
+      "clap": [
+        2,
+        4,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        8,
+        11,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-2",
+    "title": "Disco Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        2,
+        4
+      ],
+      "openHat": [
+        6
+      ],
+      "midTom": [
+        14,
+        15
+      ],
+      "snare": [
+        9,
+        11
+      ],
+      "lowTom": [
+        12,
+        13
+      ],
+      "kick": [
+        8,
+        10
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-3",
+    "title": "Disco Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        10
+      ],
+      "midTom": [
+        2
+      ],
+      "snare": [
+        0,
+        1,
+        8,
+        9
+      ],
+      "cowbell": [
+        2,
+        4
+      ],
+      "kick": [
+        4,
+        12
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-4",
+    "title": "Disco Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        4,
+        6
+      ],
+      "midTom": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "snare": [
+        2,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-5",
+    "title": "Disco Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "openHat": [
+        0
+      ],
+      "midTom": [
+        11,
+        12
+      ],
+      "snare": [
+        8,
+        9,
+        10
+      ],
+      "lowTom": [
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        4
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-6",
+    "title": "Disco Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ],
+      "snare": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-7",
+    "title": "Disco Break 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        8
+      ],
+      "midTom": [
+        2,
+        14
+      ],
+      "snare": [
+        0,
+        6,
+        12
+      ],
+      "cowbell": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15
+      ],
+      "kick": [
+        4,
+        10
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-8",
+    "title": "Disco Break 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-disco-break-9",
+    "title": "Disco Break 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Disco",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        4,
+        14
+      ],
+      "midTom": [
+        12,
+        13
+      ],
+      "snare": [
+        2,
+        10,
+        11
+      ],
+      "lowTom": [
+        8,
+        9
+      ],
+      "kick": [
+        2,
+        4
+      ]
+    },
+    "description": "A programmable disco rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-1",
+    "title": "Funk 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        9,
+        12
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        15
+      ],
+      "snare": [
+        2,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        9
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-2",
+    "title": "Funk 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        13
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        2
+      ],
+      "highTom": [
+        10
+      ],
+      "snare": [
+        5
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        7,
+        13
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-3",
+    "title": "Funk 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        14
+      ],
+      "highTom": [
+        6
+      ],
+      "snare": [
+        1,
+        10
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-4",
+    "title": "Funk 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        13
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        14
+      ],
+      "midTom": [
+        9,
+        10
+      ],
+      "snare": [
+        3,
+        13
+      ],
+      "kick": [
+        0,
+        1,
+        6,
+        7,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-5",
+    "title": "Funk 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        1,
+        6,
+        12,
+        14
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        1
+      ],
+      "midTom": [
+        15
+      ],
+      "snare": [
+        3,
+        12,
+        13
+      ],
+      "kick": [
+        0,
+        1,
+        6,
+        7,
+        9,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-6",
+    "title": "Funk 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        14
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        5,
+        10
+      ],
+      "snare": [
+        7,
+        12
+      ],
+      "kick": [
+        2,
+        6,
+        10,
+        14,
+        15
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-7",
+    "title": "Funk 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        9,
+        12
+      ],
+      "hat": [
+        0,
+        1,
+        3,
+        4,
+        7,
+        8,
+        10,
+        11,
+        13,
+        14
+      ],
+      "snare": [
+        2,
+        5,
+        6,
+        9,
+        12,
+        15
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-8",
+    "title": "Funk 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        9,
+        12
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        4,
+        6,
+        7,
+        8,
+        12
+      ],
+      "openHat": [
+        10,
+        14
+      ],
+      "snare": [
+        5,
+        9,
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        6,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-9",
+    "title": "Funk 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        3,
+        13,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        5,
+        8,
+        11,
+        12
+      ],
+      "highTom": [
+        14
+      ],
+      "snare": [
+        3,
+        6,
+        7,
+        9,
+        10,
+        13,
+        15
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-10",
+    "title": "Funk 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        13
+      ],
+      "hat": [
+        6,
+        11,
+        12,
+        14,
+        15
+      ],
+      "openHat": [
+        0,
+        3,
+        7,
+        9
+      ],
+      "snare": [
+        1,
+        2,
+        4,
+        8,
+        10,
+        13
+      ],
+      "kick": [
+        0,
+        3,
+        7,
+        9,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-11",
+    "title": "Funk 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        11,
+        14
+      ],
+      "hat": [
+        0,
+        4,
+        9,
+        10,
+        12
+      ],
+      "openHat": [
+        5,
+        7
+      ],
+      "highTom": [
+        14
+      ],
+      "snare": [
+        2,
+        6,
+        8,
+        11,
+        13
+      ],
+      "kick": [
+        0,
+        5,
+        7,
+        9
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-12",
+    "title": "Funk 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        13
+      ],
+      "hat": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11,
+        12
+      ],
+      "openHat": [
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        8,
+        10,
+        13
+      ],
+      "kick": [
+        0,
+        3,
+        9,
+        11,
+        12
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-13",
+    "title": "Funk 13",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "snare": [
+        2,
+        5,
+        12,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        6,
+        7,
+        10
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-14",
+    "title": "Funk 14",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        7,
+        9,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        5,
+        6,
+        8,
+        10
+      ],
+      "openHat": [
+        3,
+        12
+      ],
+      "snare": [
+        7,
+        9,
+        14
+      ],
+      "rimshot": [
+        15
+      ],
+      "kick": [
+        4,
+        11,
+        12
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-15",
+    "title": "Funk 15",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        3,
+        12,
+        13
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        4,
+        8,
+        10,
+        11,
+        12
+      ],
+      "openHat": [
+        6,
+        14
+      ],
+      "highTom": [
+        1
+      ],
+      "midTom": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "snare": [
+        3,
+        5,
+        7,
+        9,
+        13
+      ],
+      "kick": [
+        0,
+        1,
+        8,
+        10,
+        12
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-1",
+    "title": "Funk Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        3
+      ],
+      "highTom": [
+        11
+      ],
+      "midTom": [
+        8
+      ],
+      "snare": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        13,
+        14,
+        15
+      ],
+      "lowTom": [
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-2",
+    "title": "Funk Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2
+      ],
+      "openHat": [
+        14
+      ],
+      "highTom": [
+        12,
+        13,
+        15
+      ],
+      "midTom": [
+        8
+      ],
+      "snare": [
+        4,
+        6,
+        7
+      ],
+      "kick": [
+        0,
+        3,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-3",
+    "title": "Funk Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2
+      ],
+      "openHat": [
+        1,
+        3
+      ],
+      "highTom": [
+        11
+      ],
+      "midTom": [
+        8,
+        9
+      ],
+      "snare": [
+        4,
+        6
+      ],
+      "lowTom": [
+        13,
+        14
+      ],
+      "kick": [
+        0,
+        1,
+        3,
+        8
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-4",
+    "title": "Funk Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "snare": [
+        4,
+        9,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        7,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-5",
+    "title": "Funk Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        1,
+        4,
+        7,
+        10,
+        14,
+        15
+      ],
+      "highTom": [
+        6,
+        7
+      ],
+      "midTom": [
+        3,
+        4
+      ],
+      "snare": [
+        0,
+        1,
+        12,
+        14,
+        15
+      ],
+      "lowTom": [
+        9,
+        10
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-6",
+    "title": "Funk Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        5,
+        7,
+        10,
+        14,
+        15
+      ],
+      "hat": [
+        0
+      ],
+      "snare": [
+        4,
+        5,
+        7,
+        10,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        9
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-7",
+    "title": "Funk Break 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        10,
+        13,
+        14
+      ],
+      "highTom": [
+        13,
+        14
+      ],
+      "snare": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10
+      ],
+      "kick": [
+        0,
+        5,
+        9
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-8",
+    "title": "Funk Break 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        3,
+        4,
+        12
+      ],
+      "highTom": [
+        9
+      ],
+      "snare": [
+        0,
+        3,
+        4,
+        8,
+        12
+      ],
+      "lowTom": [
+        10,
+        15
+      ],
+      "clap": [
+        15
+      ],
+      "kick": [
+        5,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-9",
+    "title": "Funk Break 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        3,
+        7,
+        9,
+        13
+      ],
+      "highTom": [
+        8,
+        9
+      ],
+      "midTom": [
+        6,
+        7
+      ],
+      "snare": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lowTom": [
+        12,
+        13
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-10",
+    "title": "Funk Break 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        11
+      ],
+      "cymbal": [
+        12
+      ],
+      "midTom": [
+        3
+      ],
+      "snare": [
+        0,
+        10,
+        11
+      ],
+      "lowTom": [
+        6
+      ],
+      "kick": [
+        12
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-11",
+    "title": "Funk Break 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        8,
+        9,
+        11,
+        13,
+        14
+      ],
+      "highTom": [
+        8,
+        9,
+        11
+      ],
+      "midTom": [
+        13
+      ],
+      "snare": [
+        6
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        7,
+        8,
+        10,
+        12
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-12",
+    "title": "Funk Break 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        3,
+        8,
+        11
+      ],
+      "midTom": [
+        12,
+        13
+      ],
+      "snare": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10
+      ],
+      "lowTom": [
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        3,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-13",
+    "title": "Funk Break 13",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4
+      ],
+      "highTom": [
+        12,
+        13
+      ],
+      "midTom": [
+        8,
+        9,
+        10
+      ],
+      "snare": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "lowTom": [
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        3,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-14",
+    "title": "Funk Break 14",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "snare": [
+        4,
+        7,
+        9,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        3,
+        11,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-funk-break-15",
+    "title": "Funk Break 15",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Funk",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "snare": [
+        4,
+        7,
+        9,
+        12,
+        15
+      ],
+      "kick": [
+        0,
+        3,
+        11
+      ]
+    },
+    "description": "A programmable funk rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-1",
+    "title": "Jazz 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        11
+      ],
+      "kick": [
+        0,
+        5
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-2",
+    "title": "Jazz 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        2,
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        6
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-3",
+    "title": "Jazz 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        5,
+        9
+      ],
+      "kick": [
+        6,
+        11
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-4",
+    "title": "Jazz 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        2,
+        8,
+        11
+      ],
+      "kick": [
+        0,
+        5
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-5",
+    "title": "Jazz 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-6",
+    "title": "Jazz 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        5,
+        8
+      ],
+      "kick": [
+        0,
+        2
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-break-1",
+    "title": "Jazz Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5
+      ],
+      "midTom": [
+        9,
+        10,
+        11
+      ],
+      "snare": [
+        3,
+        6,
+        7,
+        8
+      ],
+      "kick": [
+        0,
+        5
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-break-2",
+    "title": "Jazz Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0
+      ],
+      "midTom": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "snare": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-jazz-break-3",
+    "title": "Jazz Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Jazz",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6
+      ],
+      "snare": [
+        3,
+        8,
+        9,
+        10,
+        11
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        6
+      ]
+    },
+    "description": "A programmable jazz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-march-1",
+    "title": "March 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "March / Tango",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        0,
+        2,
+        4,
+        5,
+        7,
+        8,
+        10,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable march / tango rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-march-2",
+    "title": "March 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "March / Tango",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable march / tango rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-tango-1",
+    "title": "Tango 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "March / Tango",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        14
+      ],
+      "hat": [
+        4,
+        12
+      ],
+      "snare": [
+        0,
+        4,
+        8,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable march / tango rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-march-tango-break-1",
+    "title": "March / Tango Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "March / Tango",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        10,
+        14
+      ],
+      "highTom": [
+        8
+      ],
+      "midTom": [
+        4
+      ],
+      "snare": [
+        0
+      ],
+      "lowTom": [
+        12
+      ],
+      "kick": [
+        2,
+        6,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable march / tango rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-march-tango-break-2",
+    "title": "March / Tango Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "March / Tango",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        11
+      ],
+      "cymbal": [
+        14
+      ],
+      "hat": [
+        2,
+        6,
+        10
+      ],
+      "snare": [
+        0,
+        2,
+        3,
+        6,
+        8,
+        9,
+        10,
+        11,
+        14
+      ],
+      "clap": [
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable march / tango rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-march-tango-break-3",
+    "title": "March / Tango Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "March / Tango",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6
+      ],
+      "hat": [
+        0
+      ],
+      "snare": [
+        2,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    "description": "A programmable march / tango rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-paso-doble-1",
+    "title": "Paso Doble 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Paso Doble / Charleston",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        11,
+        12,
+        14
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        2,
+        6,
+        10,
+        11,
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable paso doble / charleston rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-paso-doble-2",
+    "title": "Paso Doble 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Paso Doble / Charleston",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        2,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable paso doble / charleston rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-charleston-1",
+    "title": "Charleston 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Paso Doble / Charleston",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        4,
+        7,
+        8,
+        12,
+        15
+      ],
+      "hat": [
+        4,
+        12
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable paso doble / charleston rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-paso-charleston-break-1",
+    "title": "Paso / Charleston Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Paso Doble / Charleston",
+    "steps": 16,
+    "lanes": {
+      "snare": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable paso doble / charleston rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-paso-charleston-break-2",
+    "title": "Paso / Charleston Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Paso Doble / Charleston",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "midTom": [
+        5,
+        6
+      ],
+      "snare": [
+        1,
+        3,
+        12,
+        14
+      ],
+      "lowTom": [
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable paso doble / charleston rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-paso-charleston-break-3",
+    "title": "Paso / Charleston Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Paso Doble / Charleston",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        4,
+        12
+      ],
+      "snare": [
+        2,
+        6,
+        8,
+        12
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable paso doble / charleston rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-1",
+    "title": "Pop 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        8,
+        9,
+        11,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-2",
+    "title": "Pop 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        6,
+        7,
+        8,
+        10,
+        13,
+        14,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-3",
+    "title": "Pop 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        7,
+        8,
+        10,
+        12,
+        15
+      ],
+      "openHat": [
+        6,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        1,
+        3,
+        5,
+        8,
+        9,
+        11
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-4",
+    "title": "Pop 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "openHat": [
+        7,
+        15
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-5",
+    "title": "Pop 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        1,
+        3,
+        8,
+        9,
+        11,
+        14,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-6",
+    "title": "Pop 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        1,
+        3,
+        8,
+        9,
+        11
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-7",
+    "title": "Pop 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        6,
+        8,
+        10,
+        14
+      ],
+      "openHat": [
+        4,
+        12
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        3,
+        6,
+        10,
+        11,
+        14
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-8",
+    "title": "Pop 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-9",
+    "title": "Pop 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        12
+      ],
+      "openHat": [
+        10,
+        14
+      ],
+      "snare": [
+        6,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        2,
+        10
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-10",
+    "title": "Pop 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "openHat": [
+        13,
+        15
+      ],
+      "snare": [
+        4,
+        7,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        8,
+        9,
+        11,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-11",
+    "title": "Pop 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15
+      ],
+      "snare": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "kick": [
+        2,
+        5,
+        7,
+        10,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-12",
+    "title": "Pop 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        15
+      ],
+      "openHat": [
+        6,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        7,
+        8,
+        10,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-break-1",
+    "title": "Pop Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        8,
+        9,
+        11
+      ],
+      "midTom": [
+        4,
+        7
+      ],
+      "snare": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lowTom": [
+        12,
+        13,
+        14
+      ],
+      "kick": [
+        0,
+        1,
+        8
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-break-2",
+    "title": "Pop Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        3,
+        6,
+        9,
+        12
+      ],
+      "highTom": [
+        5,
+        6
+      ],
+      "midTom": [
+        3
+      ],
+      "snare": [
+        0,
+        12
+      ],
+      "lowTom": [
+        9
+      ],
+      "kick": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        10,
+        11,
+        13,
+        14,
+        15
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-break-3",
+    "title": "Pop Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0
+      ],
+      "highTom": [
+        13,
+        14,
+        15
+      ],
+      "midTom": [
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        2,
+        5,
+        6
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-break-4",
+    "title": "Pop Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "snare": [
+        4,
+        9,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        7,
+        11
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-break-5",
+    "title": "Pop Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        12,
+        13
+      ],
+      "midTom": [
+        3
+      ],
+      "snare": [
+        0,
+        9
+      ],
+      "lowTom": [
+        6
+      ],
+      "kick": [
+        12,
+        13
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-pop-break-6",
+    "title": "Pop Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Pop",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        3,
+        4,
+        7,
+        14
+      ],
+      "cymbal": [
+        0
+      ],
+      "hat": [
+        7
+      ],
+      "openHat": [
+        14
+      ],
+      "midTom": [
+        4,
+        5,
+        6
+      ],
+      "snare": [
+        1,
+        2,
+        3,
+        9,
+        10
+      ],
+      "lowTom": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "kick": [
+        0,
+        7
+      ]
+    },
+    "description": "A programmable pop rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-1",
+    "title": "Reggae 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        8
+      ],
+      "hat": [
+        0,
+        1,
+        3,
+        8,
+        10,
+        12,
+        14
+      ],
+      "openHat": [
+        4
+      ],
+      "snare": [
+        8
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-2",
+    "title": "Reggae 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "rimshot": [
+        4,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-3",
+    "title": "Reggae 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        2,
+        6,
+        7,
+        10,
+        14,
+        15
+      ],
+      "rimshot": [
+        4,
+        9,
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-4",
+    "title": "Reggae 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "rimshot": [
+        4,
+        12
+      ],
+      "kick": [
+        4,
+        10,
+        12
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-5",
+    "title": "Reggae 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "rimshot": [
+        3,
+        6,
+        10,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-6",
+    "title": "Reggae 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        8
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "rimshot": [
+        4,
+        6,
+        12,
+        14
+      ],
+      "kick": [
+        8
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-7",
+    "title": "Reggae 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "hat": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "rimshot": [
+        0,
+        5,
+        9
+      ],
+      "kick": [
+        6
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-8",
+    "title": "Reggae 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 12,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        6,
+        8
+      ],
+      "openHat": [
+        3,
+        9
+      ],
+      "rimshot": [
+        0,
+        6
+      ],
+      "kick": [
+        2,
+        6
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-9",
+    "title": "Reggae 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 12,
+    "lanes": {
+      "hat": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "rimshot": [
+        3,
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        6
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-10",
+    "title": "Reggae 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        11,
+        14
+      ],
+      "rimshot": [
+        2,
+        3,
+        6,
+        7
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-11",
+    "title": "Reggae 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        3,
+        6,
+        8,
+        10,
+        11,
+        12
+      ],
+      "openHat": [
+        1,
+        4,
+        14
+      ],
+      "rimshot": [
+        8
+      ],
+      "kick": [
+        8
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-12",
+    "title": "Reggae 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "rimshot": [
+        8
+      ],
+      "kick": [
+        0,
+        6,
+        9,
+        11,
+        12
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-1",
+    "title": "Reggae Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        12
+      ],
+      "hat": [
+        12
+      ],
+      "openHat": [
+        0
+      ],
+      "highTom": [
+        4,
+        5
+      ],
+      "midTom": [
+        6,
+        7
+      ],
+      "snare": [
+        0
+      ],
+      "lowTom": [
+        8,
+        10
+      ],
+      "kick": [
+        0,
+        12
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-2",
+    "title": "Reggae Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12,
+        13
+      ],
+      "openHat": [
+        6,
+        10,
+        14
+      ],
+      "highTom": [
+        8
+      ],
+      "midTom": [
+        12,
+        13
+      ],
+      "snare": [
+        4
+      ],
+      "clap": [
+        15
+      ],
+      "kick": [
+        6,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-3",
+    "title": "Reggae Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12,
+        13,
+        14
+      ],
+      "openHat": [
+        14
+      ],
+      "highTom": [
+        8,
+        9
+      ],
+      "midTom": [
+        2,
+        3
+      ],
+      "snare": [
+        0,
+        1,
+        6,
+        7,
+        12,
+        13
+      ],
+      "lowTom": [
+        4,
+        10
+      ],
+      "kick": [
+        14
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-4",
+    "title": "Reggae Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        8,
+        10,
+        12
+      ],
+      "hat": [
+        4
+      ],
+      "openHat": [
+        12
+      ],
+      "snare": [
+        0,
+        2,
+        6,
+        8,
+        10,
+        12
+      ],
+      "kick": [
+        12
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-5",
+    "title": "Reggae Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        2,
+        8
+      ],
+      "openHat": [
+        4,
+        10
+      ],
+      "snare": [
+        0,
+        6,
+        12
+      ],
+      "kick": [
+        2,
+        4,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-6",
+    "title": "Reggae Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        12
+      ],
+      "openHat": [
+        12
+      ],
+      "highTom": [
+        8,
+        9
+      ],
+      "midTom": [
+        6,
+        7
+      ],
+      "snare": [
+        0
+      ],
+      "lowTom": [
+        10,
+        12
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-7",
+    "title": "Reggae Break 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "openHat": [
+        9
+      ],
+      "midTom": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "snare": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lowTom": [
+        9
+      ],
+      "kick": [
+        0,
+        3,
+        6,
+        9
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-8",
+    "title": "Reggae Break 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 12,
+    "lanes": {
+      "hat": [
+        11
+      ],
+      "openHat": [
+        10
+      ],
+      "highTom": [
+        3,
+        4,
+        5
+      ],
+      "midTom": [
+        6,
+        8
+      ],
+      "snare": [
+        0,
+        2
+      ],
+      "lowTom": [
+        9,
+        10,
+        11
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-reggae-break-9",
+    "title": "Reggae Break 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Reggae",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "openHat": [
+        0
+      ],
+      "highTom": [
+        10,
+        11
+      ],
+      "midTom": [
+        2,
+        3,
+        6,
+        7
+      ],
+      "snare": [
+        4,
+        5,
+        8,
+        9
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable reggae rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-1",
+    "title": "Rock 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-2",
+    "title": "Rock 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        8,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-3",
+    "title": "Rock 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-4",
+    "title": "Rock 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-5",
+    "title": "Rock 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-6",
+    "title": "Rock 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        10
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-7",
+    "title": "Rock 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        9,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-8",
+    "title": "Rock 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        9,
+        12,
+        15
+      ],
+      "kick": [
+        0,
+        2,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-9",
+    "title": "Rock 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        10,
+        15
+      ],
+      "kick": [
+        0,
+        8,
+        14
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-10",
+    "title": "Rock 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        3,
+        5,
+        8,
+        10,
+        11,
+        13
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-11",
+    "title": "Rock 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        2,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-12",
+    "title": "Rock 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        9,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        10
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-13",
+    "title": "Rock 13",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        7,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-14",
+    "title": "Rock 14",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        6,
+        8,
+        15
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-15",
+    "title": "Rock 15",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "openHat": [
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        5,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-1",
+    "title": "Rock Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        0
+      ],
+      "highTom": [
+        12,
+        13,
+        14
+      ],
+      "midTom": [
+        10
+      ],
+      "snare": [
+        2,
+        4
+      ],
+      "kick": [
+        0,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-2",
+    "title": "Rock Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        15
+      ],
+      "cymbal": [
+        15
+      ],
+      "highTom": [
+        11
+      ],
+      "midTom": [
+        8,
+        9
+      ],
+      "snare": [
+        0,
+        2,
+        4,
+        5,
+        6
+      ],
+      "lowTom": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-3",
+    "title": "Rock Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12
+      ],
+      "snare": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "lowTom": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-4",
+    "title": "Rock Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        8,
+        14
+      ],
+      "cymbal": [
+        14
+      ],
+      "snare": [
+        3,
+        4,
+        7,
+        8
+      ],
+      "kick": [
+        0,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-5",
+    "title": "Rock Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        10,
+        12,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        4
+      ],
+      "openHat": [
+        12
+      ],
+      "highTom": [
+        12,
+        13,
+        14
+      ],
+      "midTom": [
+        8,
+        10
+      ],
+      "snare": [
+        4,
+        6,
+        7
+      ],
+      "kick": [
+        0,
+        2,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-6",
+    "title": "Rock Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        10,
+        12,
+        15
+      ],
+      "cymbal": [
+        15
+      ],
+      "highTom": [
+        13
+      ],
+      "midTom": [
+        12
+      ],
+      "snare": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        8,
+        15
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-7",
+    "title": "Rock Break 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12
+      ],
+      "cymbal": [
+        0
+      ],
+      "midTom": [
+        6
+      ],
+      "snare": [
+        2,
+        12
+      ],
+      "lowTom": [
+        10
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-8",
+    "title": "Rock Break 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        6,
+        10,
+        12
+      ],
+      "snare": [
+        4,
+        6,
+        10,
+        12
+      ],
+      "rimshot": [
+        11
+      ],
+      "lowTom": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        11,
+        12,
+        14
+      ],
+      "clap": [
+        10,
+        11,
+        12,
+        14,
+        15
+      ],
+      "cowbell": [
+        10,
+        11
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-9",
+    "title": "Rock Break 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        2,
+        4,
+        6,
+        9,
+        11,
+        14
+      ],
+      "hat": [
+        0
+      ],
+      "openHat": [
+        2
+      ],
+      "highTom": [
+        12,
+        13,
+        14
+      ],
+      "midTom": [
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        4,
+        6
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-10",
+    "title": "Rock Break 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        10,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "openHat": [
+        14
+      ],
+      "midTom": [
+        12,
+        13
+      ],
+      "snare": [
+        4,
+        8,
+        10,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        2,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-11",
+    "title": "Rock Break 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        6
+      ],
+      "cymbal": [
+        6
+      ],
+      "hat": [
+        0,
+        2,
+        4
+      ],
+      "snare": [
+        4
+      ],
+      "kick": [
+        0,
+        6
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rock-break-12",
+    "title": "Rock Break 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rock",
+    "steps": 16,
+    "lanes": {
+      "highTom": [
+        8,
+        9,
+        11
+      ],
+      "midTom": [
+        4,
+        5,
+        7
+      ],
+      "snare": [
+        0,
+        1,
+        3
+      ],
+      "lowTom": [
+        13,
+        14
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable rock rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-1",
+    "title": "Rhythm & Blues 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        8,
+        9,
+        12,
+        15
+      ],
+      "kick": [
+        0,
+        2,
+        10,
+        13,
+        14
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-2",
+    "title": "Rhythm & Blues 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        9,
+        14
+      ],
+      "kick": [
+        0,
+        2,
+        3,
+        5,
+        7,
+        11,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-3",
+    "title": "Rhythm & Blues 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        7,
+        9,
+        11,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-4",
+    "title": "Rhythm & Blues 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        8,
+        9,
+        11,
+        13,
+        14
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-5",
+    "title": "Rhythm & Blues 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        10
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-6",
+    "title": "Rhythm & Blues 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        2,
+        9,
+        11,
+        13,
+        14
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-7",
+    "title": "Rhythm & Blues 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        8,
+        10,
+        12
+      ],
+      "openHat": [
+        6,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        3,
+        8,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-8",
+    "title": "Rhythm & Blues 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        7,
+        10,
+        13
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-9",
+    "title": "Rhythm & Blues 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        1,
+        3,
+        7,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-10",
+    "title": "Rhythm & Blues 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "openHat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        4,
+        7,
+        9,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        8,
+        10,
+        11
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-11",
+    "title": "Rhythm & Blues 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "openHat": [
+        7,
+        15
+      ],
+      "snare": [
+        3,
+        13
+      ],
+      "kick": [
+        0,
+        1,
+        7,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-12",
+    "title": "Rhythm & Blues 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        15
+      ],
+      "openHat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        7,
+        8,
+        10,
+        13,
+        14
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-break-1",
+    "title": "Rhythm & Blues Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "cymbal": [
+        0,
+        2
+      ],
+      "midTom": [
+        10
+      ],
+      "snare": [
+        4,
+        5,
+        7,
+        9,
+        12,
+        13
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        2
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-break-2",
+    "title": "Rhythm & Blues Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4
+      ],
+      "snare": [
+        4,
+        6,
+        7,
+        9,
+        10,
+        11,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        8,
+        12,
+        13
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-break-3",
+    "title": "Rhythm & Blues Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        12
+      ],
+      "cymbal": [
+        0
+      ],
+      "highTom": [
+        12
+      ],
+      "midTom": [
+        10,
+        14,
+        15
+      ],
+      "snare": [
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      "kick": [
+        0,
+        13
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-break-4",
+    "title": "Rhythm & Blues Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        12
+      ],
+      "snare": [
+        2,
+        5,
+        8,
+        11,
+        14
+      ],
+      "kick": [
+        0,
+        1,
+        3,
+        4,
+        6,
+        7,
+        9,
+        10,
+        12
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-break-5",
+    "title": "Rhythm & Blues Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4,
+        8
+      ],
+      "cymbal": [
+        0,
+        12,
+        14
+      ],
+      "midTom": [
+        7,
+        8
+      ],
+      "snare": [
+        4,
+        5,
+        10,
+        11
+      ],
+      "kick": [
+        0,
+        12,
+        14
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-rhythm-blues-break-6",
+    "title": "Rhythm & Blues Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Rhythm & Blues",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        14
+      ],
+      "cymbal": [
+        14
+      ],
+      "midTom": [
+        6
+      ],
+      "snare": [
+        0,
+        12
+      ],
+      "kick": [
+        1,
+        4,
+        7,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable rhythm & blues rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-1",
+    "title": "Samba 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15
+      ],
+      "midTom": [
+        0,
+        2,
+        7,
+        9
+      ],
+      "lowTom": [
+        5,
+        11,
+        13,
+        14
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-2",
+    "title": "Samba 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15
+      ],
+      "midTom": [
+        0,
+        2,
+        8
+      ],
+      "lowTom": [
+        5,
+        11,
+        13
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-3",
+    "title": "Samba 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15
+      ],
+      "highTom": [
+        2,
+        9
+      ],
+      "midTom": [
+        0,
+        7
+      ],
+      "lowTom": [
+        4,
+        11,
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-4",
+    "title": "Samba 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        7,
+        11
+      ],
+      "hat": [
+        1,
+        3,
+        6,
+        8,
+        11,
+        14
+      ],
+      "highTom": [
+        0,
+        2
+      ],
+      "midTom": [
+        4,
+        5,
+        7
+      ],
+      "snare": [
+        9,
+        10
+      ],
+      "lowTom": [
+        12,
+        13,
+        15
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-5",
+    "title": "Samba 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        3,
+        4,
+        6,
+        7,
+        9,
+        10,
+        12,
+        13
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "midTom": [
+        5,
+        14,
+        15
+      ],
+      "rimshot": [
+        2,
+        8,
+        11
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-6",
+    "title": "Samba 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        14
+      ],
+      "hat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "midTom": [
+        14,
+        15
+      ],
+      "rimshot": [
+        0,
+        2,
+        7,
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-break-1",
+    "title": "Samba Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        4,
+        8,
+        10,
+        14
+      ],
+      "highTom": [
+        8,
+        10
+      ],
+      "midTom": [
+        4,
+        6,
+        7
+      ],
+      "snare": [
+        0,
+        1,
+        2
+      ],
+      "lowTom": [
+        12,
+        13,
+        14
+      ],
+      "kick": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        11,
+        12,
+        15
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-break-2",
+    "title": "Samba Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        12,
+        14
+      ],
+      "midTom": [
+        8,
+        10
+      ],
+      "snare": [
+        0,
+        1,
+        2,
+        12,
+        14
+      ],
+      "lowTom": [
+        4,
+        6
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-samba-break-3",
+    "title": "Samba Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Samba",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        8,
+        12
+      ],
+      "hat": [
+        12
+      ],
+      "midTom": [
+        0,
+        2
+      ],
+      "snare": [
+        0,
+        2,
+        6,
+        8,
+        12
+      ],
+      "lowTom": [
+        6,
+        8
+      ],
+      "kick": [
+        12
+      ]
+    },
+    "description": "A programmable samba rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-1",
+    "title": "Shuffle 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        6
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-2",
+    "title": "Shuffle 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        5,
+        9
+      ],
+      "kick": [
+        0,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-3",
+    "title": "Shuffle 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        5,
+        7,
+        8,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        11
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-4",
+    "title": "Shuffle 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        5,
+        8
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-5",
+    "title": "Shuffle 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        7,
+        8,
+        9
+      ],
+      "kick": [
+        0,
+        5,
+        6,
+        11
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-6",
+    "title": "Shuffle 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "snare": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-break-1",
+    "title": "Shuffle Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "highTom": [
+        9
+      ],
+      "midTom": [
+        6,
+        7,
+        8
+      ],
+      "snare": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "lowTom": [
+        10,
+        11
+      ],
+      "kick": [
+        0,
+        5,
+        6
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-break-2",
+    "title": "Shuffle Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "highTom": [
+        7,
+        9,
+        11
+      ],
+      "midTom": [
+        6,
+        8,
+        10
+      ],
+      "snare": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "kick": [
+        0,
+        6
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-shuffle-break-3",
+    "title": "Shuffle Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Shuffle",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        0,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        11
+      ],
+      "midTom": [
+        9,
+        10,
+        11
+      ],
+      "snare": [
+        1,
+        3,
+        4,
+        5,
+        7
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable shuffle rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ska-1",
+    "title": "Ska 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ska",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        2,
+        6,
+        10
+      ],
+      "openHat": [
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable ska rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ska-2",
+    "title": "Ska 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ska",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable ska rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ska-3",
+    "title": "Ska 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ska",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        6,
+        10
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "openHat": [
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable ska rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ska-break-1",
+    "title": "Ska Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ska",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12,
+        14
+      ],
+      "snare": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "description": "A programmable ska rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ska-break-2",
+    "title": "Ska Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ska",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        0,
+        8
+      ],
+      "snare": [
+        2,
+        3,
+        4,
+        6,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable ska rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ska-break-3",
+    "title": "Ska Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ska",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "highTom": [
+        10
+      ],
+      "midTom": [
+        6
+      ],
+      "snare": [
+        2
+      ],
+      "lowTom": [
+        14
+      ],
+      "kick": [
+        0,
+        4,
+        8,
+        12
+      ]
+    },
+    "description": "A programmable ska rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-1",
+    "title": "Slow 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        7,
+        8,
+        10,
+        13
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-2",
+    "title": "Slow 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        1,
+        6,
+        7,
+        10,
+        13
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-3",
+    "title": "Slow 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        13,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-4",
+    "title": "Slow 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        5,
+        6,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "cymbal": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        11,
+        14,
+        15
+      ],
+      "openHat": [
+        6,
+        7,
+        10,
+        15
+      ],
+      "highTom": [
+        15
+      ],
+      "midTom": [
+        12
+      ],
+      "snare": [
+        4
+      ],
+      "rimshot": [
+        9
+      ],
+      "lowTom": [
+        9,
+        11,
+        12,
+        13
+      ],
+      "clap": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "cowbell": [
+        15
+      ],
+      "kick": [
+        0,
+        7
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-5",
+    "title": "Slow 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        6,
+        7
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-6",
+    "title": "Slow 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        9,
+        12,
+        13
+      ],
+      "openHat": [
+        10,
+        14
+      ],
+      "snare": [
+        8
+      ],
+      "kick": [
+        0,
+        6,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-7",
+    "title": "Slow 7",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        4,
+        5,
+        8,
+        9,
+        12,
+        13
+      ],
+      "openHat": [
+        2,
+        6,
+        10,
+        14
+      ],
+      "snare": [
+        8
+      ],
+      "kick": [
+        0,
+        6,
+        14
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-8",
+    "title": "Slow 8",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        8
+      ],
+      "kick": [
+        0,
+        4,
+        6,
+        14
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-9",
+    "title": "Slow 9",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        3,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "openHat": [
+        4
+      ],
+      "snare": [
+        8
+      ],
+      "kick": [
+        0,
+        6,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-10",
+    "title": "Slow 10",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "openHat": [
+        2,
+        10
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        7,
+        8,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-11",
+    "title": "Slow 11",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "openHat": [
+        7,
+        15
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        2,
+        3,
+        7,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-12",
+    "title": "Slow 12",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15
+      ],
+      "openHat": [
+        6,
+        14
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        7,
+        8,
+        10,
+        13
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-break-1",
+    "title": "Slow Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "snare": [
+        4,
+        12,
+        13,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        7,
+        8
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-break-2",
+    "title": "Slow Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "hat": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "midTom": [
+        8,
+        10,
+        11
+      ],
+      "snare": [
+        4
+      ],
+      "lowTom": [
+        12,
+        14,
+        15
+      ],
+      "kick": [
+        0,
+        7,
+        8
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-break-3",
+    "title": "Slow Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12,
+        13
+      ],
+      "openHat": [
+        14
+      ],
+      "midTom": [
+        3
+      ],
+      "snare": [
+        0,
+        9,
+        12,
+        13
+      ],
+      "lowTom": [
+        5
+      ],
+      "kick": [
+        1,
+        4,
+        7,
+        10,
+        14
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-break-4",
+    "title": "Slow Break 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        4
+      ],
+      "hat": [
+        0,
+        2
+      ],
+      "openHat": [
+        14
+      ],
+      "highTom": [
+        10,
+        11
+      ],
+      "midTom": [
+        8
+      ],
+      "snare": [
+        3,
+        4,
+        6
+      ],
+      "lowTom": [
+        12,
+        14
+      ],
+      "kick": [
+        0,
+        13,
+        15
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-break-5",
+    "title": "Slow Break 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        11,
+        12
+      ],
+      "hat": [
+        2
+      ],
+      "openHat": [
+        6
+      ],
+      "midTom": [
+        4,
+        13,
+        14
+      ],
+      "snare": [
+        0,
+        9,
+        11,
+        12
+      ],
+      "kick": [
+        2,
+        6
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-slow-break-6",
+    "title": "Slow Break 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Slow",
+    "steps": 16,
+    "lanes": {
+      "cymbal": [
+        0,
+        1
+      ],
+      "openHat": [
+        8
+      ],
+      "highTom": [
+        14
+      ],
+      "midTom": [
+        6,
+        7
+      ],
+      "snare": [
+        4,
+        12
+      ],
+      "kick": [
+        0,
+        1,
+        8
+      ]
+    },
+    "description": "A programmable slow rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-1",
+    "title": "Swing 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        0,
+        5,
+        6,
+        11
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-2",
+    "title": "Swing 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        5,
+        6
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-3",
+    "title": "Swing 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        9,
+        11
+      ],
+      "kick": [
+        0,
+        3,
+        6,
+        9
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-4",
+    "title": "Swing 4",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        5,
+        9
+      ],
+      "kick": [
+        0,
+        6,
+        11
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-5",
+    "title": "Swing 5",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        9
+      ],
+      "kick": [
+        0,
+        6,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-6",
+    "title": "Swing 6",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        3,
+        9
+      ],
+      "cymbal": [
+        0,
+        3,
+        5,
+        6,
+        9,
+        11
+      ],
+      "snare": [
+        3,
+        5,
+        9
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        8
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-break-1",
+    "title": "Swing Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "snare": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "kick": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-break-2",
+    "title": "Swing Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "accent": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "highTom": [
+        6,
+        7
+      ],
+      "midTom": [
+        3,
+        4
+      ],
+      "snare": [
+        0,
+        1
+      ],
+      "lowTom": [
+        9,
+        10
+      ],
+      "kick": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-swing-break-3",
+    "title": "Swing Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Swing",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        2,
+        3
+      ],
+      "midTom": [
+        10,
+        11
+      ],
+      "snare": [
+        3,
+        7,
+        8
+      ],
+      "kick": [
+        0,
+        2,
+        6,
+        9
+      ]
+    },
+    "description": "A programmable swing rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-twist-1",
+    "title": "Twist 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Twist",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        12
+      ],
+      "cymbal": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "snare": [
+        4,
+        6,
+        12
+      ],
+      "kick": [
+        0,
+        8,
+        10
+      ]
+    },
+    "description": "A programmable twist rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-twist-2",
+    "title": "Twist 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Twist",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6,
+        12
+      ],
+      "cymbal": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        2,
+        4,
+        6,
+        12
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable twist rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-twist-3",
+    "title": "Twist 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Twist",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        6
+      ],
+      "cymbal": [
+        0,
+        4,
+        6,
+        8,
+        12
+      ],
+      "hat": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "snare": [
+        4,
+        6,
+        12
+      ],
+      "kick": [
+        0,
+        8
+      ]
+    },
+    "description": "A programmable twist rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-twist-break-1",
+    "title": "Twist Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Twist",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        12,
+        14
+      ],
+      "midTom": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "snare": [
+        0,
+        2,
+        4,
+        6,
+        12,
+        14
+      ],
+      "lowTom": [
+        8,
+        10
+      ]
+    },
+    "description": "A programmable twist rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-twist-break-2",
+    "title": "Twist Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Twist",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0,
+        12,
+        14
+      ],
+      "midTom": [
+        2,
+        4,
+        6
+      ],
+      "snare": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        13,
+        14,
+        15
+      ],
+      "lowTom": [
+        8,
+        10
+      ]
+    },
+    "description": "A programmable twist rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-twist-break-3",
+    "title": "Twist Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Twist",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        5,
+        14
+      ],
+      "cymbal": [
+        14
+      ],
+      "hat": [
+        0,
+        4,
+        8,
+        12
+      ],
+      "midTom": [
+        8,
+        9,
+        11,
+        13
+      ],
+      "snare": [
+        0,
+        1,
+        3,
+        5,
+        6,
+        7,
+        14
+      ]
+    },
+    "description": "A programmable twist rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-waltz-1",
+    "title": "Waltz 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Waltz",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        4,
+        7,
+        8
+      ],
+      "hat": [
+        4,
+        8
+      ],
+      "snare": [
+        4,
+        8
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable waltz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-waltz-2",
+    "title": "Waltz 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Waltz",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0
+      ],
+      "hat": [
+        4,
+        8
+      ],
+      "snare": [
+        4,
+        8
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable waltz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-waltz-3",
+    "title": "Waltz 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Waltz",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0,
+        4,
+        8,
+        11
+      ],
+      "hat": [
+        4,
+        8
+      ],
+      "snare": [
+        4,
+        8,
+        11
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable waltz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-waltz-break-1",
+    "title": "Waltz Break 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Waltz",
+    "steps": 12,
+    "lanes": {
+      "cymbal": [
+        0
+      ],
+      "hat": [
+        4,
+        8
+      ],
+      "snare": [
+        4,
+        6,
+        8,
+        10
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable waltz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-waltz-break-2",
+    "title": "Waltz Break 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Waltz",
+    "steps": 12,
+    "lanes": {
+      "hat": [
+        4,
+        8
+      ],
+      "midTom": [
+        4
+      ],
+      "snare": [
+        0
+      ],
+      "lowTom": [
+        8
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable waltz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-waltz-break-3",
+    "title": "Waltz Break 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Waltz",
+    "steps": 12,
+    "lanes": {
+      "hat": [
+        4,
+        8
+      ],
+      "midTom": [
+        0,
+        1,
+        4,
+        6
+      ],
+      "snare": [
+        0
+      ],
+      "lowTom": [
+        8,
+        10
+      ]
+    },
+    "description": "A programmable waltz rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ending-1",
+    "title": "Ending 1",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ending",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        0
+      ],
+      "hat": [
+        0
+      ],
+      "kick": [
+        0
+      ]
+    },
+    "description": "A programmable ending rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ending-2",
+    "title": "Ending 2",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ending",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        8
+      ],
+      "cymbal": [
+        8
+      ],
+      "midTom": [
+        4
+      ],
+      "snare": [
+        0
+      ],
+      "kick": [
+        8
+      ]
+    },
+    "description": "A programmable ending rhythm from the supplied pattern collection."
+  },
+  {
+    "id": "book-ending-3",
+    "title": "Ending 3",
+    "family": "Drum machine pattern",
+    "source": "Pattern book",
+    "section": "Ending",
+    "steps": 16,
+    "lanes": {
+      "accent": [
+        8
+      ],
+      "cymbal": [
+        8
+      ],
+      "midTom": [
+        3,
+        4
+      ],
+      "snare": [
+        0,
+        1
+      ],
+      "lowTom": [
+        6
+      ],
+      "kick": [
+        8
+      ]
+    },
+    "description": "A programmable ending rhythm from the supplied pattern collection."
+  }
+]

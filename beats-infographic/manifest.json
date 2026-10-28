@@ -1,0 +1,10 @@
+{
+  "name": "Beats Infographic",
+  "short_name": "Beat Atlas",
+  "description": "A playable catalog of classic breakbeats, jungle, drum and bass, and tracker drum patterns.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111719",
+  "theme_color": "#d7593f",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
